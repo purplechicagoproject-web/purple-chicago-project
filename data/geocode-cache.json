@@ -1,0 +1,38 @@
+{
+  "1104 W Madison St, Chicago, IL 60607": {
+    "display_name": "1104, West Madison Street, Greektown, West Loop, Near West Side, Chicago, West Chicago Township, Cook County, Illinois, 60607, United States",
+    "lat": 41.8818385,
+    "lon": -87.654715,
+    "query_used": "1104 W Madison St, Chicago, IL 60607"
+  },
+  "1132 S Wabash Ave Lower Level, Chicago, IL 60605": {
+    "display_name": "1132, South Wabash Avenue, Dearborn Park, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+    "lat": 41.8682341,
+    "lon": -87.6263442,
+    "query_used": "1132 S Wabash Ave Chicago, IL 60605"
+  },
+  "1400 S Michigan Ave, Chicago, IL 60605": {
+    "display_name": "Michigan Avenue Tower II, 1400, South Michigan Avenue, Central Station, South Loop, Near South Side, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+    "lat": 41.8637766,
+    "lon": -87.6245487,
+    "query_used": "1400 S Michigan Ave, Chicago, IL 60605"
+  },
+  "1410 Special Olympics Dr, Chicago, IL 60605": {
+    "display_name": "Soldier Field, 425, East McFetridge Drive, Central Station, South Loop, Near South Side, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+    "lat": 41.8623356,
+    "lon": -87.6176477,
+    "query_used": "Soldier Field, Chicago, IL"
+  },
+  "2537 S Wabash Ave #5, Chicago, IL 60616": {
+    "display_name": "2537, South Wabash Avenue, Near South Side, Chicago, South Chicago Township, Cook County, Illinois, 60616, United States",
+    "lat": 41.846412,
+    "lon": -87.6248677,
+    "query_used": "2537 S Wabash Ave Chicago, IL 60616"
+  },
+  "8 W Gartner Rd Ste 140, Naperville, IL 60540": {
+    "display_name": "Fantastic Sams, 8, West Gartner Road, Naperville Plaza, Naperville, DuPage County, Illinois, 60540, United States",
+    "lat": 41.7552135,
+    "lon": -88.1419594,
+    "query_used": "8 W Gartner Rd Naperville, IL 60540"
+  }
+}

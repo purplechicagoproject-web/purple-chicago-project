@@ -1,0 +1,9 @@
+# Reference config for local Cloudflare Pages Functions dev
+# (`npx wrangler pages dev . --kv PCHIP_CLICKS`). The KV binding itself is
+# set up in the Cloudflare dashboard for the deployed project — see DEPLOY.md.
+name = "pchip-partner-map"
+pages_build_output_dir = "."
+
+[[kv_namespaces]]
+binding = "PCHIP_CLICKS"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"

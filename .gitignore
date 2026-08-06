@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+._*
+
+# Original (pre-optimization) source images — not referenced by any code,
+# only the "-web" optimized versions are served. Kept locally, not pushed.
+/images/vendors/
+/images/stadium-info/
+
+# Unused image folder (Fan Event Hub uses only images/icons/Fan-Event-Hub.png)
+/images/Fan-Event-Hub/
+
+# Archived, no-longer-used site images (kept locally as backup)
+/archive/
+
+# Local Claude Code tooling config (dev server launch config, local permissions)
+/.claude/
+
+# Vendor contact spreadsheet — may contain vendor emails/phone numbers,
+# shouldn't be pushed to a (potentially public) repo.
+/Pchip vendor list.xlsx
