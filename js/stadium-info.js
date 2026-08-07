@@ -121,7 +121,15 @@ function renderToc(sections) {
   const links = sections
     .map((s) => `<a class="info-toc__link" href="#${s.slug}">${escapeHtml(s.title)}</a>`)
     .join("");
-  return `<nav class="info-toc" aria-label="Section navigation">${links}</nav>`;
+  return `
+    <details class="info-toc">
+      <summary class="info-toc__toggle">
+        <span>Jump to Section</span>
+        <span class="info-toc__toggle-chevron" aria-hidden="true"></span>
+      </summary>
+      <nav class="info-toc__links" aria-label="Section navigation">${links}</nav>
+    </details>
+  `;
 }
 
 function renderHero() {
@@ -163,14 +171,24 @@ async function main() {
       </div>
     `;
 
-    // The sticky TOC's own height varies (it wraps to more rows on narrow
-    // screens), so anchor-scroll offset is measured rather than guessed.
+    // The sticky TOC's own height varies (collapsed vs expanded, and it
+    // wraps to more rows on narrow screens), so anchor-scroll offset is
+    // measured rather than guessed.
     const toc = root.querySelector(".info-toc");
     const updateTocOffset = () => {
       document.documentElement.style.setProperty("--info-toc-height", `${toc.getBoundingClientRect().height}px`);
     };
     updateTocOffset();
     window.addEventListener("resize", updateTocOffset);
+    toc.addEventListener("toggle", updateTocOffset);
+
+    // Collapse the TOC back down after jumping to a section, so it doesn't
+    // stay pinned open over the content the link just scrolled to.
+    toc.querySelectorAll(".info-toc__link").forEach((link) => {
+      link.addEventListener("click", () => {
+        toc.open = false;
+      });
+    });
   } catch (err) {
     console.error(err);
     root.innerHTML = `

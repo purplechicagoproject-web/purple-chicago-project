@@ -48,8 +48,10 @@ function toRootAbsolute(path) {
 }
 
 // "images/vendors/soul-burger/foo.jpg" -> "/images/vendors-web/soul-burger/foo.jpg"
+// (accepts either a raw sheet path or one already root-absolute, since
+// `images` is root-absolute by the time this runs on it in buildVendors)
 export function toWebImagePath(originalPath) {
-  return toRootAbsolute(originalPath.replace(/^images\/vendors\//, "images/vendors-web/"));
+  return toRootAbsolute(originalPath.replace(/^\/?images\/vendors\//, "images/vendors-web/"));
 }
 
 function parseImageList(logoFileCell) {

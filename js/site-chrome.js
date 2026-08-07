@@ -59,7 +59,7 @@ function renderFooter() {
       </div>
       <div class="site-footer__col site-footer__disclaimer">
         <h3>Disclaimer</h3>
-        <p>Purple Chicago Project is an independent, fan-run initiative and is not affiliated with BTS, BIGHIT MUSIC, HYBE, Soldier Field, or the Chicago Bears. We do our best to keep event details, venue policies, and schedules accurate and up to date, but please confirm important information with official organizers before finalizing your plans.</p>
+        <p>Purple Chicago Project is an independent, fan-run initiative and is not affiliated with BTS, BIGHIT MUSIC, HYBE, or Soldier Field. We do our best to keep event details, venue policies, and schedules accurate and up to date, but please confirm important information with official organizers before finalizing your plans.</p>
         <p class="site-footer__copyright">&copy; 2026 Mun Layers Media LLC. All rights reserved.</p>
       </div>
     </footer>
