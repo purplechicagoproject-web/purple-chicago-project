@@ -9,8 +9,13 @@ function escapeHtml(str) {
     .replace(/>/g, "&gt;");
 }
 
+// Even without a photo yet, the carousel-shaped slot is kept so the panel
+// layout (and the gap before the title) stays consistent — content never
+// sits flush against the close button.
 function renderPhoto(photo) {
-  if (!photo) return "";
+  if (!photo) {
+    return `<div class="carousel carousel--placeholder"><span class="carousel__placeholder-icon" aria-hidden="true">📸</span></div>`;
+  }
   return `
     <div class="carousel">
       <div class="carousel__track">

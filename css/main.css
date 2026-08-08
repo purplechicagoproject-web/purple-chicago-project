@@ -143,6 +143,15 @@ button {
   background: rgba(255, 255, 255, 0.14);
 }
 
+.site-nav__link--featured {
+  font-weight: 700;
+  border: 1.5px solid rgba(244, 189, 31, 0.55);
+}
+
+.site-nav__link--featured[aria-current="page"] {
+  border-color: transparent;
+}
+
 .site-header__hamburger {
   display: none;
   flex-direction: column;
@@ -250,6 +259,11 @@ button {
 .site-footer__link:hover {
   color: #fff;
   text-decoration: underline;
+}
+
+.site-footer__link--featured {
+  font-weight: 700;
+  color: var(--gold-400);
 }
 
 .site-footer__contact {
@@ -950,13 +964,25 @@ button {
   flex: 1 1 auto;
 }
 
-/* Carousel — square crop, center-cropped, same on desktop panel and mobile sheet. */
+/* Carousel — center-cropped to a tall 4:5 ratio, same on desktop panel and mobile sheet. */
 .carousel {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 4 / 5;
   background: var(--ink-900);
   overflow: hidden;
+}
+
+.carousel--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, var(--purple-800), var(--purple-900));
+}
+
+.carousel__placeholder-icon {
+  font-size: 44px;
+  opacity: 0.55;
 }
 
 .carousel__track {
