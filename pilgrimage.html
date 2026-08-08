@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>Pilgrimage — Coming Soon</title>
-  <meta name="description" content="This page is coming soon." />
+  <title>Pilgrimage — Welcome Partners Map</title>
+  <meta name="description" content="Follow BTS's footsteps in Chicago — a map of spots the members have visited across past tours and trips." />
   <meta name="robots" content="noindex, nofollow" />
   <link rel="icon" href="/images/site/favicon.png" />
 
@@ -12,16 +12,40 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" />
 
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <link rel="stylesheet" href="/css/main.css" />
 </head>
 <body data-page="pilgrimage">
   <div id="site-header-root"></div>
 
-  <main class="coming-soon-page" id="coming-soon-root"></main>
+  <main class="map-page">
+    <div class="map-stage" id="map-stage">
+      <div id="map"></div>
 
-  <div id="site-footer-root"></div>
+      <div class="map-status" id="map-status">Loading map...</div>
+    </div>
+  </main>
 
-  <script type="module" src="/js/coming-soon.js"></script>
+  <div class="panel-backdrop" id="panel-backdrop"></div>
+
+  <!-- Desktop: left slide-in panel -->
+  <aside class="detail-panel" id="detail-panel" aria-hidden="true">
+    <button type="button" class="detail-panel__close" id="detail-panel-close" aria-label="Close">&times;</button>
+    <div class="detail-panel__scroll" id="detail-panel-content"></div>
+  </aside>
+
+  <!-- Mobile: bottom sheet. Fully independent of the map's view — opening
+       or closing it must never pan/zoom the map. -->
+  <aside class="mobile-sheet" id="mobile-sheet" aria-hidden="true">
+    <div class="mobile-sheet__handle" aria-hidden="true"></div>
+    <button type="button" class="mobile-sheet__close" id="mobile-sheet-close" aria-label="Close">&times;</button>
+    <div class="mobile-sheet__scroll" id="mobile-sheet-content"></div>
+  </aside>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script type="module" src="/js/pilgrimage.js"></script>
   <script type="module" src="/js/site-chrome.js"></script>
 </body>
 </html>

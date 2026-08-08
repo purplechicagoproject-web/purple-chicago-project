@@ -1,15 +1,45 @@
 {
+  "108 N State St, Chicago, IL 60602": {
+    "display_name": "Block 37 Shops, 108, North State Street, Theatre District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60602, United States",
+    "lat": 41.8838784,
+    "lon": -87.6285659,
+    "query_used": "108 N State St, Chicago, IL 60602"
+  },
   "1104 W Madison St, Chicago, IL 60607": {
     "display_name": "1104, West Madison Street, Greektown, West Loop, Near West Side, Chicago, West Chicago Township, Cook County, Illinois, 60607, United States",
     "lat": 41.8818385,
     "lon": -87.654715,
     "query_used": "1104 W Madison St, Chicago, IL 60607"
   },
+  "111 S Michigan Ave, Chicago, IL 60603": {
+    "display_name": "Ryerson & Burnham Libraries, 111, South Michigan Avenue, Jewelers Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60603, United States",
+    "lat": 41.8793588,
+    "lon": -87.6236685,
+    "query_used": "111 S Michigan Ave, Chicago, IL 60603"
+  },
   "1132 S Wabash Ave Lower Level, Chicago, IL 60605": {
     "display_name": "1132, South Wabash Avenue, Dearborn Park, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
     "lat": 41.8682341,
     "lon": -87.6263442,
     "query_used": "1132 S Wabash Ave Chicago, IL 60605"
+  },
+  "1200 S DuSable Lake Shore Dr, Chicago, IL 60605": {
+    "display_name": "South DuSable Lake Shore Drive, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+    "lat": 41.8694362,
+    "lon": -87.6170988,
+    "query_used": "1200 S DuSable Lake Shore Dr, Chicago, IL 60605"
+  },
+  "130 E Randolph St, Chicago, IL 60601": {
+    "display_name": "130, East Randolph Street, Jewelers Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60601, United States",
+    "lat": 41.8843072,
+    "lon": -87.6242295,
+    "query_used": "130 E Randolph St, Chicago, IL 60601"
+  },
+  "1340 S Michigan Ave, Chicago, IL 60605": {
+    "display_name": "Giordano's Pizzeria, 1340, South Michigan Avenue, Central Station, South Loop, Near South Side, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+    "lat": 41.8645673,
+    "lon": -87.6243724,
+    "query_used": "1340 S Michigan Ave, Chicago, IL 60605"
   },
   "1400 S Michigan Ave, Chicago, IL 60605": {
     "display_name": "Michigan Avenue Tower II, 1400, South Michigan Avenue, Central Station, South Loop, Near South Side, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
@@ -23,16 +53,94 @@
     "lon": -87.6176477,
     "query_used": "Soldier Field, Chicago, IL"
   },
+  "1516 N Milwaukee Ave, Chicago, IL 60622": {
+    "display_name": "1516, North Milwaukee Avenue, Wicker Park, West Town, Chicago, West Chicago Township, Cook County, Illinois, 60622, United States",
+    "lat": 41.9089446,
+    "lon": -87.6756429,
+    "query_used": "1516 N Milwaukee Ave, Chicago, IL 60622"
+  },
+  "1561 N Milwaukee Ave, Chicago, IL 60622": {
+    "display_name": "1561, North Milwaukee Avenue, Wicker Park, West Town, Chicago, West Chicago Township, Cook County, Illinois, 60622, United States",
+    "lat": 41.909983,
+    "lon": -87.6764706,
+    "query_used": "1561 N Milwaukee Ave, Chicago, IL 60622"
+  },
+  "181 N Michigan Ave, Chicago, IL 60601": {
+    "display_name": "181, North Michigan Avenue, Theatre District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60601, United States",
+    "lat": 41.8854046,
+    "lon": -87.6246059,
+    "query_used": "181 N Michigan Ave, Chicago, IL 60601"
+  },
+  "2 E Ontario St, Chicago, IL 60611": {
+    "display_name": "Gordon Ramsay Burger, 2, East Ontario Street, River North, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8934486,
+    "lon": -87.6279307,
+    "query_used": "2 E Ontario St, Chicago, IL 60611"
+  },
+  "201 E Randolph St, Chicago, IL 60601": {
+    "display_name": "201, East Randolph Street, Jewelers Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60601, United States",
+    "lat": 41.8842746,
+    "lon": -87.6239422,
+    "query_used": "201 E Randolph St, Chicago, IL 60601"
+  },
+  "2391 N Stockton Dr, Chicago, IL 60614": {
+    "display_name": "Lincoln Park Conservatory, 2391, North Stockton Drive, Mid-North District, Lincoln Park, Chicago, North Chicago Township, Cook County, Illinois, 60614, United States",
+    "lat": 41.9244127,
+    "lon": -87.6348029,
+    "query_used": "2391 N Stockton Dr, Chicago, IL 60614"
+  },
   "2537 S Wabash Ave #5, Chicago, IL 60616": {
     "display_name": "2537, South Wabash Avenue, Near South Side, Chicago, South Chicago Township, Cook County, Illinois, 60616, United States",
     "lat": 41.846412,
     "lon": -87.6248677,
     "query_used": "2537 S Wabash Ave Chicago, IL 60616"
   },
+  "322 E Illinois St, Chicago, IL 60611": {
+    "display_name": "Lucky Strike Downtown Chicago, 322, East Illinois Street, Streeterville, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8912185,
+    "lon": -87.619059,
+    "query_used": "322 E Illinois St, Chicago, IL 60611"
+  },
+  "333 Michigan Ave, Chicago, IL 60601": {
+    "display_name": "333, South Michigan Avenue, Jewelers Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60604, United States",
+    "lat": 41.8778104,
+    "lon": -87.6244875,
+    "query_used": "333 Michigan Ave, Chicago, IL 60601"
+  },
+  "60 W Ontario St, Chicago, IL 60654": {
+    "display_name": "Chicago Chop House, 60, West Ontario Street, River North, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60654, United States",
+    "lat": 41.893521,
+    "lon": -87.6304308,
+    "query_used": "60 W Ontario St, Chicago, IL 60654"
+  },
+  "600 E Grand Ave, Chicago, IL 60611": {
+    "display_name": "The Butterfly House, 600, East Grand Avenue, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8923939,
+    "lon": -87.6106286,
+    "query_used": "600 E Grand Ave, Chicago, IL 60611"
+  },
   "8 W Gartner Rd Ste 140, Naperville, IL 60540": {
     "display_name": "Fantastic Sams, 8, West Gartner Road, Naperville Plaza, Naperville, DuPage County, Illinois, 60540, United States",
     "lat": 41.7552135,
     "lon": -88.1419594,
     "query_used": "8 W Gartner Rd Naperville, IL 60540"
+  },
+  "805 S State St, Chicago, IL 60605": {
+    "display_name": "Lou Malnati's Pizzeria, 805, South State Street, Printer's Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+    "lat": 41.8715532,
+    "lon": -87.6273394,
+    "query_used": "805 S State St, Chicago, IL 60605"
+  },
+  "875 N Michigan Ave, Chicago, IL 60611": {
+    "display_name": "875 N Michigan, 875, North Michigan Avenue, Streeterville, Gold Coast, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8988813,
+    "lon": -87.6230962,
+    "query_used": "875 N Michigan Ave, Chicago, IL 60611"
+  },
+  "Jackson Dr & Lake Shore Dr": {
+    "display_name": "Jackson Dr & DuSable Lake Shore Dr, Chicago, IL (manually placed — lakefront near Grant Park/Buckingham Fountain)",
+    "lat": 41.876,
+    "lon": -87.6167,
+    "query_used": "manual-override (Nominatim matched wrong city for this intersection without state context)"
   }
 }

@@ -28,11 +28,21 @@ REQUEST_DELAY_SEC = 1.1
 
 SOLDIER_FIELD_ADDRESS = "1410 Special Olympics Dr, Chicago, IL 60605"
 
+# Pilgrimage (BTS Chicago spots) sheet — a second, independent data source
+# geocoded into the same shared cache (keyed by address string, so it
+# doesn't matter which page/sheet an address came from).
+PILGRIMAGE_CSV_URL = (
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQylaZwldd8KohFXnT0ASwF4HLe6vE3RnvqqxwU-XQ7_J186xRfG_WxfF3yYJCB6lbUPshzccWao9yZ/pub?gid=0&single=true&output=csv"
+)
+
 # Nominatim can't resolve some addresses literally (e.g. a venue's official
 # street address vs. how OSM has it mapped). Give it a friendlier query to
 # try as a last resort, keyed by the exact address string used elsewhere.
 QUERY_OVERRIDES = {
     SOLDIER_FIELD_ADDRESS: "Soldier Field, Chicago, IL",
+    # No city/state in the sheet's address for this intersection — without
+    # it, Nominatim matched a same-named street pair in San Diego instead.
+    "Jackson Dr & Lake Shore Dr": "Jackson Drive & DuSable Lake Shore Drive, Chicago, IL",
 }
 
 
@@ -76,18 +86,33 @@ def split_multi_location(raw_address):
     return out
 
 
-def fetch_vendor_addresses(csv_url):
+def fetch_csv_rows(csv_url):
     req = urllib.request.Request(csv_url, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(req, timeout=30) as resp:
         raw = resp.read().decode("utf-8")
-    reader = csv.DictReader(io.StringIO(raw))
+    return list(csv.DictReader(io.StringIO(raw)))
+
+
+def fetch_vendor_addresses(csv_url):
     addresses = []
-    for row in reader:
+    for row in fetch_csv_rows(csv_url):
         raw_address = (row.get("address") or "").strip()
         if not raw_address:
             continue
         for _label, addr in split_multi_location(raw_address):
             addresses.append(addr)
+    return addresses
+
+
+def fetch_pilgrimage_addresses(csv_url):
+    # One address per row (no "Label: addr | Label2: addr2" splitting) — a
+    # row with an empty address is intentionally skipped here; the page
+    # falls back to an approximate downtown coordinate for those instead.
+    addresses = []
+    for row in fetch_csv_rows(csv_url):
+        raw_address = (row.get("address") or "").strip()
+        if raw_address:
+            addresses.append(raw_address)
     return addresses
 
 
@@ -107,7 +132,10 @@ def simplify(address):
 def geocode_one(address):
     queries = simplify(address)
     if address in QUERY_OVERRIDES:
-        queries.append(QUERY_OVERRIDES[address])
+        # Tried first, not as a last resort — some addresses (e.g. missing
+        # city/state) return a plausible-looking but wrong match elsewhere
+        # in the US, so we can't wait for the plain query to "fail" first.
+        queries.insert(0, QUERY_OVERRIDES[address])
     for query in queries:
         params = {
             "q": query,
@@ -144,6 +172,9 @@ def main():
     print(f"Fetching vendor sheet: {csv_url}")
     addresses = fetch_vendor_addresses(csv_url)
     addresses.append(SOLDIER_FIELD_ADDRESS)
+
+    print(f"Fetching Pilgrimage sheet: {PILGRIMAGE_CSV_URL}")
+    addresses.extend(fetch_pilgrimage_addresses(PILGRIMAGE_CSV_URL))
 
     cache = load_cache()
     to_fetch = [a for a in addresses if a not in cache]

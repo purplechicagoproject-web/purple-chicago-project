@@ -5,6 +5,7 @@ import { addSoldierFieldOverlay } from "./soldier-field.js";
 import { initOffscreenBadges } from "./offscreen-badges.js";
 import { initPanel } from "./panel.js";
 import { initMobileSheet } from "./mobile-sheet.js";
+import { initWelcomePopup } from "./welcome-popup.js";
 
 const statusEl = document.getElementById("map-status");
 const config = window.PCHIP_CONFIG;
@@ -18,10 +19,22 @@ function setStatus(text) {
   }
 }
 
+function showWelcomePopup() {
+  initWelcomePopup({
+    storageKey: "pchip_welcome_map",
+    bodyHtml: `
+      <h2 class="welcome-popup__title">Welcome to Chicago, ARMY!</h2>
+      <p class="welcome-popup__subtitle">Let's celebrate Chicago like a festival!</p>
+      <p class="welcome-popup__body">Tap a pin to open its detail page.</p>
+    `,
+  });
+}
+
 async function main() {
   initPanel();
   initMobileSheet();
   const map = initMap(config);
+  showWelcomePopup();
 
   try {
     setStatus("Loading partner info...");
