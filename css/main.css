@@ -964,11 +964,11 @@ button {
   flex: 1 1 auto;
 }
 
-/* Carousel — center-cropped to a tall 4:5 ratio, same on desktop panel and mobile sheet. */
+/* Carousel — square crop, center-cropped, same on desktop panel and mobile sheet. */
 .carousel {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1 / 1;
   background: var(--ink-900);
   overflow: hidden;
 }
