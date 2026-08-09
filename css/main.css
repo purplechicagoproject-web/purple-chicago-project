@@ -1295,6 +1295,11 @@ button {
   height: auto;
 }
 
+/* About & Contact's hero art at 2/3 the usual size. */
+.info-hero__art--small {
+  width: clamp(107px, 13.3vw, 173px);
+}
+
 .info-hero__text {
   max-width: 520px;
 }
