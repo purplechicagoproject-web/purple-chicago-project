@@ -92,6 +92,40 @@ function renderHero(title, subtitle) {
   `;
 }
 
+// The six Chicago Trip Guide category pages — fixed, not CSV-driven, so
+// this list is shared verbatim by the hub page's own static markup.
+export const TRIP_GUIDE_LINKS = [
+  { href: "/chicago-trip-guide/must-see.html", label: "Chicago Must-See List" },
+  { href: "/chicago-trip-guide/free-things.html", label: "Free Things to See" },
+  { href: "/chicago-trip-guide/rooftops.html", label: "Rooftop Views" },
+  { href: "/chicago-trip-guide/fun.html", label: "Something Fun While You're Here" },
+  { href: "/chicago-trip-guide/kpop-stores.html", label: "K-pop Store List" },
+  { href: "/chicago-trip-guide/safety.html", label: "Safety in Chicago" },
+];
+
+// Same collapsible "Jump to Section" pattern as Stadium Info, but the
+// links are separate pages rather than in-page anchors — a plain
+// <details> needs no JS to toggle, and there's no anchor-offset math
+// needed since each link is a full page navigation.
+export function renderTripGuideNav() {
+  const links = TRIP_GUIDE_LINKS.map(
+    (l) => `<a class="info-toc__link" href="${l.href}">${escapeHtml(l.label)}</a>`
+  ).join("");
+  return `
+    <details class="info-toc">
+      <summary class="info-toc__toggle">
+        <span>Jump to Section</span>
+        <span class="info-toc__toggle-chevron" aria-hidden="true"></span>
+      </summary>
+      <nav class="info-toc__links" aria-label="Chicago Trip Guide sections">${links}</nav>
+    </details>
+  `;
+}
+
+export function renderBackLink() {
+  return `<a class="tg-back-link" href="/chicago-trip-guide.html">&larr; Back to Chicago Trip Guide</a>`;
+}
+
 // Shared entry point for the five CSV-driven place-list sub-pages
 // (Must-See, Free Things, Rooftops, Fun, K-pop placeholder excluded —
 // that one has its own bespoke script since it isn't a card list).
@@ -105,7 +139,10 @@ export async function initPlacePage({ rootId, pageName, heroTitle, heroSubtitle 
 
     root.innerHTML = `
       ${renderHero(heroTitle, heroSubtitle)}
+      ${renderTripGuideNav()}
+      <div class="tg-back-wrap">${renderBackLink()}</div>
       <div class="tg-grid">${items.map(renderPlaceCard).join("")}</div>
+      <div class="tg-back-wrap">${renderBackLink()}</div>
     `;
     mountInstagramEmbeds(root);
   } catch (err) {

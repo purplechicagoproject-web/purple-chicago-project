@@ -1,4 +1,5 @@
 import { fetchTripGuideRows, rowsForPage } from "./chicago-trip-guide-data.js";
+import { renderTripGuideNav, renderBackLink } from "./chicago-trip-guide-content.js";
 
 const PAGE_NAME = "K-pop Store List";
 const DEFAULT_SUBTEXT = "We're putting together a list of the best K-pop stores in Chicago, check back soon!";
@@ -24,9 +25,14 @@ async function main() {
   }
 
   root.innerHTML = `
-    <img class="coming-soon__art" src="/images/site/coming-soon3.png" width="1744" height="1862" alt="Illustration of a building under construction with a crane" />
-    <h1 class="coming-soon__title">K-POP STORE LIST</h1>
-    <p class="coming-soon__subtext">${escapeHtml(subtext)}</p>
+    ${renderTripGuideNav()}
+    <div class="tg-back-wrap">${renderBackLink()}</div>
+    <div class="coming-soon-page coming-soon-page--inline">
+      <img class="coming-soon__art" src="/images/site/coming-soon3.png" width="1744" height="1862" alt="Illustration of a building under construction with a crane" />
+      <h1 class="coming-soon__title">K-POP STORE LIST</h1>
+      <p class="coming-soon__subtext">${escapeHtml(subtext)}</p>
+    </div>
+    <div class="tg-back-wrap">${renderBackLink()}</div>
   `;
 }
 

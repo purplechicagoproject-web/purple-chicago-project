@@ -1,5 +1,2 @@
-# Site is still under construction — block all crawling for now.
-# Remove this Disallow (and the per-page <meta name="robots" noindex> tags)
-# once the site is ready to be promoted.
 User-agent: *
-Disallow: /
+Allow: /

@@ -1,6 +1,6 @@
 // Detail-panel markup for a Chicago Trip Guide spot — shared by the desktop
 // slide-in panel and the mobile bottom sheet, mirroring vendor-content.js's
-// role for the Partner Map.
+// role for the Welcome Partners Map.
 
 function escapeHtml(str) {
   return String(str)

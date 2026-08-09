@@ -12,7 +12,7 @@ const ICONS = {
 function navLinksHTML(activeSlug, extraClass) {
   return NAV_ITEMS.map((item) => {
     const current = item.slug === activeSlug ? ' aria-current="page"' : "";
-    // Partner Map is the site's core feature — call it out everywhere the
+    // Welcome Partners Map is the site's core feature — call it out everywhere the
     // nav appears, not just when it happens to be the active page.
     const featured = item.slug === "map" ? ` ${extraClass}--featured` : "";
     return `<a class="${extraClass}${featured}" href="${item.href}"${current}>${item.label}</a>`;

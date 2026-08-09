@@ -1,4 +1,5 @@
 import { fetchTripGuideRows, rowsForPage } from "./chicago-trip-guide-data.js";
+import { renderTripGuideNav, renderBackLink } from "./chicago-trip-guide-content.js";
 
 const PAGE_NAME = "Safety in Chicago";
 
@@ -110,10 +111,13 @@ async function main() {
 
     root.innerHTML = `
       ${renderHero()}
+      ${renderTripGuideNav()}
+      <div class="tg-back-wrap">${renderBackLink()}</div>
       <div class="info-sections tips-sections">
         ${items.map(renderSection).join("")}
       </div>
       <p class="tg-safety-disclaimer">${escapeHtml(DISCLAIMER)}</p>
+      <div class="tg-back-wrap">${renderBackLink()}</div>
     `;
   } catch (err) {
     console.error(err);
