@@ -1578,6 +1578,38 @@ button {
   line-height: 1.4;
 }
 
+.event-filters {
+  max-width: 1180px;
+  margin: 0 auto 32px;
+  padding: 0 6vw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.event-filter-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cream-100);
+  font-family: var(--font-body);
+  font-size: calc((0.95rem + var(--body-font-boost)) * var(--font-scale));
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.event-filter-btn:not(.is-active):hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.event-filter-btn.is-active {
+  background: var(--gold-500);
+  color: var(--purple-900);
+}
+
 .event-grid {
   max-width: 1180px;
   margin: 0 auto;
@@ -1586,6 +1618,10 @@ button {
   grid-template-columns: repeat(2, 1fr);
   gap: 28px;
   align-items: stretch;
+}
+
+.event-card.is-hidden {
+  display: none;
 }
 
 .event-card {
@@ -2220,6 +2256,14 @@ button {
   text-align: center;
 }
 
+/* Every page using this pattern renders two of these — one above the
+   content, one below, right before the footer. Only the second (last)
+   one needs extra bottom room so the button doesn't sit flush against
+   the footer. */
+.tg-back-wrap:last-of-type {
+  padding-bottom: 70px;
+}
+
 .tg-back-link {
   display: inline-block;
   padding: 11px 22px;
@@ -2251,6 +2295,150 @@ button {
   .tg-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Partner Toolkit                                                         */
+/* ---------------------------------------------------------------------- */
+
+.info-text__link {
+  color: var(--purple-700);
+  text-decoration: underline;
+}
+
+.pt-ig-card {
+  max-width: 420px;
+  margin: 0 auto 20px;
+}
+
+.tg-card__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.pt-idea-card {
+  scroll-margin-top: calc(var(--header-height) + var(--info-toc-height, 100px) + 16px);
+}
+
+/* A few Idea Reference rows have wide/landscape product photos and read
+   better as a single full-width card instead of following the 2-column
+   grid. */
+.pt-idea-card--wide {
+  grid-column: 1 / -1;
+}
+
+/* The do/don't columns are a fixed 2-column grid regardless of container
+   width — inside a narrower grid card that leaves too little room per
+   column, so it collapses to one column there specifically. */
+.tg-card__body .tips-dodont {
+  grid-template-columns: 1fr;
+}
+
+.pt-idea-groups {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 6vw 90px;
+}
+
+.pt-idea-group + .pt-idea-group {
+  margin-top: 48px;
+}
+
+.pt-idea-group__heading {
+  margin: 0 0 20px;
+  font-family: var(--font-display);
+  font-weight: normal;
+  color: var(--purple-900);
+  font-size: calc(1.9rem * var(--font-scale));
+  letter-spacing: 0.02em;
+}
+
+/* Nested inside .pt-idea-groups, which already provides the outer
+   max-width/margin/padding once for the whole page. */
+.pt-idea-group__grid {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pt-gate {
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--header-height) + 40px) 6vw 60px;
+  background: url("/images/site/BG.jpg") center/cover no-repeat, var(--purple-800);
+}
+
+.pt-gate__card {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 34px 30px;
+  text-align: center;
+}
+
+.pt-gate__title {
+  margin: 0 0 10px;
+  font-family: var(--font-display);
+  font-weight: normal;
+  color: var(--purple-900);
+  font-size: calc(1.9rem * var(--font-scale));
+  letter-spacing: 0.02em;
+}
+
+.pt-gate__text {
+  margin: 0 0 20px;
+  font-family: var(--font-body);
+  color: var(--ink-700);
+  font-size: calc((0.95rem + var(--body-font-boost)) * var(--font-scale));
+  line-height: 1.5;
+}
+
+.pt-gate__input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  margin: 0 0 14px;
+  border: 2px solid rgba(78, 42, 148, 0.25);
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: calc((1rem + var(--body-font-boost)) * var(--font-scale));
+  color: var(--ink-900);
+}
+
+.pt-gate__input:focus {
+  outline: none;
+  border-color: var(--purple-700);
+}
+
+.pt-gate__submit {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 999px;
+  background: var(--purple-700);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: calc((1rem + var(--body-font-boost)) * var(--font-scale));
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.pt-gate__submit:hover {
+  background: var(--purple-600);
+}
+
+.pt-gate__error {
+  margin: 14px 0 0;
+  font-family: var(--font-body);
+  color: var(--magenta-500);
+  font-size: calc((0.9rem + var(--body-font-boost)) * var(--font-scale));
 }
 
 /* ---------------------------------------------------------------------- */
