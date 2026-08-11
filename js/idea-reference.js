@@ -1,7 +1,7 @@
 import { guardPage } from "./partner-toolkit-auth.js";
 import { fetchPartnerToolkitRows, rowsForPage } from "./partner-toolkit-data.js";
 import {
-  renderAnchorToc,
+  renderCategoryToc,
   initAnchorToc,
   renderIdeaGroups,
   renderBackLink,
@@ -28,7 +28,7 @@ async function loadContent(root) {
 
     root.innerHTML = `
       ${renderHero()}
-      ${renderAnchorToc(items)}
+      ${renderCategoryToc(items)}
       <div class="tg-back-wrap">${renderBackLink()}</div>
       ${renderIdeaGroups(items)}
       <div class="tg-back-wrap">${renderBackLink()}</div>

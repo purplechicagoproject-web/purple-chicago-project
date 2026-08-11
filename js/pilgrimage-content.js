@@ -9,22 +9,6 @@ function escapeHtml(str) {
     .replace(/>/g, "&gt;");
 }
 
-// Even without a photo yet, the carousel-shaped slot is kept so the panel
-// layout (and the gap before the title) stays consistent — content never
-// sits flush against the close button.
-function renderPhoto(photo) {
-  if (!photo) {
-    return `<div class="carousel carousel--placeholder"><span class="carousel__placeholder-icon" aria-hidden="true">📸</span></div>`;
-  }
-  return `
-    <div class="carousel">
-      <div class="carousel__track">
-        <div class="carousel__slide"><img src="${escapeHtml(photo)}" alt="" loading="eager" /></div>
-      </div>
-    </div>
-  `;
-}
-
 function renderCta(link, label, extraClass) {
   if (!link || !label) return "";
   const cls = extraClass ? `panel-body__cta ${extraClass}` : "panel-body__cta";
@@ -33,8 +17,7 @@ function renderCta(link, label, extraClass) {
 
 export function renderSpotDetailHTML(spot) {
   return `
-    ${renderPhoto(spot.photo)}
-    <div class="panel-body">
+    <div class="panel-body panel-body--no-photo">
       <h2 class="panel-body__name">${escapeHtml(spot.name)}</h2>
       ${spot.address ? `<p class="panel-body__address">${escapeHtml(spot.address)}</p>` : ""}
       ${spot.content ? `<p class="panel-body__content">${escapeHtml(spot.content)}</p>` : ""}

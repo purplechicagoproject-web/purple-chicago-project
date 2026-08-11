@@ -1057,6 +1057,15 @@ button {
   padding: 20px 22px 28px;
 }
 
+/* Pilgrimage's panel has no photo above it (unlike the Welcome Partners Map's
+   vendor panel, which always keeps its carousel) — extra top padding takes
+   over the photo block's old job of clearing the fixed site header, which
+   sits on top of the panel (the header's z-index is higher than the
+   panel's), not just the floating close button. */
+.panel-body--no-photo {
+  padding-top: calc(var(--header-height) + 24px);
+}
+
 .panel-body__category {
   display: inline-block;
   font-size: calc(0.72rem + var(--body-font-boost));
@@ -2291,6 +2300,25 @@ button {
   text-align: center;
 }
 
+/* Generic small-print note, same muted style as .tg-safety-disclaimer —
+   used wherever a page needs a low-emphasis aside above the footer. */
+.tg-note {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 6vw 60px;
+  font-family: var(--font-body);
+  color: var(--ink-700);
+  font-size: calc(0.75rem + var(--body-font-boost));
+  font-style: italic;
+  opacity: 0.75;
+  text-align: center;
+}
+
+.tg-note a {
+  color: inherit;
+  text-decoration: underline;
+}
+
 @media (max-width: 760px) {
   .tg-grid {
     grid-template-columns: 1fr;
@@ -2318,6 +2346,10 @@ button {
 }
 
 .pt-idea-card {
+  scroll-margin-top: calc(var(--header-height) + var(--info-toc-height, 100px) + 16px);
+}
+
+.pt-idea-group {
   scroll-margin-top: calc(var(--header-height) + var(--info-toc-height, 100px) + 16px);
 }
 

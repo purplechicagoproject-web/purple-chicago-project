@@ -193,7 +193,7 @@ export function renderIdeaGroups(items) {
       ${groups
         .map(
           ([category, rows]) => `
-        <section class="pt-idea-group">
+        <section class="pt-idea-group"${category ? ` id="${slugify(category)}"` : ""}>
           ${category ? `<h2 class="pt-idea-group__heading">${escapeHtml(category)}</h2>` : ""}
           <div class="tg-grid pt-idea-group__grid">${rows.map(renderIdeaCard).join("")}</div>
         </section>
@@ -204,12 +204,10 @@ export function renderIdeaGroups(items) {
   `;
 }
 
-// In-page anchor "Jump to Section" nav, built from whichever sections
-// actually exist on that page's CSV rows — same pattern as Stadium Info.
-export function renderAnchorToc(items) {
-  if (items.length === 0) return "";
-  const links = items
-    .map((i) => `<a class="info-toc__link" href="#${slugify(i.title)}">${escapeHtml(i.title)}</a>`)
+function renderTocFromLinks(links) {
+  if (links.length === 0) return "";
+  const html = links
+    .map((l) => `<a class="info-toc__link" href="#${l.slug}">${escapeHtml(l.label)}</a>`)
     .join("");
   return `
     <details class="info-toc">
@@ -217,9 +215,23 @@ export function renderAnchorToc(items) {
         <span>Jump to Section</span>
         <span class="info-toc__toggle-chevron" aria-hidden="true"></span>
       </summary>
-      <nav class="info-toc__links" aria-label="Section navigation">${links}</nav>
+      <nav class="info-toc__links" aria-label="Section navigation">${html}</nav>
     </details>
   `;
+}
+
+// In-page anchor "Jump to Section" nav, built from whichever sections
+// actually exist on that page's CSV rows — same pattern as Stadium Info.
+export function renderAnchorToc(items) {
+  return renderTocFromLinks(items.map((i) => ({ slug: slugify(i.title), label: i.title })));
+}
+
+// Idea Reference has too many individual cards for a per-card TOC to be
+// useful — this jumps to each category group's heading instead, same as
+// the Chicago Trip Guide pages' section-level nav.
+export function renderCategoryToc(items) {
+  const groups = groupByCategory(items).filter(([category]) => category);
+  return renderTocFromLinks(groups.map(([category]) => ({ slug: slugify(category), label: category })));
 }
 
 // The sticky TOC's own height varies (collapsed vs expanded, wraps on
