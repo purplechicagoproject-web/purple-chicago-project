@@ -1183,6 +1183,95 @@ button {
   opacity: 0.7;
 }
 
+/* Returns from a vendor's detail view back to the partner list — same
+   outlined-pill treatment as .panel-body__cta--secondary, appended only
+   when the panel has a list to go back to (desktop only). */
+.panel-body__go-to-list {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 13px 16px;
+  margin-top: 14px;
+  border-radius: 999px;
+  background: transparent;
+  border: 2px solid var(--purple-700);
+  color: var(--purple-700);
+  font-weight: 700;
+  font-size: calc(0.95rem + var(--body-font-boost));
+  cursor: pointer;
+}
+
+.panel-body__go-to-list:hover {
+  background: rgba(78, 42, 148, 0.08);
+}
+
+/* Desktop-only default panel view: every partner, one box each, before any
+   pin is clicked. No photo/carousel above it (unlike the vendor detail
+   view), so — like Pilgrimage's photo-less panel — its own top padding
+   clears the fixed site header, which sits above the panel in z-order. */
+.partner-list {
+  padding: calc(var(--header-height) + 24px) 22px 28px;
+}
+
+.partner-list__title {
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+  font-weight: normal;
+  font-size: 1.5rem;
+  color: var(--ink-900);
+}
+
+.partner-list__item {
+  background: var(--cream-100);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+}
+
+.partner-list__item-name {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: normal;
+  font-size: 1.15rem;
+  color: var(--ink-900);
+}
+
+.partner-list__item-address {
+  margin: 0 0 8px;
+  font-size: calc(0.85rem + var(--body-font-boost));
+  color: var(--ink-700);
+}
+
+.partner-list__item-offer {
+  display: inline-block;
+  font-size: calc(0.7rem + var(--body-font-boost));
+  font-weight: 700;
+  color: #fff;
+  background: var(--magenta-500);
+  padding: 2px 9px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+
+.partner-list__more-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 10px 16px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: var(--purple-700);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  font-size: calc(0.85rem + var(--body-font-boost));
+  cursor: pointer;
+}
+
+.partner-list__more-btn:hover {
+  background: var(--purple-600);
+}
+
 /* ---------------------------------------------------------------------- */
 /* Mobile bottom sheet (shares panel-body/carousel markup + classes)       */
 /* Fully independent of the map — no code here ever touches the map's      */

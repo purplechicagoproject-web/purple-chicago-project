@@ -3,9 +3,10 @@ import { buildVendors, buildMapPoints } from "./vendors.js";
 import { initMap, addVendorMarkers } from "./map.js";
 import { addSoldierFieldOverlay } from "./soldier-field.js";
 import { initOffscreenBadges } from "./offscreen-badges.js";
-import { initPanel } from "./panel.js";
+import { initPanel, openPanelWithList } from "./panel.js";
 import { initMobileSheet } from "./mobile-sheet.js";
 import { initWelcomePopup } from "./welcome-popup.js";
+import { isMobileViewport } from "./device.js";
 
 const statusEl = document.getElementById("map-status");
 const config = window.PCHIP_CONFIG;
@@ -41,6 +42,13 @@ async function main() {
     const rows = await fetchVendorRows(config.CSV_URL);
     const vendors = buildVendors(rows);
     const points = buildMapPoints(vendors);
+
+    // Desktop only — mobile keeps the existing tap-a-pin-only flow, no list
+    // view at all. Shown before markers/geocoding finish since the list
+    // doesn't depend on either.
+    if (!isMobileViewport(config)) {
+      openPanelWithList(points);
+    }
 
     const [entries] = await Promise.all([
       addVendorMarkers(map, points, config),
