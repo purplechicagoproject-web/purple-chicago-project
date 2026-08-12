@@ -20,11 +20,18 @@ function domainOf(url) {
 
 function renderCarousel(images, idPrefix) {
   if (images.length === 0) return "";
+  // All slides load eagerly, not just the first. loading="lazy" here was
+  // unreliable: every slide sits in the same horizontal flex row (the track
+  // is what gets transformed to reveal the "current" one), so slides a few
+  // widths out landed outside the browser's near-viewport heuristic and
+  // never fired — silently missing photos in the carousel unless the user
+  // clicked through enough times to bring them close enough to load. The
+  // carousel only ever renders once a vendor's panel is actually opened
+  // (never preloaded for every vendor up front), and each one is at most a
+  // handful of already-optimized images, so eager-loading all of them here
+  // is cheap.
   const slides = images
-    .map(
-      (src, i) =>
-        `<div class="carousel__slide"><img src="${escapeHtml(src)}" alt="" loading="${i === 0 ? "eager" : "lazy"}" /></div>`
-    )
+    .map((src) => `<div class="carousel__slide"><img src="${escapeHtml(src)}" alt="" loading="eager" /></div>`)
     .join("");
   const dots = images
     .map(
