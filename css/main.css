@@ -32,14 +32,15 @@
   --shadow-card: 0 8px 24px rgba(47, 26, 87, 0.25);
 
   /* Body copy */
-  --font-body: "Bebas Neue", "Apple SD Gothic Neo", -apple-system, BlinkMacSystemFont,
+  --font-body: "Big Shoulders", "Apple SD Gothic Neo", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, sans-serif;
   /* Headlines / emphasis */
   --font-display: "Antihero", var(--font-body);
 
-  /* Extra flat boost for Bebas Neue body copy specifically (on top of the
-     sitewide --font-scale multiplier below). */
-  --body-font-boost: 2pt;
+  /* Extra flat boost for body copy (on top of the sitewide --font-scale
+     multiplier below) — see the --body-font-boost comment further down for
+     why this is 0 now instead of Bebas Neue's old 2pt. */
+  --body-font-boost: 0pt;
 
   /* Single lever for sitewide font size, applied to every font-size rule
      (headlines included) — bump this one value to rescale the whole site. */
@@ -123,9 +124,12 @@ button {
   justify-content: flex-end;
 }
 
+/* Nav is exempt from the sitewide Big Shoulders swap — keeps its original
+   Bebas Neue look regardless of what --font-body is set to. */
 .site-nav__link {
   padding: 8px 12px;
   border-radius: 999px;
+  font-family: "Bebas Neue", var(--font-body);
   font-size: calc(1rem + var(--body-font-boost));
   letter-spacing: 0.02em;
   text-decoration: none;
@@ -249,9 +253,12 @@ button {
   gap: 12px;
 }
 
+/* Same Bebas Neue exemption as .site-nav__link — footer repeats the same
+   menu, so it should look the same. */
 .site-footer__link {
   text-decoration: none;
   color: var(--cream-100);
+  font-family: "Bebas Neue", var(--font-body);
   font-size: calc(1.05rem + var(--body-font-boost));
   letter-spacing: 0.02em;
 }
@@ -943,9 +950,12 @@ button {
   transform: translateX(0);
 }
 
+/* The fixed site header (z-index 1000) sits above this panel (950) — its
+   close button would otherwise render right where the header covers it, so
+   it's pushed down to sit just below the header instead. */
 .detail-panel__close {
   position: absolute;
-  top: 12px;
+  top: calc(var(--header-height) + 12px);
   right: 12px;
   z-index: 2;
   width: 34px;
@@ -959,17 +969,25 @@ button {
   cursor: pointer;
 }
 
+/* Same header-clearing reasoning as the close button above — this panel's
+   own content (whatever renders inside it: a vendor's carousel, the
+   partner list, a pilgrimage spot with no photo) would otherwise start
+   underneath the fixed header instead of below it. Individual content
+   types only need to add their own extra breathing room on top of this,
+   not re-clear the header themselves. */
 .detail-panel__scroll {
   overflow-y: auto;
   flex: 1 1 auto;
+  padding-top: var(--header-height);
 }
 
-/* Carousel — square crop, center-cropped, same on desktop panel and mobile sheet. */
+/* Carousel — square slide, same on desktop panel and mobile sheet. Images
+   are letterboxed (never cropped) against a brand-purple background. */
 .carousel {
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;
-  background: var(--ink-900);
+  background: var(--purple-900);
   overflow: hidden;
 }
 
@@ -999,7 +1017,8 @@ button {
 .carousel__slide img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   display: block;
 }
 
@@ -1058,12 +1077,12 @@ button {
 }
 
 /* Pilgrimage's panel has no photo above it (unlike the Welcome Partners Map's
-   vendor panel, which always keeps its carousel) — extra top padding takes
-   over the photo block's old job of clearing the fixed site header, which
-   sits on top of the panel (the header's z-index is higher than the
-   panel's), not just the floating close button. */
+   vendor panel, which always keeps its carousel) — a bit of extra top
+   padding on top of .detail-panel__scroll's own header-clearing padding
+   (mobile-sheet doesn't add that, since it never overlaps the header
+   regardless of content, so this is the only padding that applies there). */
 .panel-body--no-photo {
-  padding-top: calc(var(--header-height) + 24px);
+  padding-top: 24px;
 }
 
 .panel-body__category {
@@ -1206,11 +1225,10 @@ button {
 }
 
 /* Desktop-only default panel view: every partner, one box each, before any
-   pin is clicked. No photo/carousel above it (unlike the vendor detail
-   view), so — like Pilgrimage's photo-less panel — its own top padding
-   clears the fixed site header, which sits above the panel in z-order. */
+   pin is clicked. Only ever rendered inside .detail-panel__scroll, which
+   already clears the header on its own — no extra top padding needed here. */
 .partner-list {
-  padding: calc(var(--header-height) + 24px) 22px 28px;
+  padding: 24px 22px 28px;
 }
 
 .partner-list__title {
@@ -1984,13 +2002,27 @@ button {
   margin-bottom: 18px;
 }
 
+/* Short checklist-style bullets (Essentials & Tips, Safety in Chicago,
+   Transportation Guide) keep the bold-uppercase punch Bebas Neue gave them
+   for free — Big Shoulders needs it spelled out explicitly, plus a size
+   bump, so a single short line doesn't read thin next to the rest of the
+   page. */
 .tips-list li {
   padding: 8px 4px;
   font-family: var(--font-body);
   color: var(--ink-900);
-  font-size: calc((1rem + var(--body-font-boost)) * var(--font-scale));
+  font-size: calc((1.05rem + var(--body-font-boost)) * var(--font-scale));
+  font-weight: 700;
+  text-transform: uppercase;
   line-height: 1.5;
   border-bottom: 1px solid rgba(78, 42, 148, 0.1);
+}
+
+/* Bold "Label:" prefixes get the same purple emphasis as .info-text/
+   .info-bullet's bold labels elsewhere on the site — used by Essentials &
+   Tips, Safety in Chicago, and the Press Media Guide. */
+.tips-list li strong {
+  color: var(--purple-700);
 }
 
 .tips-subhead {
@@ -2408,8 +2440,70 @@ button {
   text-decoration: underline;
 }
 
+.kpop-store-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 6vw 90px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.kpop-store-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 22px 20px;
+}
+
+.kpop-store-card__name {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-weight: normal;
+  color: var(--purple-900);
+  font-size: calc(1.2rem * var(--font-scale));
+  letter-spacing: 0.02em;
+}
+
+.kpop-store-card__address {
+  margin: 0 0 12px;
+  font-family: var(--font-body);
+  color: var(--purple-700);
+  font-size: calc((0.85rem + var(--body-font-boost)) * var(--font-scale));
+}
+
+.kpop-store-card__link {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--purple-700);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: calc((0.85rem + var(--body-font-boost)) * var(--font-scale));
+  text-decoration: none;
+}
+
+.kpop-store-card__link:hover {
+  background: var(--purple-600);
+}
+
+.kpop-store-fallback {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 6vw 90px;
+  text-align: center;
+  font-family: var(--font-body);
+  color: var(--ink-700);
+  font-size: calc((1rem + var(--body-font-boost)) * var(--font-scale));
+  line-height: 1.55;
+}
+
 @media (max-width: 760px) {
   .tg-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kpop-store-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -2563,16 +2657,96 @@ button {
 }
 
 /* ---------------------------------------------------------------------- */
+/* Press                                                                   */
+/* ---------------------------------------------------------------------- */
+
+.press-quote {
+  max-width: 760px;
+  margin: 0 auto 24px;
+  padding: 20px 24px;
+  border-left: 4px solid var(--purple-700);
+  background: var(--cream-100);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--ink-900);
+  font-size: calc((1.05rem + var(--body-font-boost)) * var(--font-scale));
+  line-height: 1.6;
+}
+
+/* Media Guide's label+content rows are full sentences, not short checklist
+   bullets — read naturally in mixed case (unlike .tips-list li) with the
+   same bold-purple label treatment as the rest of the site. */
+.press-label-list li {
+  padding: 8px 4px;
+  font-family: var(--font-body);
+  color: var(--ink-900);
+  font-size: calc((1rem + var(--body-font-boost)) * var(--font-scale));
+  line-height: 1.5;
+  border-bottom: 1px solid rgba(78, 42, 148, 0.1);
+}
+
+.press-label-list li strong {
+  color: var(--purple-700);
+}
+
+.press-news-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.press-news-item {
+  padding: 14px 4px;
+  border-bottom: 1px solid rgba(78, 42, 148, 0.1);
+}
+
+.press-news-item__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.press-news-item__title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  color: var(--ink-900);
+  font-size: calc((1rem + var(--body-font-boost)) * var(--font-scale));
+  text-decoration: none;
+}
+
+a.press-news-item__title:hover {
+  text-decoration: underline;
+  color: var(--purple-700);
+}
+
+.press-news-item__meta {
+  font-family: var(--font-body);
+  color: var(--purple-700);
+  font-size: calc((0.8rem + var(--body-font-boost)) * var(--font-scale));
+  white-space: nowrap;
+}
+
+.press-news-item__summary {
+  margin: 6px 0 0;
+  font-family: var(--font-body);
+  color: var(--ink-700);
+  font-size: calc((0.92rem + var(--body-font-boost)) * var(--font-scale));
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------------- */
 /* About & Contact                                                         */
 /* ---------------------------------------------------------------------- */
 
 .ac-section {
   display: flex;
   align-items: center;
-  gap: 6vw;
-  max-width: 1000px;
+  gap: clamp(40px, 6vw, 100px);
+  width: min(92vw, 1600px);
   margin: 0 auto;
-  padding: 50px 6vw;
+  padding: clamp(50px, 8vw, 120px) 0;
 }
 
 .ac-section--reverse {
@@ -2580,8 +2754,7 @@ button {
 }
 
 .ac-section__image {
-  flex: 0 0 auto;
-  width: clamp(160px, 24vw, 280px);
+  flex: 0 1 clamp(220px, 22vw, 380px);
 }
 
 .ac-section__image img {
@@ -2600,8 +2773,9 @@ button {
 }
 
 .ac-section__text {
-  flex: 1 1 auto;
+  flex: 1 1 480px;
   min-width: 0;
+  max-width: 760px;
 }
 
 .ac-section__heading {
@@ -2678,6 +2852,120 @@ button {
 
   .ac-section__image {
     width: clamp(140px, 50vw, 220px);
+  }
+}
+
+/* About section card grid — typography/spacing only, no images or icons
+   inside the cards themselves. A text label sits above the grid, matching
+   the "Contact" heading's font/color for a symmetric page composition. */
+.ac-about-label {
+  width: min(92vw, 1600px);
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 48px) 0 0;
+  font-family: var(--font-display);
+  font-weight: normal;
+  color: var(--purple-900);
+  font-size: calc(2rem * var(--font-scale));
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+.ac-card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 3vw, 32px);
+  width: min(92vw, 1600px);
+  margin: 0 auto;
+  padding: clamp(30px, 5vw, 60px) 0 clamp(50px, 8vw, 120px);
+}
+
+.ac-card {
+  background: var(--cream-100);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: clamp(24px, 3vw, 36px);
+}
+
+.ac-card--full {
+  grid-column: 1 / -1;
+}
+
+/* IP guidance card reads as a callout, not just another card. */
+.ac-card--principles {
+  background: var(--purple-700);
+}
+
+.ac-card__heading {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-weight: normal;
+  color: var(--purple-900);
+  font-size: calc(1.6rem * var(--font-scale));
+  letter-spacing: 0.02em;
+}
+
+.ac-card--principles .ac-card__heading {
+  color: var(--cream-50);
+}
+
+.ac-card__body p {
+  margin: 0 0 14px;
+  font-family: var(--font-body);
+  color: var(--ink-900);
+  font-size: calc((1rem + var(--body-font-boost)) * var(--font-scale));
+  line-height: 1.6;
+}
+
+.ac-card__body p:last-child {
+  margin-bottom: 0;
+}
+
+.ac-card--principles .ac-card__body p {
+  color: var(--cream-50);
+}
+
+.ac-card__checklist,
+.ac-card__arrow-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ac-card__checklist li,
+.ac-card__arrow-list li {
+  position: relative;
+  margin: 0 0 10px;
+  padding-left: 26px;
+  font-family: var(--font-body);
+  color: var(--ink-900);
+  font-size: calc((1rem + var(--body-font-boost)) * var(--font-scale));
+  line-height: 1.5;
+}
+
+.ac-card__checklist li:last-child,
+.ac-card__arrow-list li:last-child {
+  margin-bottom: 0;
+}
+
+.ac-card__checklist li::before,
+.ac-card__arrow-list li::before {
+  position: absolute;
+  left: 0;
+  color: var(--purple-700);
+  font-weight: 700;
+}
+
+.ac-card__checklist li::before {
+  content: "\2713";
+}
+
+.ac-card__arrow-list li::before {
+  content: "\2192";
+}
+
+@media (max-width: 700px) {
+  .ac-card-grid {
+    grid-template-columns: 1fr;
   }
 }
 

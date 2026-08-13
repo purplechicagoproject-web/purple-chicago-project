@@ -9,5 +9,6 @@ export const NAV_ITEMS = [
   { slug: "chicago-trip-guide", label: "Chicago trip Guide", href: "/chicago-trip-guide.html" },
   { slug: "fan-event-hub", label: "Fan Event Hub", href: "/fan-event-hub.html" },
   { slug: "partner-toolkit", label: "Partner Toolkit", href: "/partner-toolkit.html" },
+  { slug: "press", label: "Press", href: "/press.html" },
   { slug: "about-contact", label: "About & Contact", href: "/about-contact.html" },
 ];
