@@ -457,6 +457,98 @@ button {
 }
 
 /* ---------------------------------------------------------------------- */
+/* Homepage — concert countdown                                            */
+/* ---------------------------------------------------------------------- */
+
+.countdown-section {
+  background: url("/images/hero/BG.jpg") center/cover no-repeat, #956caa;
+  padding: clamp(32px, 5vw, 56px) 6vw;
+  text-align: center;
+}
+
+.countdown-section__title {
+  margin: 0 0 24px;
+  font-family: var(--font-display);
+  font-weight: normal;
+  color: #fff;
+  font-size: clamp(calc(20px * var(--font-scale)), calc(2.4vw * var(--font-scale)), calc(32px * var(--font-scale)));
+  letter-spacing: 0.02em;
+}
+
+.countdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1.6vw, 20px);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.countdown[hidden] {
+  display: none;
+}
+
+.countdown__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: var(--purple-900);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  width: clamp(60px, 20vw, 110px);
+  padding: clamp(10px, 2vw, 18px) 4px;
+}
+
+.countdown__value {
+  font-family: "Bebas Neue", var(--font-body);
+  color: #fff;
+  font-size: clamp(26px, 6vw, 48px);
+  line-height: 1;
+}
+
+.countdown__label {
+  font-family: "Bebas Neue", var(--font-body);
+  color: var(--gold-400);
+  font-size: clamp(10px, 1.6vw, 13px);
+  letter-spacing: 0.08em;
+}
+
+.countdown__colon {
+  font-family: "Bebas Neue", var(--font-body);
+  color: #fff;
+  font-size: clamp(22px, 5vw, 40px);
+  line-height: 1;
+  opacity: 0.7;
+  padding-bottom: 20px;
+}
+
+.countdown-section__live {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: normal;
+  color: #fff;
+  font-size: clamp(calc(24px * var(--font-scale)), calc(3vw * var(--font-scale)), calc(40px * var(--font-scale)));
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 480px) {
+  .countdown {
+    gap: 6px;
+  }
+
+  .countdown__unit {
+    width: clamp(56px, 21vw, 80px);
+    padding: 10px 2px;
+  }
+
+  .countdown__colon {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
 /* Homepage — "For You, ARMY"                                              */
 /* ---------------------------------------------------------------------- */
 
