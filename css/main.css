@@ -900,6 +900,35 @@ button {
   transform: scale(1.08);
 }
 
+/* Always-visible button to reopen the "All Partners" list after it's been
+   closed — desktop only, since the list itself only ever exists there. */
+.map-list-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 500;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 20px;
+  background: var(--purple-700);
+  color: #fff;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: calc(0.85rem + var(--body-font-boost));
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+}
+
+.map-list-btn:hover {
+  background: var(--purple-800);
+}
+
+@media (max-width: 860px) {
+  .map-list-btn {
+    display: none;
+  }
+}
+
 /* ---------------------------------------------------------------------- */
 /* Off-screen vendor badges                                                */
 /* ---------------------------------------------------------------------- */
@@ -1344,6 +1373,11 @@ button {
   font-weight: normal;
   font-size: 1.15rem;
   color: var(--ink-900);
+}
+
+.partner-list__item-location-label {
+  font-weight: 700;
+  color: var(--purple-700);
 }
 
 .partner-list__item-address {

@@ -12,10 +12,14 @@ function escapeHtml(str) {
 
 export function renderPartnerListHTML(points) {
   const items = points
-    .map(
-      (point, index) => `
+    .map((point, index) => {
+      const nameLine = point.label
+        ? `${escapeHtml(point.vendor.name)} <span class="partner-list__item-location-label">— ${escapeHtml(point.label)}</span>`
+        : escapeHtml(point.vendor.name);
+
+      return `
     <div class="partner-list__item">
-      <h3 class="partner-list__item-name">${escapeHtml(point.vendor.name)}</h3>
+      <h3 class="partner-list__item-name">${nameLine}</h3>
       <p class="partner-list__item-address">${escapeHtml(point.address)}</p>
       ${
         point.vendor.offerType
@@ -24,8 +28,8 @@ export function renderPartnerListHTML(points) {
       }
       <button type="button" class="partner-list__more-btn" data-list-index="${index}">More Information</button>
     </div>
-  `
-    )
+  `;
+    })
     .join("");
 
   return `

@@ -5,6 +5,7 @@ const panelEl = document.getElementById("detail-panel");
 const contentEl = document.getElementById("detail-panel-content");
 const closeBtn = document.getElementById("detail-panel-close");
 const backdropEl = document.getElementById("panel-backdrop");
+const listBtn = document.getElementById("map-list-btn");
 
 let activeCarousel = null;
 
@@ -27,6 +28,16 @@ function showList() {
   contentEl.scrollTop = 0;
 }
 
+// Shared "open the panel" chrome (used whether it's opening on a vendor or
+// on the list) — keeps openPanelForPoint/openPanelWithList/openPartnerList
+// from drifting out of sync on the classList/aria/backdrop/event steps.
+function openPanelChrome() {
+  panelEl.classList.add("is-open");
+  panelEl.setAttribute("aria-hidden", "false");
+  backdropEl.classList.add("is-visible");
+  window.dispatchEvent(new CustomEvent("pchip:panel-open"));
+}
+
 export function openPanelForPoint(point) {
   const goToListHtml = listPoints
     ? `<button type="button" class="panel-body__go-to-list" data-go-to-list>&larr; Go to List</button>`
@@ -37,10 +48,7 @@ export function openPanelForPoint(point) {
   contentEl.querySelector("[data-go-to-list]")?.addEventListener("click", showList);
 
   contentEl.scrollTop = 0;
-  panelEl.classList.add("is-open");
-  panelEl.setAttribute("aria-hidden", "false");
-  backdropEl.classList.add("is-visible");
-  window.dispatchEvent(new CustomEvent("pchip:panel-open"));
+  openPanelChrome();
 }
 
 // Desktop-only default view: the panel opens showing every partner before
@@ -50,10 +58,17 @@ export function openPanelForPoint(point) {
 export function openPanelWithList(points) {
   listPoints = points;
   showList();
-  panelEl.classList.add("is-open");
-  panelEl.setAttribute("aria-hidden", "false");
-  backdropEl.classList.add("is-visible");
-  window.dispatchEvent(new CustomEvent("pchip:panel-open"));
+  openPanelChrome();
+}
+
+// Reopens the "All Partners" list on demand (the always-visible map button)
+// after the panel has been closed. Only does anything once listPoints has
+// been set by openPanelWithList — i.e. desktop only, same as the "Go to
+// List" button inside a vendor's detail view.
+export function openPartnerList() {
+  if (!listPoints) return;
+  showList();
+  openPanelChrome();
 }
 
 export function closePanel() {
@@ -71,4 +86,5 @@ export function initPanel() {
   closeBtn.addEventListener("click", closePanel);
   backdropEl.addEventListener("click", closePanel);
   document.addEventListener("keydown", onKeydown);
+  listBtn?.addEventListener("click", openPartnerList);
 }
