@@ -1577,22 +1577,39 @@ button {
 .ow-blocks {
   display: flex;
   flex-direction: column;
-  gap: clamp(48px, 7vw, 90px);
-  padding: clamp(48px, 7vw, 90px) 0;
 }
 
+/* Each block is a full-bleed section (so the tint/divider span edge to
+   edge) with generous vertical padding — content itself stays centered
+   and constrained via .ow-block__inner. */
 .ow-block {
+  width: 100%;
+  padding: clamp(56px, 8vw, 110px) 0;
+  border-top: 1px solid rgba(78, 42, 148, 0.15);
+}
+
+.ow-block:first-child {
+  border-top: none;
+}
+
+.ow-block--tint {
+  background: var(--cream-100);
+}
+
+.ow-block__inner {
   width: 80%;
   max-width: 900px;
   margin: 0 auto;
 }
 
+/* Bigger and more prominent than a .tips-accordion__title (1.5rem) on
+   other info pages, but still clearly under the page's own hero title. */
 .ow-block__heading {
-  margin: 0 0 18px;
+  margin: 0 0 22px;
   font-family: var(--font-display);
   font-weight: normal;
   color: var(--purple-900);
-  font-size: calc(2rem * var(--font-scale));
+  font-size: clamp(calc(1.9rem * var(--font-scale)), calc(3.2vw * var(--font-scale)), calc(2.6rem * var(--font-scale)));
   letter-spacing: 0.02em;
   text-align: center;
 }
@@ -1647,11 +1664,15 @@ button {
 
 @media (max-width: 700px) {
   .ow-block {
+    padding: clamp(40px, 10vw, 64px) 0;
+  }
+
+  .ow-block__inner {
     width: 90%;
   }
 
   .ow-block__heading {
-    font-size: calc(1.6rem * var(--font-scale));
+    font-size: calc(1.7rem * var(--font-scale));
   }
 
   .ow-block__text {

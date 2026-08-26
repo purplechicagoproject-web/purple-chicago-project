@@ -23,7 +23,7 @@ const FALLBACK_ROWS = [
   },
   {
     order: 2,
-    section_title: "",
+    section_title: "A Welcome from the Mayor",
     content_type: "video",
     content: "",
     video_url: "https://youtu.be/_RrI53Qr-zE",
@@ -43,7 +43,7 @@ const FALLBACK_ROWS = [
   },
   {
     order: 4,
-    section_title: "",
+    section_title: "Illinois Declares BTS Day",
     content_type: "image",
     content:
       "On August 14, 2026, Illinois Governor JB Pritzker signed an official proclamation declaring August 27–28 “BTS Day” in the State of Illinois, recognizing the group's global cultural impact and philanthropy.",
@@ -71,17 +71,20 @@ function toRootAbsolute(path) {
 }
 
 // Accepts youtu.be/ID, youtube.com/watch?v=ID, or an already-embeddable URL.
+// rel=0 keeps end-screen suggestions limited to this channel instead of
+// pulling in unrelated videos; modestbranding=1 shrinks the YouTube logo.
 function toYouTubeEmbedUrl(url) {
+  const params = "rel=0&modestbranding=1";
   try {
     const u = new URL(url);
     if (u.hostname.includes("youtu.be")) {
-      return `https://www.youtube.com/embed${u.pathname}`;
+      return `https://www.youtube.com/embed${u.pathname}?${params}`;
     }
     if (u.pathname.startsWith("/embed/")) {
-      return url;
+      return `${url}${url.includes("?") ? "&" : "?"}${params}`;
     }
     const videoId = u.searchParams.get("v");
-    if (videoId) return `https://www.youtube.com/embed/${videoId}`;
+    if (videoId) return `https://www.youtube.com/embed/${videoId}?${params}`;
   } catch {
     // fall through
   }
@@ -108,47 +111,52 @@ function renderHeading(sectionTitle) {
 
 function renderTextBlock(row) {
   return `
-    <section class="ow-block">
-      ${renderHeading(row.section_title)}
-      ${renderParagraphs(row.content)}
-    </section>
+    ${renderHeading(row.section_title)}
+    ${renderParagraphs(row.content)}
   `;
 }
 
 function renderVideoBlock(row) {
   const embedUrl = toYouTubeEmbedUrl(row.video_url);
   return `
-    <section class="ow-block">
-      ${renderHeading(row.section_title)}
-      <div class="ow-video">
-        <iframe
-          src="${escapeHtml(embedUrl)}"
-          title="${escapeHtml(row.section_title || "Video")}"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-        ></iframe>
-      </div>
-      ${renderParagraphs(row.content)}
-    </section>
+    ${renderHeading(row.section_title)}
+    <div class="ow-video">
+      <iframe
+        src="${escapeHtml(embedUrl)}"
+        title="${escapeHtml(row.section_title || "Video")}"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+    </div>
+    ${renderParagraphs(row.content)}
   `;
 }
 
 function renderImageBlock(row) {
   return `
-    <section class="ow-block">
-      ${renderHeading(row.section_title)}
-      <img class="ow-image-block__img" src="${escapeHtml(toRootAbsolute(row.image_file))}" alt="${escapeHtml(row.section_title || "")}" loading="lazy" />
-      ${renderParagraphs(row.content)}
-      ${renderButton(row.button_text, row.button_link)}
-    </section>
+    ${renderHeading(row.section_title)}
+    <img class="ow-image-block__img" src="${escapeHtml(toRootAbsolute(row.image_file))}" alt="${escapeHtml(row.section_title || "")}" loading="lazy" />
+    ${renderParagraphs(row.content)}
+    ${renderButton(row.button_text, row.button_link)}
   `;
 }
 
-function renderBlock(row) {
-  if (row.content_type === "video") return renderVideoBlock(row);
-  if (row.content_type === "image") return renderImageBlock(row);
-  return renderTextBlock(row);
+// Each block gets its own full-bleed section — alternating tint plus a top
+// divider (added via CSS) makes them read as clearly separate sections
+// instead of one continuous scroll of content.
+function renderBlock(row, index) {
+  let inner;
+  if (row.content_type === "video") inner = renderVideoBlock(row);
+  else if (row.content_type === "image") inner = renderImageBlock(row);
+  else inner = renderTextBlock(row);
+
+  const tintClass = index % 2 === 1 ? " ow-block--tint" : "";
+  return `
+    <section class="ow-block${tintClass}">
+      <div class="ow-block__inner">${inner}</div>
+    </section>
+  `;
 }
 
 function renderBanner() {
@@ -187,7 +195,7 @@ async function main() {
   root.innerHTML = `
     ${renderBanner()}
     <div class="ow-blocks">
-      ${rows.map(renderBlock).join("")}
+      ${rows.map((row, i) => renderBlock(row, i)).join("")}
     </div>
   `;
 }
