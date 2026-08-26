@@ -1570,6 +1570,95 @@ button {
   line-height: 1.4;
 }
 
+/* ---------------------------------------------------------------------- */
+/* Official Welcome — big, always-expanded content blocks (no accordion)   */
+/* ---------------------------------------------------------------------- */
+
+.ow-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(48px, 7vw, 90px);
+  padding: clamp(48px, 7vw, 90px) 0;
+}
+
+.ow-block {
+  width: 80%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.ow-block__heading {
+  margin: 0 0 18px;
+  font-family: var(--font-display);
+  font-weight: normal;
+  color: var(--purple-900);
+  font-size: calc(2rem * var(--font-scale));
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+.ow-block__text {
+  margin: 0 0 16px;
+  font-family: var(--font-body);
+  color: var(--ink-900);
+  font-size: calc((1.15rem + var(--body-font-boost)) * var(--font-scale));
+  line-height: 1.6;
+  text-align: center;
+}
+
+.ow-block__text:last-child {
+  margin-bottom: 0;
+}
+
+.ow-video {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%;
+  margin: 0 0 20px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  background: var(--purple-900);
+}
+
+.ow-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.ow-image-block__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 0 20px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.ow-block__btn {
+  display: block;
+  width: max-content;
+  margin: 8px auto 0;
+}
+
+@media (max-width: 700px) {
+  .ow-block {
+    width: 90%;
+  }
+
+  .ow-block__heading {
+    font-size: calc(1.6rem * var(--font-scale));
+  }
+
+  .ow-block__text {
+    font-size: calc((1rem + var(--body-font-boost)) * var(--font-scale));
+  }
+}
+
 .info-toc {
   position: sticky;
   top: var(--header-height);
