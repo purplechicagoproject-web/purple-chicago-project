@@ -2171,6 +2171,18 @@ button {
   margin-bottom: 12px;
 }
 
+/* Instagram embed tucked into the Public Transit (CTA) accordion — centered
+   like the rest of this section's content, "Watch on Instagram" styled the
+   same as the section's other CTA button. */
+.tg-instagram-embed {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.tg-instagram-embed .info-link-btn {
+  margin: 4px 0 16px;
+}
+
 .tips-dodont--single {
   grid-template-columns: 1fr;
 }
