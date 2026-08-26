@@ -1598,14 +1598,14 @@ button {
 
 .ow-block__inner {
   width: 80%;
-  max-width: 900px;
+  max-width: 1080px;
   margin: 0 auto;
 }
 
 /* Bigger and more prominent than a .tips-accordion__title (1.5rem) on
    other info pages, but still clearly under the page's own hero title. */
 .ow-block__heading {
-  margin: 0 0 22px;
+  margin: 0 0 28px;
   font-family: var(--font-display);
   font-weight: normal;
   color: var(--purple-900);
@@ -1614,13 +1614,34 @@ button {
   text-align: center;
 }
 
+/* Media (video/image/Instagram) on the left, copy on the right — stacks
+   on mobile. The media column has a fixed-ish basis so a tall image can't
+   stretch the row; height is separately capped on the image/video itself. */
+.ow-block__row {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 4vw, 56px);
+}
+
+.ow-block__media {
+  flex: 1 1 380px;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.ow-block__copy {
+  flex: 1 1 380px;
+  min-width: 0;
+}
+
 .ow-block__text {
   margin: 0 0 16px;
   font-family: var(--font-body);
   color: var(--ink-900);
   font-size: calc((1.15rem + var(--body-font-boost)) * var(--font-scale));
   line-height: 1.6;
-  text-align: center;
+  text-align: left;
 }
 
 .ow-block__text:last-child {
@@ -1630,9 +1651,9 @@ button {
 .ow-video {
   position: relative;
   width: 100%;
+  max-width: 420px;
   height: 0;
   padding-bottom: 56.25%;
-  margin: 0 0 20px;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
   overflow: hidden;
@@ -1647,19 +1668,26 @@ button {
   border: 0;
 }
 
+/* max-height keeps a tall (e.g. portrait document) image from stretching
+   the whole row — width and height both cap out, whichever binds first. */
 .ow-image-block__img {
   display: block;
-  width: 100%;
+  width: auto;
+  max-width: 100%;
   height: auto;
-  margin: 0 0 20px;
+  max-height: 420px;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
+}
+
+.ow-block__media .instagram-media {
+  max-width: 100% !important;
 }
 
 .ow-block__btn {
   display: block;
   width: max-content;
-  margin: 8px auto 0;
+  margin: 24px auto 0;
 }
 
 @media (max-width: 700px) {
@@ -1671,12 +1699,21 @@ button {
     width: 90%;
   }
 
-  .ow-block__heading {
-    font-size: calc(1.7rem * var(--font-scale));
+  .ow-block__row {
+    flex-direction: column;
+  }
+
+  .ow-block__media {
+    width: 100%;
   }
 
   .ow-block__text {
+    text-align: center;
     font-size: calc((1rem + var(--body-font-boost)) * var(--font-scale));
+  }
+
+  .ow-block__heading {
+    font-size: calc(1.7rem * var(--font-scale));
   }
 }
 

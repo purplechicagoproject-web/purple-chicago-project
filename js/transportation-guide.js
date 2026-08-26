@@ -1,4 +1,5 @@
 import { parseCsv, rowsToObjects } from "./csv.js";
+import { loadInstagramEmbedScript, processInstagramEmbeds, renderInstagramBlockquote } from "./instagram-embed.js";
 
 const CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDjz9I2fK0c9NdVsGHP8rePWlbfhYQ1lvVMgDpwR_dwm8UVr-MdbCqUMSa8PcmBMkchkfCMojfsoZY/pub?gid=0&single=true&output=csv";
@@ -90,21 +91,10 @@ function renderButton(buttonText, buttonLink) {
   return `<a class="info-link-btn" href="${escapeHtml(buttonLink)}" target="_blank" rel="noopener">${escapeHtml(buttonText)}</a>`;
 }
 
-// Standard Instagram oEmbed blockquote — embed.js finds this by class and
-// swaps it for the real iframe. The fallback link inside is Instagram's own
-// placeholder markup (shown only until the script processes it), not a
-// title/caption we're adding.
 function renderInstagramEmbed(url) {
   return `
     <div class="tg-instagram-embed">
-      <blockquote
-        class="instagram-media"
-        data-instgrm-permalink="${escapeHtml(url)}"
-        data-instgrm-version="14"
-        style="background:#FFF; border:0; border-radius:3px; margin: 1px auto; max-width:540px; min-width:326px; padding:0; width:99.375%;"
-      >
-        <a href="${escapeHtml(url)}" target="_blank" rel="noopener"></a>
-      </blockquote>
+      ${renderInstagramBlockquote(url, escapeHtml)}
       <a class="info-link-btn" href="${escapeHtml(url)}" target="_blank" rel="noopener">Watch on Instagram</a>
     </div>
   `;
@@ -135,24 +125,6 @@ function renderSection(row) {
 // accordion may still be collapsed), so we also re-run it manually once
 // loaded and again whenever the CTA accordion is opened. process() is safe
 // to call repeatedly — it only touches blockquotes it hasn't converted yet.
-let instagramScriptPromise = null;
-function loadInstagramEmbedScript() {
-  if (window.instgrm) return Promise.resolve();
-  if (instagramScriptPromise) return instagramScriptPromise;
-  instagramScriptPromise = new Promise((resolve) => {
-    const script = document.createElement("script");
-    script.src = "https://www.instagram.com/embed.js";
-    script.async = true;
-    script.onload = resolve;
-    document.body.appendChild(script);
-  });
-  return instagramScriptPromise;
-}
-
-function processInstagramEmbeds() {
-  window.instgrm?.Embeds?.process();
-}
-
 function wireInstagramEmbed() {
   loadInstagramEmbedScript().then(processInstagramEmbeds);
 

@@ -1,59 +1,8 @@
 import { parseCsv, rowsToObjects } from "./csv.js";
+import { loadInstagramEmbedScript, processInstagramEmbeds, renderInstagramBlockquote } from "./instagram-embed.js";
 
-// Paste the sheet's "Publish to web -> CSV" link here once it's ready. Until
-// then the page renders the fallback content below, so it's ready to ship
-// today and switches over to the sheet automatically the moment this is set.
-const CSV_URL = "";
-
-// Same shape the sheet will use: order, section_title, content_type,
-// content, video_url, image_file, button_text, button_link. Ships today with
-// the launch content; future rows (e.g. a Willis Tower lighting photo) just
-// get added to the sheet — always rendered fully expanded, never behind an
-// accordion, same as these.
-const FALLBACK_ROWS = [
-  {
-    order: 1,
-    section_title: "",
-    content_type: "text",
-    content: "This week, Chicago and Illinois made it official: BTS and ARMY are welcome here.",
-    video_url: "",
-    image_file: "",
-    button_text: "",
-    button_link: "",
-  },
-  {
-    order: 2,
-    section_title: "A Welcome from the Mayor",
-    content_type: "video",
-    content: "",
-    video_url: "https://youtu.be/_RrI53Qr-zE",
-    image_file: "",
-    button_text: "",
-    button_link: "",
-  },
-  {
-    order: 3,
-    section_title: "",
-    content_type: "text",
-    content: "From official proclamations to public celebrations, the city and state have shown up in a big way.",
-    video_url: "",
-    image_file: "",
-    button_text: "",
-    button_link: "",
-  },
-  {
-    order: 4,
-    section_title: "Illinois Declares BTS Day",
-    content_type: "image",
-    content:
-      "On August 14, 2026, Illinois Governor JB Pritzker signed an official proclamation declaring August 27–28 “BTS Day” in the State of Illinois, recognizing the group's global cultural impact and philanthropy.",
-    video_url: "",
-    image_file: "images/official-welcome/BTS-Day.jpg",
-    button_text: "Read the Full Story",
-    button_link:
-      "https://chicago.suntimes.com/arts-and-culture/2026/08/20/gov-jb-pritzker-declares-bts-day-in-illinois-in-honor-of-k-pop-groups-visit-bts-chicago-soldier-field",
-  },
-];
+const CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRw1-LKJC2EKZJLhOUktSUgppWwnaKT9WJ0rMUrxRVjcgWGR1ENlUvZ9v99Ek2ZcnWd0n_1DErbmTRI/pub?gid=0&single=true&output=csv";
 
 function escapeHtml(str) {
   return String(str)
@@ -109,17 +58,9 @@ function renderHeading(sectionTitle) {
   return sectionTitle ? `<h2 class="ow-block__heading">${escapeHtml(sectionTitle)}</h2>` : "";
 }
 
-function renderTextBlock(row) {
-  return `
-    ${renderHeading(row.section_title)}
-    ${renderParagraphs(row.content)}
-  `;
-}
-
-function renderVideoBlock(row) {
+function renderVideoMedia(row) {
   const embedUrl = toYouTubeEmbedUrl(row.video_url);
   return `
-    ${renderHeading(row.section_title)}
     <div class="ow-video">
       <iframe
         src="${escapeHtml(embedUrl)}"
@@ -129,32 +70,42 @@ function renderVideoBlock(row) {
         allowfullscreen
       ></iframe>
     </div>
-    ${renderParagraphs(row.content)}
   `;
 }
 
-function renderImageBlock(row) {
-  return `
-    ${renderHeading(row.section_title)}
-    <img class="ow-image-block__img" src="${escapeHtml(toRootAbsolute(row.image_file))}" alt="${escapeHtml(row.section_title || "")}" loading="lazy" />
-    ${renderParagraphs(row.content)}
-    ${renderButton(row.button_text, row.button_link)}
-  `;
+function renderImageMedia(row) {
+  return `<img class="ow-image-block__img" src="${escapeHtml(toRootAbsolute(row.image_file))}" alt="${escapeHtml(row.section_title || "")}" loading="lazy" />`;
 }
 
-// Each block gets its own full-bleed section — alternating tint plus a top
-// divider (added via CSS) makes them read as clearly separate sections
-// instead of one continuous scroll of content.
+// The Instagram post URL is stored in the video_url column, reused across
+// both video types since both are "the URL for this block's clip".
+function renderInstagramMedia(row) {
+  return renderInstagramBlockquote(row.video_url, escapeHtml);
+}
+
+function renderMedia(row) {
+  if (row.content_type === "video") return renderVideoMedia(row);
+  if (row.content_type === "image") return renderImageMedia(row);
+  if (row.content_type === "instagram_video") return renderInstagramMedia(row);
+  return "";
+}
+
+// Every block: heading on top, media + copy side by side below (stacks on
+// mobile), optional button underneath — always fully expanded, no accordion.
 function renderBlock(row, index) {
-  let inner;
-  if (row.content_type === "video") inner = renderVideoBlock(row);
-  else if (row.content_type === "image") inner = renderImageBlock(row);
-  else inner = renderTextBlock(row);
-
+  const media = renderMedia(row);
   const tintClass = index % 2 === 1 ? " ow-block--tint" : "";
+
   return `
     <section class="ow-block${tintClass}">
-      <div class="ow-block__inner">${inner}</div>
+      <div class="ow-block__inner">
+        ${renderHeading(row.section_title)}
+        <div class="ow-block__row">
+          ${media ? `<div class="ow-block__media">${media}</div>` : ""}
+          <div class="ow-block__copy">${renderParagraphs(row.content)}</div>
+        </div>
+        ${renderButton(row.button_text, row.button_link)}
+      </div>
     </section>
   `;
 }
@@ -171,33 +122,34 @@ function renderBanner() {
   `;
 }
 
-async function loadRows() {
-  if (!CSV_URL) return FALLBACK_ROWS;
-
-  const res = await fetch(CSV_URL, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Sheet fetch failed: ${res.status}`);
-  const text = await res.text();
-  const rows = rowsToObjects(parseCsv(text)).sort((a, b) => Number(a.order) - Number(b.order));
-  return rows.length ? rows : FALLBACK_ROWS;
-}
-
 async function main() {
   const root = document.getElementById("official-welcome-root");
   if (!root) return;
 
-  let rows = FALLBACK_ROWS;
   try {
-    rows = await loadRows();
+    const res = await fetch(CSV_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error(`Sheet fetch failed: ${res.status}`);
+    const text = await res.text();
+    const rows = rowsToObjects(parseCsv(text)).sort((a, b) => Number(a.order) - Number(b.order));
+
+    root.innerHTML = `
+      ${renderBanner()}
+      <div class="ow-blocks">
+        ${rows.map((row, i) => renderBlock(row, i)).join("")}
+      </div>
+    `;
+
+    const hasInstagramBlock = rows.some((r) => r.content_type === "instagram_video");
+    if (hasInstagramBlock) {
+      loadInstagramEmbedScript().then(processInstagramEmbeds);
+    }
   } catch (err) {
     console.error(err);
+    root.innerHTML = `
+      ${renderBanner()}
+      <p class="info-error">Couldn't load this page right now. Please try again shortly.</p>
+    `;
   }
-
-  root.innerHTML = `
-    ${renderBanner()}
-    <div class="ow-blocks">
-      ${rows.map((row, i) => renderBlock(row, i)).join("")}
-    </div>
-  `;
 }
 
 main();
