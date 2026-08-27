@@ -58,18 +58,16 @@ function renderHeading(sectionTitle) {
   return sectionTitle ? `<h2 class="ow-block__heading">${escapeHtml(sectionTitle)}</h2>` : "";
 }
 
-function renderVideoMedia(row) {
+function renderVideoIframe(row) {
   const embedUrl = toYouTubeEmbedUrl(row.video_url);
   return `
-    <div class="ow-video">
-      <iframe
-        src="${escapeHtml(embedUrl)}"
-        title="${escapeHtml(row.section_title || "Video")}"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
-      ></iframe>
-    </div>
+    <iframe
+      src="${escapeHtml(embedUrl)}"
+      title="${escapeHtml(row.section_title || "Video")}"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+    ></iframe>
   `;
 }
 
@@ -84,26 +82,42 @@ function renderInstagramMedia(row) {
 }
 
 function renderMedia(row) {
-  if (row.content_type === "video") return renderVideoMedia(row);
   if (row.content_type === "image") return renderImageMedia(row);
   if (row.content_type === "instagram_video") return renderInstagramMedia(row);
   return "";
 }
 
-// Every block: heading on top, media + copy side by side below (stacks on
-// mobile), optional button underneath — always fully expanded, no accordion.
-function renderBlock(row, index) {
+// YouTube videos get their own full-width treatment (large embed, caption
+// below, centered) — image and Instagram blocks use the media-left/copy-
+// right layout instead.
+function renderFullWidthVideoBlock(row) {
+  return `
+    <div class="ow-video ow-video--full">${renderVideoIframe(row)}</div>
+    <div class="ow-block__copy ow-block__copy--center">${renderParagraphs(row.content)}</div>
+  `;
+}
+
+function renderMediaCopyBlock(row) {
   const media = renderMedia(row);
+  return `
+    <div class="ow-block__row">
+      ${media ? `<div class="ow-block__media">${media}</div>` : ""}
+      <div class="ow-block__copy">${renderParagraphs(row.content)}</div>
+    </div>
+  `;
+}
+
+// Every block: heading on top, content below, optional button underneath —
+// always fully expanded, no accordion.
+function renderBlock(row, index) {
   const tintClass = index % 2 === 1 ? " ow-block--tint" : "";
+  const body = row.content_type === "video" ? renderFullWidthVideoBlock(row) : renderMediaCopyBlock(row);
 
   return `
     <section class="ow-block${tintClass}">
       <div class="ow-block__inner">
         ${renderHeading(row.section_title)}
-        <div class="ow-block__row">
-          ${media ? `<div class="ow-block__media">${media}</div>` : ""}
-          <div class="ow-block__copy">${renderParagraphs(row.content)}</div>
-        </div>
+        ${body}
         ${renderButton(row.button_text, row.button_link)}
       </div>
     </section>
