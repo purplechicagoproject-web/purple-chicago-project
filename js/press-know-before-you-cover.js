@@ -23,6 +23,7 @@ function slugify(text) {
 function renderHero() {
   return `
     <div class="info-hero">
+      <img class="info-hero__art" src="/images/press/pen.png" alt="Illustration of a hand holding a pen" />
       <div class="info-hero__text">
         <h1 class="info-hero__title">Know Before You Cover</h1>
         <p class="info-hero__subtitle">Prior coverage and context on Purple Chicago Project, by category.</p>

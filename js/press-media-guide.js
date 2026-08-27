@@ -23,6 +23,7 @@ function escapeHtml(str) {
 function renderHero() {
   return `
     <div class="info-hero">
+      <img class="info-hero__art" src="/images/press/do-don%27t.png" alt="Illustration of a do and don't checklist" />
       <div class="info-hero__text">
         <h1 class="info-hero__title">Media Guide</h1>
         <p class="info-hero__subtitle">Background, terminology, and guidance for covering Purple Chicago Project.</p>
