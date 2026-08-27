@@ -93,22 +93,30 @@ function renderMedia(row) {
 function renderFullWidthVideoBlock(row) {
   return `
     <div class="ow-video ow-video--full">${renderVideoIframe(row)}</div>
-    <div class="ow-block__copy ow-block__copy--center">${renderParagraphs(row.content)}</div>
+    <div class="ow-block__copy ow-block__copy--center">
+      ${renderParagraphs(row.content)}
+      ${renderButton(row.button_text, row.button_link)}
+    </div>
   `;
 }
 
+// Button lives inside the copy column (right under its paragraph text),
+// not centered under the whole row — so it tracks the text, not the media.
 function renderMediaCopyBlock(row) {
   const media = renderMedia(row);
   return `
     <div class="ow-block__row">
       ${media ? `<div class="ow-block__media">${media}</div>` : ""}
-      <div class="ow-block__copy">${renderParagraphs(row.content)}</div>
+      <div class="ow-block__copy">
+        ${renderParagraphs(row.content)}
+        ${renderButton(row.button_text, row.button_link)}
+      </div>
     </div>
   `;
 }
 
-// Every block: heading on top, content below, optional button underneath —
-// always fully expanded, no accordion.
+// Every block: heading on top, content below — always fully expanded, no
+// accordion. Each content-type renderer places its own button.
 function renderBlock(row, index) {
   const tintClass = index % 2 === 1 ? " ow-block--tint" : "";
   const body = row.content_type === "video" ? renderFullWidthVideoBlock(row) : renderMediaCopyBlock(row);
@@ -118,7 +126,6 @@ function renderBlock(row, index) {
       <div class="ow-block__inner">
         ${renderHeading(row.section_title)}
         ${body}
-        ${renderButton(row.button_text, row.button_link)}
       </div>
     </section>
   `;
