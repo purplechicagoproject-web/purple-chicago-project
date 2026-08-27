@@ -26,6 +26,22 @@ function renderHubGrid() {
   `;
 }
 
+function renderContactSection() {
+  return `
+    <div class="info-sections">
+      <div class="info-section">
+        <p class="info-text">We put this page together to make covering this weekend as easy as possible, background on BTS and ARMY, context on prior coverage, and a direct line to us for anything else you need.</p>
+        <h2 class="tips-subhead">Press Inquiries</h2>
+        <p class="info-text">Purple Chicago Project is happy to provide our official press release, additional photos, and background materials for media coverage. For the full press release or to schedule an interview, please reach out directly.</p>
+        <p class="info-text">
+          📧 <a class="info-text__link" href="mailto:purplechicagoproject@gmail.com">purplechicagoproject@gmail.com</a><br />
+          📷 <a class="info-text__link" href="https://www.instagram.com/purplechicagoproject/" target="_blank" rel="noopener">@purplechicagoproject</a>
+        </p>
+      </div>
+    </div>
+  `;
+}
+
 function main() {
   const root = document.getElementById("press-root");
   if (!root) return;
@@ -34,6 +50,7 @@ function main() {
     ${renderHero()}
     ${renderPressHubNav()}
     ${renderHubGrid()}
+    ${renderContactSection()}
   `;
 }
 

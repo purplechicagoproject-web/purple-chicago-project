@@ -1907,7 +1907,7 @@ button {
 
 .info-link-btn {
   display: inline-block;
-  margin: 4px 8px 16px 0;
+  margin: 4px 8px 24px 0;
   padding: 11px 20px;
   border-radius: 999px;
   background: var(--purple-700);
@@ -2584,6 +2584,12 @@ button {
   padding: 40px 6vw 90px;
 }
 
+/* On Press, the hub grid isn't the last thing on the page — the contact
+   section below supplies its own closing padding instead. */
+body[data-page="press"] .tg-hub-grid {
+  padding-bottom: 20px;
+}
+
 .tg-hub-card {
   display: block;
   padding: 28px 26px;
@@ -2690,7 +2696,7 @@ button {
 .tg-back-wrap {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 20px 6vw 0;
+  padding: 20px 6vw 24px;
   text-align: center;
 }
 
