@@ -18,16 +18,20 @@ function renderHubGrid() {
       <a class="tg-hub-card" href="/press/media-guide.html">
         <div class="tg-hub-card__heading">
           <img class="info-section__icon" src="/images/press/do-don%27t.png" alt="" />
-          <h2 class="tg-hub-card__title">Media Guide</h2>
+          <div class="tg-hub-card__heading-text">
+            <h2 class="tg-hub-card__title">Media Guide</h2>
+            <p class="tg-hub-card__subtitle">Background, terminology, and guidance for coverage</p>
+          </div>
         </div>
-        <p class="tg-hub-card__subtitle">Background, terminology, and guidance for coverage</p>
       </a>
       <a class="tg-hub-card" href="/press/know-before-you-cover.html">
         <div class="tg-hub-card__heading">
           <img class="info-section__icon" src="/images/press/pen.png" alt="" />
-          <h2 class="tg-hub-card__title">Know Before You Cover</h2>
+          <div class="tg-hub-card__heading-text">
+            <h2 class="tg-hub-card__title">Know Before You Cover</h2>
+            <p class="tg-hub-card__subtitle">Prior coverage and context, by category</p>
+          </div>
         </div>
-        <p class="tg-hub-card__subtitle">Prior coverage and context, by category</p>
       </a>
     </div>
   `;

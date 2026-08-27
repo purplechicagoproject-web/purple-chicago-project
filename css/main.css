@@ -2604,19 +2604,22 @@ body[data-page="press"] .tg-hub-grid {
   transform: translateY(-4px);
 }
 
-/* Icon + title side by side, reusing .info-section__icon's exact box style
-   (stadium-info.html's section-heading icons) — .tg-hub-card__title keeps
-   its own size/color, just loses its own bottom margin since the row
-   provides that spacing instead. */
+/* Icon on the left (reusing .info-section__icon's exact box style from
+   stadium-info.html), title + subtitle stacked to its right — the subtitle
+   lines up under the title's own text start (not the icon), and nothing
+   renders below the icon itself. */
 .tg-hub-card__heading {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
-  margin-bottom: 8px;
+}
+
+.tg-hub-card__heading-text {
+  min-width: 0;
 }
 
 .tg-hub-card__heading .tg-hub-card__title {
-  margin-bottom: 0;
+  margin-bottom: 4px;
 }
 
 .tg-hub-card__title {
