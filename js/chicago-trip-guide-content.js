@@ -98,7 +98,6 @@ export const TRIP_GUIDE_LINKS = [
   { href: "/chicago-trip-guide/must-see.html", label: "Chicago Must-See List" },
   { href: "/chicago-trip-guide/free-things.html", label: "Free Things to See" },
   { href: "/chicago-trip-guide/rooftops.html", label: "Rooftop Views" },
-  { href: "/chicago-trip-guide/fun.html", label: "Something Fun While You're Here" },
   { href: "/chicago-trip-guide/kpop-stores.html", label: "K-pop Store List" },
   { href: "/chicago-trip-guide/safety.html", label: "Safety in Chicago" },
 ];
