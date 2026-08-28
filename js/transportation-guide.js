@@ -100,6 +100,19 @@ function renderInstagramEmbed(url) {
   `;
 }
 
+function renderCtaMapImage() {
+  return `
+    <figure class="tg-cta-map">
+      <img
+        class="tg-cta-map__img"
+        src="/images/transportation-guide-web/bts-map-social.jpg"
+        alt="CTA route map to BTS concert, August 27 and 28"
+      />
+      <figcaption class="tg-cta-map__caption">Image courtesy of CTA</figcaption>
+    </figure>
+  `;
+}
+
 function renderSection(row) {
   const slug = slugify(row.section_title);
   const isCtaSection = slug === CTA_SECTION_SLUG;
@@ -115,6 +128,7 @@ function renderSection(row) {
         ${renderDoDont(row.dos, row.donts)}
         ${renderButton(row.button_text, row.button_link)}
         ${isCtaSection ? renderInstagramEmbed(CTA_INSTAGRAM_EMBED_URL) : ""}
+        ${isCtaSection ? renderCtaMapImage() : ""}
       </div>
     </details>
   `;

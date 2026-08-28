@@ -2353,6 +2353,32 @@ button {
   margin: 4px 0 16px;
 }
 
+/* CTA route map — sits at the very end of the Public Transit (CTA)
+   accordion, right after the Watch on Instagram button, spaced/centered
+   the same way as the embed above it. */
+.tg-cta-map {
+  margin: 16px 0 0;
+  text-align: center;
+}
+
+.tg-cta-map__img {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  margin: 0 auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+.tg-cta-map__caption {
+  margin: 8px 0 0;
+  font-family: var(--font-body);
+  font-size: calc(0.8rem + var(--body-font-boost));
+  color: var(--ink-700);
+  text-align: center;
+}
+
 .tips-dodont--single {
   grid-template-columns: 1fr;
 }
