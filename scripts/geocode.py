@@ -35,6 +35,12 @@ PILGRIMAGE_CSV_URL = (
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQylaZwldd8KohFXnT0ASwF4HLe6vE3RnvqqxwU-XQ7_J186xRfG_WxfF3yYJCB6lbUPshzccWao9yZ/pub?gid=0&single=true&output=csv"
 )
 
+# Hotel accommodation survey (/survey-hotels) — Korean-language headers,
+# address column is "주소".
+HOTEL_SURVEY_CSV_URL = (
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQbTSUdat8qkFpjmli-WSPEMNa93h23b8vuhczV0mmWwjDoplbeWNQ0CYyyDFG85hvrXbwTZNfRcmMN/pub?gid=219261712&single=true&output=csv"
+)
+
 # Nominatim can't resolve some addresses literally (e.g. a venue's official
 # street address vs. how OSM has it mapped). Give it a friendlier query to
 # try as a last resort, keyed by the exact address string used elsewhere.
@@ -116,6 +122,20 @@ def fetch_pilgrimage_addresses(csv_url):
     return addresses
 
 
+def fetch_hotel_survey_addresses(csv_url):
+    # Korean headers; address column is "주소". Every row in this sheet has
+    # a non-empty address, geocodable as-is or not — filtering/flagging
+    # "주소확인필요" rows for display is handled client-side in
+    # js/survey-hotels.js, not here; this just makes sure every address
+    # that *can* be resolved ends up in the shared cache.
+    addresses = []
+    for row in fetch_csv_rows(csv_url):
+        raw_address = (row.get("주소") or "").strip()
+        if raw_address:
+            addresses.append(raw_address)
+    return addresses
+
+
 def simplify(address):
     """Progressively strips suite/unit-level detail for a retry query."""
     import re
@@ -175,6 +195,9 @@ def main():
 
     print(f"Fetching Pilgrimage sheet: {PILGRIMAGE_CSV_URL}")
     addresses.extend(fetch_pilgrimage_addresses(PILGRIMAGE_CSV_URL))
+
+    print(f"Fetching Hotel Survey sheet: {HOTEL_SURVEY_CSV_URL}")
+    addresses.extend(fetch_hotel_survey_addresses(HOTEL_SURVEY_CSV_URL))
 
     cache = load_cache()
     to_fetch = [a for a in addresses if a not in cache]

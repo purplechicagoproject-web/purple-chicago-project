@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Where ARMY Stayed — Welcome Partners Map</title>
+  <meta name="description" content="A map of where ARMY stayed in Chicago, from the PChiP accommodation survey." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="/images/site/favicon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@400;700&family=Bebas+Neue&display=swap" />
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body data-page="survey-hotels">
+  <div id="site-header-root"></div>
+
+  <main class="map-page survey-hotels-page">
+    <h1 class="survey-hotels__title">Where ARMY Stayed</h1>
+    <div class="map-stage" id="map-stage">
+      <div id="map"></div>
+
+      <div class="map-status" id="map-status">Loading map...</div>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script type="module" src="/js/survey-hotels.js"></script>
+  <script type="module" src="/js/site-chrome.js"></script>
+</body>
+</html>

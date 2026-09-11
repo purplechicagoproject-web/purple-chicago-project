@@ -1,9 +1,63 @@
 {
+  "1 W Washington St, Chicago, IL 60602": {
+    "display_name": "Staypineapple, An Iconic Hotel, The Loop, 1, West Washington Street, Theatre District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60602, United States",
+    "lat": 41.8830439,
+    "lon": -87.6282334,
+    "query_used": "1 W Washington St, Chicago, IL 60602"
+  },
+  "10 E Grand Ave, Chicago, IL 60611": {
+    "display_name": "North Bridge Self Park, 10, East Grand Avenue, River North, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8919297,
+    "lon": -87.6272228,
+    "query_used": "10 E Grand Ave, Chicago, IL 60611"
+  },
+  "10 S Wabash Ave, Chicago, IL 60603": {
+    "display_name": "Silversmith Hotel Chicago Downtown, 10, South Wabash Avenue, Jewelers Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60603, United States",
+    "lat": 41.881682,
+    "lon": -87.6266569,
+    "query_used": "10 S Wabash Ave, Chicago, IL 60603"
+  },
+  "10300 W Higgins Rd, Rosemont, IL 60018": {
+    "display_name": "Best Western O'Hare, 10300, West Higgins Road, Rosemont, Maine Township, Cook County, Illinois, 60018, United States",
+    "lat": 41.9991761,
+    "lon": -87.8860434,
+    "query_used": "10300 W Higgins Rd, Rosemont, IL 60018"
+  },
+  "105 E Delaware Pl, Chicago, IL 60611": {
+    "display_name": "The Whitehall Hotel, 105, East Delaware Place, Gold Coast, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8989328,
+    "lon": -87.6257157,
+    "query_used": "105 E Delaware Pl, Chicago, IL 60611"
+  },
+  "105 N May St, Chicago, IL 60607": {
+    "display_name": "Hyatt House Chicago West Loop-Fulton Market, 105, North May Street, Restaurant Row, West Loop, Near West Side, Chicago, West Chicago Township, Cook County, Illinois, 60607, United States",
+    "lat": 41.8832666,
+    "lon": -87.6552347,
+    "query_used": "105 N May St, Chicago, IL 60607"
+  },
   "108 N State St, Chicago, IL 60602": {
     "display_name": "Block 37 Shops, 108, North State Street, Theatre District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60602, United States",
     "lat": 41.8838784,
     "lon": -87.6285659,
     "query_used": "108 N State St, Chicago, IL 60602"
+  },
+  "11 S LaSalle St, Chicago, IL 60603": {
+    "display_name": "Residence Inn Chicago Downtown/Loop, 11, South LaSalle Street, Financial District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60603, United States",
+    "lat": 41.8816746,
+    "lon": -87.6321072,
+    "query_used": "11 S LaSalle St, Chicago, IL 60603"
+  },
+  "110 W Huron St, Chicago, IL 60654": {
+    "display_name": "Home2 Suites by Hilton Chicago River North, 110, West Huron Street, River North, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60654, United States",
+    "lat": 41.8950571,
+    "lon": -87.6315585,
+    "query_used": "110 W Huron St, Chicago, IL 60654"
+  },
+  "1100 S Michigan Ave, Chicago, IL 60605": {
+    "display_name": "Best Western Grant Park Hotel, 1100, South Michigan Avenue, Dearborn Park, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+    "lat": 41.8691254,
+    "lon": -87.6246855,
+    "query_used": "1100 S Michigan Ave, Chicago, IL 60605"
   },
   "1104 W Madison St, Chicago, IL 60607": {
     "display_name": "1104, West Madison Street, Greektown, West Loop, Near West Side, Chicago, West Chicago Township, Cook County, Illinois, 60607, United States",
@@ -17,11 +71,41 @@
     "lon": -87.6236685,
     "query_used": "111 S Michigan Ave, Chicago, IL 60603"
   },
+  "111 W Adams St, Chicago, IL 60603": {
+    "display_name": "Club Quarters Central Loop Hotel, 111, West Adams Street, Financial District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60603, United States",
+    "lat": 41.8793184,
+    "lon": -87.631192,
+    "query_used": "111 W Adams St, Chicago, IL 60603"
+  },
+  "111 W Huron St, Chicago, IL 60654": {
+    "display_name": "Hotel Felix, 111, West Huron Street, River North, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60654, United States",
+    "lat": 41.8946215,
+    "lon": -87.6315484,
+    "query_used": "111 W Huron St, Chicago, IL 60654"
+  },
   "1132 S Wabash Ave Lower Level, Chicago, IL 60605": {
     "display_name": "1132, South Wabash Avenue, Dearborn Park, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
     "lat": 41.8682341,
     "lon": -87.6263442,
     "query_used": "1132 S Wabash Ave Chicago, IL 60605"
+  },
+  "118 E 11th St, Chicago, IL 60605": {
+    "display_name": "East 11th Street, Dearborn Park, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+    "lat": 41.8692637,
+    "lon": -87.626653,
+    "query_used": "118 E 11th St, Chicago, IL 60605"
+  },
+  "12 S Michigan Ave, Chicago, IL 60603": {
+    "display_name": "Chicago Athletic Association Hotel, 12, South Michigan Avenue, Jewelers Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60603, United States",
+    "lat": 41.8816573,
+    "lon": -87.6249801,
+    "query_used": "12 S Michigan Ave, Chicago, IL 60603"
+  },
+  "120 E Delaware Pl, Chicago, IL 60611": {
+    "display_name": "Four Seasons Hotel Chicago, 120, East Delaware Place, Gold Coast, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8996386,
+    "lon": -87.6248842,
+    "query_used": "120 E Delaware Pl, Chicago, IL 60611"
   },
   "1200 S DuSable Lake Shore Dr, Chicago, IL 60605": {
     "display_name": "South DuSable Lake Shore Drive, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
@@ -29,11 +113,59 @@
     "lon": -87.6170988,
     "query_used": "1200 S DuSable Lake Shore Dr, Chicago, IL 60605"
   },
+  "122 W Monroe St, Chicago, IL 60603": {
+    "display_name": "Boleo, 122, West Monroe Street, Financial District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60603, United States",
+    "lat": 41.8808447,
+    "lon": -87.6317483,
+    "query_used": "122 W Monroe St, Chicago, IL 60603"
+  },
+  "123 E Cermak Rd, Chicago, IL 60616": {
+    "display_name": "123, East Cermak Road, Motor Row, Near South Side, Chicago, South Chicago Township, Cook County, Illinois, 60616, United States",
+    "lat": 41.8530297,
+    "lon": -87.6235474,
+    "query_used": "123 E Cermak Rd, Chicago, IL 60616"
+  },
+  "1241 N Clybourn Ave, Chicago, IL 60610": {
+    "display_name": "1241, North Clybourn Avenue, River North, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60610, United States",
+    "lat": 41.9045594,
+    "lon": -87.6405033,
+    "query_used": "1241 N Clybourn Ave, Chicago, IL 60610"
+  },
+  "125 S. Clark St., Chicago, IL": {
+    "display_name": "Harry's Hamburgs, 125, South Clark Street, Financial District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60603, United States",
+    "lat": 41.8798349,
+    "lon": -87.6304801,
+    "query_used": "125 S. Clark St., Chicago, IL"
+  },
+  "125 W Ohio St, Chicago, IL 60654": {
+    "display_name": "Best Western River North, 125, West Ohio Street, River North, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60654, United States",
+    "lat": 41.8921316,
+    "lon": -87.6319855,
+    "query_used": "125 W Ohio St, Chicago, IL 60654"
+  },
+  "1252 S Halsted St, Chicago, IL 60607": {
+    "display_name": "Subway, 1252, South Halsted Street, University Village, Little Italy, Near West Side, Chicago, West Chicago Township, Cook County, Illinois, 60608, United States",
+    "lat": 41.8656014,
+    "lon": -87.6470906,
+    "query_used": "1252 S Halsted St, Chicago, IL 60607"
+  },
+  "1266 N Milwaukee Ave, Chicago, IL 60622": {
+    "display_name": "Daebak Korean BBQ, 1266, North Milwaukee Avenue, Pulaski Park, Wicker Park, West Town, Chicago, West Chicago Township, Cook County, Illinois, 60622, United States",
+    "lat": 41.9046904,
+    "lon": -87.668957,
+    "query_used": "1266 N Milwaukee Ave, Chicago, IL 60622"
+  },
   "130 E Randolph St, Chicago, IL 60601": {
     "display_name": "130, East Randolph Street, Jewelers Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60601, United States",
     "lat": 41.8843072,
     "lon": -87.6242295,
     "query_used": "130 E Randolph St, Chicago, IL 60601"
+  },
+  "1301 N State Pkwy, Chicago, IL 60610": {
+    "display_name": "Ambassador Hotel, 1301, North State Parkway, Gold Coast, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60610, United States",
+    "lat": 41.9059879,
+    "lon": -87.628314,
+    "query_used": "1301 N State Pkwy, Chicago, IL 60610"
   },
   "1340 S Michigan Ave, Chicago, IL 60605": {
     "display_name": "Giordano's Pizzeria, 1340, South Michigan Avenue, Central Station, South Loop, Near South Side, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
@@ -53,6 +185,36 @@
     "lon": -87.6176477,
     "query_used": "Soldier Field, Chicago, IL"
   },
+  "1480 N Milwaukee Ave, Chicago, IL 60622": {
+    "display_name": "Seoul Spice Korean Kitchen, 1480, North Milwaukee Avenue, Wicker Park, West Town, Chicago, West Chicago Township, Cook County, Illinois, 60622, United States",
+    "lat": 41.9087319,
+    "lon": -87.6751244,
+    "query_used": "1480 N Milwaukee Ave, Chicago, IL 60622"
+  },
+  "15 E Ohio St, Chicago, IL 60611": {
+    "display_name": "ACME Hotel Company, 15, East Ohio Street, River North, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8922463,
+    "lon": -87.6274987,
+    "query_used": "15 E Ohio St, Chicago, IL 60611"
+  },
+  "150 E Huron St, Chicago, IL 60611": {
+    "display_name": "150, East Huron Street, Magnificent Mile, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8952062,
+    "lon": -87.623183,
+    "query_used": "150 E Huron St, Chicago, IL 60611"
+  },
+  "151 E Wacker Dr, Chicago, IL 60601": {
+    "display_name": "Hyatt Regency Chicago, 151, East Upper Wacker Drive, New East Side, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60601, United States",
+    "lat": 41.8874806,
+    "lon": -87.6228364,
+    "query_used": "151 E Wacker Dr, Chicago, IL 60601"
+  },
+  "151 W Adams St, Chicago, IL 60603": {
+    "display_name": "JW Marriott Chicago, 151, West Adams Street, Financial District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60603, United States",
+    "lat": 41.879266,
+    "lon": -87.6330277,
+    "query_used": "151 W Adams St, Chicago, IL 60603"
+  },
   "1516 N Milwaukee Ave, Chicago, IL 60622": {
     "display_name": "1516, North Milwaukee Avenue, Wicker Park, West Town, Chicago, West Chicago Township, Cook County, Illinois, 60622, United States",
     "lat": 41.9089446,
@@ -65,11 +227,65 @@
     "lon": -87.6764706,
     "query_used": "1561 N Milwaukee Ave, Chicago, IL 60622"
   },
+  "160 E Huron St, Chicago, IL 60611": {
+    "display_name": "The Windsor, 160, East Huron Street, Magnificent Mile, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8951053,
+    "lon": -87.6229664,
+    "query_used": "160 E Huron St, Chicago, IL 60611"
+  },
+  "1625 Milwaukee Ave, Glenview, IL 60025": {
+    "display_name": "Baymont Glenview, 1625, Milwaukee Avenue, Northfield Woods, Glenview, Northfield Township, Cook County, Illinois, 60025, United States",
+    "lat": 42.0859933,
+    "lon": -87.8674079,
+    "query_used": "1625 Milwaukee Ave, Glenview, IL 60025"
+  },
+  "163 E Walton Pl, Chicago, IL 60611": {
+    "display_name": "Millennium Knickerbocker Hotel Chicago, 163, East Walton Place, Gold Coast, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8997836,
+    "lon": -87.6227266,
+    "query_used": "163 E Walton Pl, Chicago, IL 60611"
+  },
+  "17 E Monroe St, Chicago, IL 60603": {
+    "display_name": "The Palmer House Hilton, 17, East Monroe Street, Jewelers Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60603, United States",
+    "lat": 41.8803325,
+    "lon": -87.6269504,
+    "query_used": "17 E Monroe St, Chicago, IL 60603"
+  },
+  "171 W Randolph St, Chicago, IL 60601": {
+    "display_name": "The Allegro Royal Sonesta Hotel Chicago Loop, 171, West Randolph Street, Theatre District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60601, United States",
+    "lat": 41.8841092,
+    "lon": -87.6336242,
+    "query_used": "171 W Randolph St, Chicago, IL 60601"
+  },
+  "1726 W Division St., Chicago, IL 60622": {
+    "display_name": "Tous les Jours, 1726, West Division Street, Pulaski Park, Wicker Park, West Town, Chicago, West Chicago Township, Cook County, Illinois, 60622, United States",
+    "lat": 41.903475,
+    "lon": -87.6710967,
+    "query_used": "1726 W Division St., Chicago, IL 60622"
+  },
   "181 N Michigan Ave, Chicago, IL 60601": {
     "display_name": "181, North Michigan Avenue, Theatre District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60601, United States",
     "lat": 41.8854046,
     "lon": -87.6246059,
     "query_used": "181 N Michigan Ave, Chicago, IL 60601"
+  },
+  "189 N Wabash Ave, Chicago, IL 60601": {
+    "display_name": "189, North Wabash Avenue, Theatre District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60601, United States",
+    "lat": 41.885578,
+    "lon": -87.6261632,
+    "query_used": "189 N Wabash Ave, Chicago, IL 60601"
+  },
+  "1900 Oakton St, Elk Grove Village, IL 60007": {
+    "display_name": "1900, Oakton Street, Elk Grove Village, Elk Grove Township, Cook County, Illinois, 60007, United States",
+    "lat": 42.02253,
+    "lon": -87.958294,
+    "query_used": "1900 Oakton St, Elk Grove Village, IL 60007"
+  },
+  "1975 E Higgins Rd, Schaumburg, IL 60173": {
+    "display_name": "East Higgins Road, Schaumburg, Schaumburg Township, Cook County, Illinois, 60173, United States",
+    "lat": 42.0371764,
+    "lon": -88.0320304,
+    "query_used": "1975 E Higgins Rd, Schaumburg, IL 60173"
   },
   "2 E Ontario St, Chicago, IL 60611": {
     "display_name": "Gordon Ramsay Burger, 2, East Ontario Street, River North, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
@@ -77,11 +293,83 @@
     "lon": -87.6279307,
     "query_used": "2 E Ontario St, Chicago, IL 60611"
   },
+  "20 E Delaware Pl, Chicago, IL 60611": {
+    "display_name": "The Talbott Hotel, 20, East Delaware Place, Gold Coast, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8994577,
+    "lon": -87.627489,
+    "query_used": "20 E Delaware Pl, Chicago, IL 60611"
+  },
+  "20 N. Michigan Ave, Chicago, IL 60602": {
+    "display_name": "20 North Michigan, 20, North Michigan Avenue, Jewelers Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60602, United States",
+    "lat": 41.8826638,
+    "lon": -87.6249881,
+    "query_used": "20 N. Michigan Ave, Chicago, IL 60602"
+  },
   "201 E Randolph St, Chicago, IL 60601": {
     "display_name": "201, East Randolph Street, Jewelers Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60601, United States",
     "lat": 41.8842746,
     "lon": -87.6239422,
     "query_used": "201 E Randolph St, Chicago, IL 60601"
+  },
+  "201 N State St, Chicago, IL 60601": {
+    "display_name": "201, North State Street, Theatre District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60601, United States",
+    "lat": 41.8864262,
+    "lon": -87.6280661,
+    "query_used": "201 N State St, Chicago, IL 60601"
+  },
+  "21 W Adams St, Chicago, IL 60603": {
+    "display_name": "21, West Adams Street, Financial District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60603, United States",
+    "lat": 41.8793734,
+    "lon": -87.6281408,
+    "query_used": "21 W Adams St, Chicago, IL 60603"
+  },
+  "2121 S Prairie Ave, Chicago, IL 60616": {
+    "display_name": "Marriott Marquis, 2121, South Prairie Avenue, Motor Row, Near South Side, Chicago, South Chicago Township, Cook County, Illinois, 60616, United States",
+    "lat": 41.8536541,
+    "lon": -87.6202477,
+    "query_used": "2121 S Prairie Ave, Chicago, IL 60616"
+  },
+  "216 E Ontario St, Chicago, IL 60611": {
+    "display_name": "Fairfield Inn & Suites Chicago Downtown/Magnificent Mile, 216, East Ontario Street, Streeterville, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8936483,
+    "lon": -87.6219597,
+    "query_used": "216 E Ontario St, Chicago, IL 60611"
+  },
+  "22 W Monroe St, Chicago, IL 60603": {
+    "display_name": "Hampton Majestic Chicago Theatre District, 22, West Monroe Street, Jewelers Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60603, United States",
+    "lat": 41.8808622,
+    "lon": -87.6285869,
+    "query_used": "22 W Monroe St, Chicago, IL 60603"
+  },
+  "221 N Columbus Dr, Chicago, IL 60601": {
+    "display_name": "221, North Columbus Drive, New East Side, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60601, United States",
+    "lat": 41.8865275,
+    "lon": -87.6208669,
+    "query_used": "221 N Columbus Dr, Chicago, IL 60601"
+  },
+  "2222 Enterprise Dr, Westchester, IL 60154": {
+    "display_name": "Four Points by Sheraton Chicago Westchester/Oak Brook, 2222, Enterprise Drive, Westchester, Proviso Township, Cook County, Illinois, 60154, United States",
+    "lat": 41.8471154,
+    "lon": -87.9083775,
+    "query_used": "2222 Enterprise Dr, Westchester, IL 60154"
+  },
+  "2233 S Martin Luther King Jr Dr, Chicago, IL 60616": {
+    "display_name": "Hyatt Conference Center, 2233, South Doctor Martin Luther King Junior Drive, Motor Row, Near South Side, Chicago, South Chicago Township, Cook County, Illinois, 60616, United States",
+    "lat": 41.8514878,
+    "lon": -87.6193903,
+    "query_used": "2233 S Martin Luther King Jr Dr, Chicago, IL 60616"
+  },
+  "225 N Wabash Ave, Chicago, IL 60601": {
+    "display_name": "Hotel Monaco, 225, North Wabash Avenue, Theatre District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60601, United States",
+    "lat": 41.8864913,
+    "lon": -87.6260067,
+    "query_used": "225 N Wabash Ave, Chicago, IL 60601"
+  },
+  "226 W Jackson Blvd, Chicago, IL 60606": {
+    "display_name": "Hilton Garden Inn Chicago Central Loop, 226, West Jackson Boulevard, Financial District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60606, United States",
+    "lat": 41.8784216,
+    "lon": -87.6349212,
+    "query_used": "226 W Jackson Blvd, Chicago, IL 60606"
   },
   "2391 N Stockton Dr, Chicago, IL 60614": {
     "display_name": "Lincoln Park Conservatory, 2391, North Stockton Drive, Mid-North District, Lincoln Park, Chicago, North Chicago Township, Cook County, Illinois, 60614, United States",
@@ -89,11 +377,53 @@
     "lon": -87.6348029,
     "query_used": "2391 N Stockton Dr, Chicago, IL 60614"
   },
+  "24 E Ida B Wells Dr, Chicago, IL 60605": {
+    "display_name": "24, East Ida B. Wells Drive, Printer's Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+    "lat": 41.8755687,
+    "lon": -87.6273124,
+    "query_used": "24 E Ida B Wells Dr, Chicago, IL 60605"
+  },
+  "2411 W North Ave. Chicago, IL 60647": {
+    "display_name": "2411, West North Avenue, Wicker Park, West Town, Chicago, West Chicago Township, Cook County, Illinois, 60647, United States",
+    "lat": 41.9101083,
+    "lon": -87.687749,
+    "query_used": "2411 W North Ave. Chicago, IL 60647"
+  },
+  "243 E Ontario St, Chicago, IL 60611": {
+    "display_name": "243, East Ontario Street, Streeterville, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8933565,
+    "lon": -87.6181909,
+    "query_used": "243 E Ontario St, Chicago, IL 60611"
+  },
+  "2528 N. Milwaukee Ave, Chicago, IL 60647": {
+    "display_name": "2528, North Milwaukee Avenue, Logan Square, Chicago, West Chicago Township, Cook County, Illinois, 60647, United States",
+    "lat": 41.9267108,
+    "lon": -87.7037288,
+    "query_used": "2528 N. Milwaukee Ave, Chicago, IL 60647"
+  },
   "2537 S Wabash Ave #5, Chicago, IL 60616": {
     "display_name": "2537, South Wabash Avenue, Near South Side, Chicago, South Chicago Township, Cook County, Illinois, 60616, United States",
     "lat": 41.846412,
     "lon": -87.6248677,
     "query_used": "2537 S Wabash Ave Chicago, IL 60616"
+  },
+  "30 E Hubbard St, Chicago, IL 60611": {
+    "display_name": "Glazed and Infused, 30, East Hubbard Street, River North, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.890232,
+    "lon": -87.6275538,
+    "query_used": "30 E Hubbard St, Chicago, IL 60611"
+  },
+  "301 E North Water St, Chicago, IL 60611": {
+    "display_name": "Sheraton Grand Chicago, 301, East North Water Street, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8891374,
+    "lon": -87.6194796,
+    "query_used": "301 E North Water St, Chicago, IL 60611"
+  },
+  "3010 Finley Rd, Downers Grove, IL 60515": {
+    "display_name": "Best Western Chicago - Downers Grove, 3010, Finley Road, Downers Grove, DuPage County, Illinois, 60515, United States",
+    "lat": 41.8325673,
+    "lon": -88.0267378,
+    "query_used": "3010 Finley Rd, Downers Grove, IL 60515"
   },
   "322 E Illinois St, Chicago, IL 60611": {
     "display_name": "Lucky Strike Downtown Chicago, 322, East Illinois Street, Streeterville, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
@@ -101,11 +431,101 @@
     "lon": -87.619059,
     "query_used": "322 E Illinois St, Chicago, IL 60611"
   },
+  "323 E Wacker Dr, Chicago, IL 60601": {
+    "display_name": "Swissotel Chicago, 323, East Wacker Drive, New East Side, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60601, United States",
+    "lat": 41.8873452,
+    "lon": -87.6195255,
+    "query_used": "323 E Wacker Dr, Chicago, IL 60601"
+  },
   "333 Michigan Ave, Chicago, IL 60601": {
     "display_name": "333, South Michigan Avenue, Jewelers Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60604, United States",
     "lat": 41.8778104,
     "lon": -87.6244875,
     "query_used": "333 Michigan Ave, Chicago, IL 60601"
+  },
+  "3939 N Mannheim Rd, Schiller Park, IL 60176": {
+    "display_name": "Hampton Inn Chicago-O'Hare International Airport, 3939, North Mannheim Road, Schiller Park, Leyden Township, Cook County, Illinois, 60176, United States",
+    "lat": 41.9498656,
+    "lon": -87.8850505,
+    "query_used": "3939 N Mannheim Rd, Schiller Park, IL 60176"
+  },
+  "401 N Milwaukee Ave, Chicago, IL 60654": {
+    "display_name": "PERILLA fare, 401, North Milwaukee Avenue, West Town, Chicago, West Chicago Township, Cook County, Illinois, 60654, United States",
+    "lat": 41.8893525,
+    "lon": -87.6445067,
+    "query_used": "401 N Milwaukee Ave, Chicago, IL 60654"
+  },
+  "505 N State St, Chicago, IL 60654": {
+    "display_name": "The Royal Sonesta Chicago River North, 505, North State Street, River North, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60654, United States",
+    "lat": 41.8911493,
+    "lon": -87.6278016,
+    "query_used": "505 N State St, Chicago, IL 60654"
+  },
+  "506 W Harrison St, Chicago, IL 60607": {
+    "display_name": "506, West Harrison Street, Near West Side, Chicago, West Chicago Township, Cook County, Illinois, 60607, United States",
+    "lat": 41.8744807,
+    "lon": -87.6401557,
+    "query_used": "506 W Harrison St, Chicago, IL 60607"
+  },
+  "511 N Columbus Dr, Chicago, IL 60611": {
+    "display_name": "Embassy Suites by Hilton Chicago Downtown Magnificent Mile, 511, North Columbus Drive, Streeterville, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8915058,
+    "lon": -87.6196694,
+    "query_used": "511 N Columbus Dr, Chicago, IL 60611"
+  },
+  "5114 N Lincoln Ave, Chicago, IL 60625": {
+    "display_name": "Dancen, 5114, North Lincoln Avenue, West Ravenswood, Lincoln Square, Chicago, Jefferson Township, Cook County, Illinois, 60625, United States",
+    "lat": 41.9745374,
+    "lon": -87.6924826,
+    "query_used": "5114 N Lincoln Ave, Chicago, IL 60625"
+  },
+  "520 S Michigan Ave, Chicago, IL 60605": {
+    "display_name": "Congress Plaza Hotel, 520, South Michigan Avenue, Printer's Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+    "lat": 41.8749586,
+    "lon": -87.6248317,
+    "query_used": "520 S Michigan Ave, Chicago, IL 60605"
+  },
+  "5300 W Touhy Ave, Skokie, IL 60077": {
+    "display_name": "5300, West Touhy Avenue, Skokie, Niles Township, Cook County, Illinois, 60077, United States",
+    "lat": 42.0119657,
+    "lon": -87.7601232,
+    "query_used": "5300 W Touhy Ave, Skokie, IL 60077"
+  },
+  "540 N Michigan Ave, Chicago, IL 60611": {
+    "display_name": "Chicago Marriott Downtown Magnificent Mile, 540, North Michigan Avenue, Magnificent Mile, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8920926,
+    "lon": -87.6248689,
+    "query_used": "540 N Michigan Ave, Chicago, IL 60611"
+  },
+  "55 E 11th St, Chicago, IL 60605": {
+    "display_name": "55, East 11th Street, Dearborn Park, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+    "lat": 41.8690778,
+    "lon": -87.6253871,
+    "query_used": "55 E 11th St, Chicago, IL 60605"
+  },
+  "55 E Ontario St, Chicago, IL 60611": {
+    "display_name": "Hotel 55 Chicago Downtown, 55, East Ontario Street, River North, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8929963,
+    "lon": -87.6259605,
+    "query_used": "55 E Ontario St, Chicago, IL 60611"
+  },
+  "55 E Washington St, Chicago, IL 60602": {
+    "display_name": "Pittsfield Building, 55, East Washington Street, Jewelers Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60602, United States",
+    "lat": 41.8830309,
+    "lon": -87.6257371,
+    "query_used": "55 E Washington St, Chicago, IL 60602"
+  },
+  "5500 N River Rd, Rosemont, IL 60018": {
+    "display_name": "Embassy Suites by Hilton Chicago O'Hare Rosemont, 5500, North River Road, Rosemont, Leyden Township, Cook County, Illinois, 60018, United States",
+    "lat": 41.9790945,
+    "lon": -87.8632147,
+    "query_used": "5500 N River Rd, Rosemont, IL 60018"
+  },
+  "5615 N Cumberland Ave, Chicago, IL 60631": {
+    "display_name": "5615, North Cumberland Avenue, Norwood Park, Chicago, Jefferson Township, Cook County, Illinois, 60631, United States",
+    "lat": 41.9819045,
+    "lon": -87.8352221,
+    "query_used": "5615 N Cumberland Ave, Chicago, IL 60631"
   },
   "60 W Ontario St, Chicago, IL 60654": {
     "display_name": "Chicago Chop House, 60, West Ontario Street, River North, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60654, United States",
@@ -119,11 +539,101 @@
     "lon": -87.6106286,
     "query_used": "600 E Grand Ave, Chicago, IL 60611"
   },
+  "619 N State Street, Chicago, IL 60654": {
+    "display_name": "619, North State Street, River North, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60654, United States",
+    "lat": 41.8929507,
+    "lon": -87.6280037,
+    "query_used": "619 N State Street, Chicago, IL 60654"
+  },
+  "633 N St Clair St, Chicago, IL 60611": {
+    "display_name": "The Capital Grille, 633, North Saint Clair Street, Magnificent Mile, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8938944,
+    "lon": -87.6225092,
+    "query_used": "633 N St Clair St, Chicago, IL 60611"
+  },
+  "636 S Michigan Ave, Chicago, IL 60605": {
+    "display_name": "The Blackstone, Autograph Collection, 636, South Michigan Avenue, Printer's Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+    "lat": 41.8733563,
+    "lon": -87.6247907,
+    "query_used": "636 S Michigan Ave, Chicago, IL 60605"
+  },
+  "65 E Harrison St, Chicago, IL 60605": {
+    "display_name": "65, East Harrison Street, Printer's Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+    "lat": 41.8744804,
+    "lon": -87.6265149,
+    "query_used": "65 E Harrison St, Chicago, IL 60605"
+  },
+  "6540 S Cicero Ave, Bedford Park, IL 60638": {
+    "display_name": "Hampton Inn & Suites Chicago Midway Airport, 6540, South Cicero Avenue, Bedford Park, Stickney Township, Cook County, Illinois, 60638, United States",
+    "lat": 41.7738035,
+    "lon": -87.7426838,
+    "query_used": "6540 S Cicero Ave, Bedford Park, IL 60638"
+  },
+  "660 N State St, Chicago, IL 60654": {
+    "display_name": "Eurostars Magnificent Mile, 660, North State Street, River North, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60654, United States",
+    "lat": 41.8943132,
+    "lon": -87.6284307,
+    "query_used": "660 N State St, Chicago, IL 60654"
+  },
+  "6630 S Cicero Ave, Bedford Park, IL 60638": {
+    "display_name": "Fairfield Inn & Suites Chicago Midway Airport, 6630, South Cicero Avenue, Bedford Park, Stickney Township, Cook County, Illinois, 60638, United States",
+    "lat": 41.7723004,
+    "lon": -87.7436946,
+    "query_used": "6630 S Cicero Ave, Bedford Park, IL 60638"
+  },
+  "676 N Michigan Ave, Chicago, IL 60611": {
+    "display_name": "Omni Chicago Hotel, 676, North Michigan Avenue, Magnificent Mile, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8947233,
+    "lon": -87.6249305,
+    "query_used": "676 N Michigan Ave, Chicago, IL 60611"
+  },
+  "68 E Wacker Pl, Chicago, IL 60601": {
+    "display_name": "68, East Wacker Place, Theatre District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60601, United States",
+    "lat": 41.8868986,
+    "lon": -87.6257027,
+    "query_used": "68 E Wacker Pl, Chicago, IL 60601"
+  },
+  "720 S Michigan Ave, Chicago, IL 60605": {
+    "display_name": "Chicago Hilton & Towers, 720, South Michigan Avenue, Printer's Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+    "lat": 41.8725091,
+    "lon": -87.6251131,
+    "query_used": "720 S Michigan Ave, Chicago, IL 60605"
+  },
+  "733 W Madison St, Chicago, IL 60661": {
+    "display_name": "733, West Madison Street, Greektown, West Loop, Near West Side, Chicago, West Chicago Township, Cook County, Illinois, 60661, United States",
+    "lat": 41.8817014,
+    "lon": -87.6468427,
+    "query_used": "733 W Madison St, Chicago, IL 60661"
+  },
+  "75 E Wacker Dr, Chicago, IL 60601": {
+    "display_name": "Club Quarters Hotel, Wacker at Michigan, 75, East Upper Wacker Drive, Theatre District, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60601, United States",
+    "lat": 41.8876218,
+    "lon": -87.625448,
+    "query_used": "75 E Wacker Dr, Chicago, IL 60601"
+  },
   "8 W Gartner Rd Ste 140, Naperville, IL 60540": {
     "display_name": "Fantastic Sams, 8, West Gartner Road, Naperville Plaza, Naperville, DuPage County, Illinois, 60540, United States",
     "lat": 41.7552135,
     "lon": -88.1419594,
     "query_used": "8 W Gartner Rd Naperville, IL 60540"
+  },
+  "800 Lake Cook Rd, Deerfield, IL 60015": {
+    "display_name": "Courtyard Chicago Deerfield, 800, Lake Cook Road, Deerfield, Lake County, Illinois, 60015, United States",
+    "lat": 42.1538402,
+    "lon": -87.8469589,
+    "query_used": "800 Lake Cook Rd, Deerfield, IL 60015"
+  },
+  "800 N Michigan Ave, Chicago, IL 60611": {
+    "display_name": "Park Tower, 800, North Michigan Avenue, Streeterville, Gold Coast, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8970266,
+    "lon": -87.6253125,
+    "query_used": "800 N Michigan Ave, Chicago, IL 60611"
+  },
+  "800 S Michigan Ave, Chicago, IL 60605": {
+    "display_name": "Essex on the Park, 800, South Michigan Avenue, Printer's Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+    "lat": 41.8714904,
+    "lon": -87.6247391,
+    "query_used": "800 S Michigan Ave, Chicago, IL 60605"
   },
   "805 S State St, Chicago, IL 60605": {
     "display_name": "Lou Malnati's Pizzeria, 805, South State Street, Printer's Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
@@ -131,16 +641,58 @@
     "lon": -87.6273394,
     "query_used": "805 S State St, Chicago, IL 60605"
   },
+  "808 S Michigan Ave, Chicago, IL 60605": {
+    "display_name": "808, South Michigan Avenue, Printer's Row, Loop, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+    "lat": 41.8716673,
+    "lon": -87.6243589,
+    "query_used": "808 S Michigan Ave, Chicago, IL 60605"
+  },
+  "8101 W Higgins Rd, Chicago, IL 60631": {
+    "display_name": "SpringHill Suites Chicago O'Hare, 8101, West Higgins Road, Norwood Park, Chicago, Jefferson Township, Cook County, Illinois, 60631, United States",
+    "lat": 41.9851242,
+    "lon": -87.8298626,
+    "query_used": "8101 W Higgins Rd, Chicago, IL 60631"
+  },
+  "8500 W Bryn Mawr Ave, Chicago, IL 60631": {
+    "display_name": "Renaissance Chicago O'Hare Suites, 8500, West Bryn Mawr Avenue, O'Hare, Chicago, Jefferson Township, Cook County, Illinois, 60631, United States",
+    "lat": 41.9831406,
+    "lon": -87.8409362,
+    "query_used": "8500 W Bryn Mawr Ave, Chicago, IL 60631"
+  },
   "875 N Michigan Ave, Chicago, IL 60611": {
     "display_name": "875 N Michigan, 875, North Michigan Avenue, Streeterville, Gold Coast, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
     "lat": 41.8988813,
     "lon": -87.6230962,
     "query_used": "875 N Michigan Ave, Chicago, IL 60611"
   },
+  "890 E Ogden Ave, Naperville, IL 60540": {
+    "display_name": "Stardust Motel, 890, East Ogden Avenue, Naperville, DuPage County, Illinois, 60563, United States",
+    "lat": 41.7877411,
+    "lon": -88.1332486,
+    "query_used": "890 E Ogden Ave, Naperville, IL 60540"
+  },
+  "900 E Grand Ave, Chicago, IL 60611": {
+    "display_name": "Sable at Navy Pier, 900, East Grand Avenue, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8913281,
+    "lon": -87.6028356,
+    "query_used": "900 E Grand Ave, Chicago, IL 60611"
+  },
+  "909 N Michigan Ave, Chicago, IL 60611": {
+    "display_name": "The Westin Michigan Avenue Chicago, 909, North Michigan Avenue, Gold Coast, Near North Side, Chicago, North Chicago Township, Cook County, Illinois, 60611, United States",
+    "lat": 41.8994421,
+    "lon": -87.6232342,
+    "query_used": "909 N Michigan Ave, Chicago, IL 60611"
+  },
   "Jackson Dr & Lake Shore Dr": {
     "display_name": "Jackson Dr & DuSable Lake Shore Dr, Chicago, IL (manually placed — lakefront near Grant Park/Buckingham Fountain)",
     "lat": 41.876,
     "lon": -87.6167,
     "query_used": "manual-override (Nominatim matched wrong city for this intersection without state context)"
+  },
+  "Prairie Shores, Chicago, IL 60616": {
+    "display_name": "Prairie Shores, 2937, Douglas, Chicago, South Chicago Township, Cook County, Illinois, 60616, United States",
+    "lat": 41.8404546,
+    "lon": -87.6163782,
+    "query_used": "Prairie Shores, Chicago, IL 60616"
   }
 }
