@@ -1,5 +1,5 @@
 import { parseCsv, rowsToObjects } from "./csv.js";
-import { geocodeAddress } from "./geocode-client.js";
+import { geocodeAddressStaticOnly } from "./geocode-client.js";
 
 const CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQbTSUdat8qkFpjmli-WSPEMNa93h23b8vuhczV0mmWwjDoplbeWNQ0CYyyDFG85hvrXbwTZNfRcmMN/pub?gid=219261712&single=true&output=csv";
@@ -68,33 +68,40 @@ async function addHotelMarkers(map, hotels) {
 
   await Promise.all(
     hotels.map(async (hotel) => {
-      const geo = await geocodeAddress(hotel.address);
-      if (!geo) {
-        console.warn(`[Survey Hotels] Could not geocode "${hotel.name}" ("${hotel.address}") — skipping.`);
-        return;
-      }
+      // Never let one hotel's failure (geocode lookup, marker creation,
+      // anything) reject the whole batch — the other 90+ markers that
+      // already resolved must still end up on the map.
+      try {
+        const geo = await geocodeAddressStaticOnly(hotel.address);
+        if (!geo) {
+          console.warn(`[Survey Hotels] Could not geocode "${hotel.name}" ("${hotel.address}") — skipping.`);
+          return;
+        }
 
-      const latlng = L.latLng(geo.lat, geo.lon);
-      const radius = radiusFor(hotel.count, maxCount);
+        const latlng = L.latLng(geo.lat, geo.lon);
+        const radius = radiusFor(hotel.count, maxCount);
 
-      const marker = L.circleMarker(latlng, {
-        radius,
-        color: hotel.needsVerification ? "#8a8a8a" : "#2f1a57",
-        weight: 1.5,
-        fillColor: hotel.needsVerification ? "#9e9e9e" : "#4e2a94",
-        fillOpacity: hotel.needsVerification ? 0.45 : 0.75,
-      });
+        const marker = L.circleMarker(latlng, {
+          radius,
+          color: hotel.needsVerification ? "#8a8a8a" : "#2f1a57",
+          weight: 1.5,
+          fillColor: hotel.needsVerification ? "#9e9e9e" : "#4e2a94",
+          fillOpacity: hotel.needsVerification ? 0.45 : 0.75,
+        });
 
-      marker.bindTooltip(`${escapeHtml(hotel.name)} — ${hotel.count}명`, {
-        direction: "top",
-        offset: [0, -radius],
-        sticky: false,
-      });
+        marker.bindTooltip(`${escapeHtml(hotel.name)} — ${hotel.count}명`, {
+          direction: "top",
+          offset: [0, -radius],
+          sticky: false,
+        });
 
-      marker.addTo(map);
+        marker.addTo(map);
 
-      if (hotel.district !== SUBURB_DISTRICT) {
-        downtownLatLngs.push(latlng);
+        if (hotel.district !== SUBURB_DISTRICT) {
+          downtownLatLngs.push(latlng);
+        }
+      } catch (err) {
+        console.warn(`[Survey Hotels] Skipping "${hotel.name}" after an unexpected error:`, err);
       }
     })
   );
