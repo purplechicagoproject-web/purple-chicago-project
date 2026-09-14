@@ -3,6 +3,13 @@ import { loadInstagramEmbedScript, processInstagramEmbeds, renderInstagramBlockq
 const THANKS_INSTAGRAM_URL = "https://www.instagram.com/p/DcwTar9KPKa/";
 const LANG_STORAGE_KEY = "pchip_impact_lang";
 
+// Cycled onto the stat cards / quote cards for a bit of color variety —
+// each name maps to a pastel tint of an existing brand accent color (see
+// the .impact-stat-card--* / .impact-quote-card--* rules in main.css),
+// not a new palette.
+const STAT_TINTS = ["cream", "purple", "gold", "magenta", "green"];
+const QUOTE_TINTS = ["purple", "gold", "cream", "green"];
+
 // No sheet behind this page — the numbers are a one-time campaign recap,
 // not content that changes without a code change anyway. Content is kept
 // bilingual here (rather than a site-wide i18n system, which nothing else
@@ -10,7 +17,7 @@ const LANG_STORAGE_KEY = "pchip_impact_lang";
 // Korean-reading ARMY audience directly.
 const CONTENT = {
   en: {
-    heroTitle: "No budget. Just ARMY. A big first step.",
+    heroTitle: ["No budget.", "Just ARMY.", "A big first step."],
     heroSubtitle:
       "In August 2026, BTS came to Chicago. We wanted to make sure they were welcomed the way they deserved.",
     stats: [
@@ -37,6 +44,7 @@ const CONTENT = {
       "The Purple Chicago Project website completely eased my anxiety about this trip. I saw you on the Chicago news too, and felt so proud for an ARMY I've never met but who helped me so much.",
       "I loved Chicago so much I already booked my next trip for April.",
     ],
+    quoteAttribution: "— ARMY",
     learnedTitle: "What We Learned",
     learnedParas: [
       "This project stands out not because it was perfect, but because we were honest about what worked and what didn't.",
@@ -54,7 +62,7 @@ const CONTENT = {
     finalLine: "By the next tour, we won't be moving separately anymore.",
   },
   ko: {
-    heroTitle: "예산은 없었다. 아미만 있었다. 그래도 큰 첫걸음.",
+    heroTitle: ["예산은 없었다.", "아미만 있었다.", "그래도 큰 첫걸음."],
     heroSubtitle: "2026년 8월, BTS가 시카고에 왔습니다. 우리는 그들이 받아 마땅한 환영을 받을 수 있도록 하고 싶었습니다.",
     stats: [
       { number: "546,120", label: "소셜 미디어 도달 수" },
@@ -80,6 +88,7 @@ const CONTENT = {
       "Purple Chicago Project 웹사이트 덕분에 이번 여행에 대한 불안이 완전히 사라졌어요. 시카고 뉴스에서도 봤는데, 만난 적도 없는 아미가 이렇게 큰 도움을 준 게 정말 자랑스러웠어요.",
       "시카고가 너무 좋아서 벌써 4월 여행을 예약했어요.",
     ],
+    quoteAttribution: "— 아미",
     learnedTitle: "우리가 배운 것",
     learnedParas: [
       "이 프로젝트가 특별한 이유는 완벽해서가 아니라, 무엇이 통했고 무엇이 통하지 않았는지 솔직하게 밝혔기 때문입니다.",
@@ -127,11 +136,14 @@ function renderLangToggle(lang) {
 }
 
 function renderHero(c, lang) {
+  const titleLines = c.heroTitle
+    .map((line) => `<span class="impact-hero__line">${escapeHtml(line)}</span>`)
+    .join("");
   return `
     <section class="impact-hero">
       ${renderLangToggle(lang)}
       <div class="impact-hero__inner">
-        <h1 class="impact-hero__title">${escapeHtml(c.heroTitle)}</h1>
+        <h1 class="impact-hero__title">${titleLines}</h1>
         <p class="impact-hero__subtitle">${escapeHtml(c.heroSubtitle)}</p>
       </div>
     </section>
@@ -145,8 +157,8 @@ function renderStats(c) {
         <div class="impact-stat-grid">
           ${c.stats
             .map(
-              (s) => `
-            <div class="impact-stat-card">
+              (s, i) => `
+            <div class="impact-stat-card impact-stat-card--${STAT_TINTS[i % STAT_TINTS.length]}">
               <span class="impact-stat-card__number">${escapeHtml(s.number)}</span>
               <span class="impact-stat-card__label">${escapeHtml(s.label)}</span>
             </div>
@@ -172,9 +184,12 @@ function renderHighlights(c) {
           .map(
             (h, i) =>
               `<div class="impact-highlight${i === 0 ? " impact-highlight--lead" : ""}">` +
+              `<span class="impact-highlight__index">[0${i + 1}]</span>` +
+              `<span class="impact-highlight__content">` +
               (h.prefix ? `<span class="impact-highlight__text">${escapeHtml(h.prefix)}</span>` : "") +
               `<span class="impact-highlight__number">${escapeHtml(h.number)}</span>` +
               `<span class="impact-highlight__text">${escapeHtml(h.suffix)}</span>` +
+              `</span>` +
               `</div>`
           )
           .join("")}
@@ -190,10 +205,11 @@ function renderQuotes(c) {
       <div class="impact-quote-grid">
         ${c.quotes
           .map(
-            (q) => `
-          <blockquote class="impact-quote-card">
+            (q, i) => `
+          <blockquote class="impact-quote-card impact-quote-card--${QUOTE_TINTS[i % QUOTE_TINTS.length]}">
             <span class="impact-quote-card__mark" aria-hidden="true">&ldquo;</span>
             <p class="impact-quote-card__text">${escapeHtml(q)}</p>
+            <cite class="impact-quote-card__attribution">${escapeHtml(c.quoteAttribution)}</cite>
           </blockquote>
         `
           )

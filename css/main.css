@@ -3381,6 +3381,10 @@ a.press-news-item__title:hover {
   letter-spacing: 0.01em;
 }
 
+.impact-hero__line {
+  display: block;
+}
+
 .impact-hero__subtitle {
   margin: 0 auto;
   max-width: 560px;
@@ -3413,28 +3417,54 @@ a.press-news-item__title:hover {
   gap: 18px;
 }
 
+/* The big top-right radius (vs. small radius everywhere else) gives each
+   card the asymmetric "blob corner" shape — a card grid reads as more
+   designed than plain rounded rectangles, and it echoes the rounded
+   brush-stroke feel of the site's illustrations. */
 .impact-stat-card {
-  background: #fff;
-  border: 1px solid rgba(78, 42, 148, 0.12);
-  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 180px;
+  border-radius: 18px 72px 18px 18px;
   box-shadow: var(--shadow-card);
-  padding: 22px 14px 20px;
-  text-align: center;
+  padding: 26px 22px 22px;
+  text-align: left;
+}
+
+.impact-stat-card--cream {
+  background: var(--cream-100);
+}
+
+.impact-stat-card--purple {
+  background: #ece4f9;
+}
+
+.impact-stat-card--gold {
+  background: #fdf1cd;
+}
+
+.impact-stat-card--magenta {
+  background: #fbe3ea;
+}
+
+.impact-stat-card--green {
+  background: #e3f3e4;
 }
 
 .impact-stat-card__number {
   display: block;
   font-family: var(--font-display);
   font-weight: normal;
-  color: var(--purple-700);
-  font-size: clamp(calc(26px * var(--font-scale)), calc(4vw * var(--font-scale)), calc(50px * var(--font-scale)));
+  color: var(--purple-900);
+  font-size: clamp(calc(26px * var(--font-scale)), calc(4vw * var(--font-scale)), calc(46px * var(--font-scale)));
   line-height: 1.1;
   overflow-wrap: break-word;
 }
 
 .impact-stat-card__label {
   display: block;
-  margin-top: 8px;
+  margin-top: 18px;
   font-family: var(--font-body);
   color: var(--ink-700);
   font-size: calc((0.82rem + var(--body-font-boost)) * var(--font-scale));
@@ -3495,20 +3525,36 @@ a.press-news-item__title:hover {
   letter-spacing: 0.02em;
 }
 
+/* A clean divider-line list (bracketed index + row, no card chrome) reads
+   as more editorial than another row of boxes — a deliberate contrast to
+   the stat cards right above it and the quote cards right below. */
 .impact-highlight-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  max-width: 760px;
+  max-width: 820px;
   margin: 0 auto;
+  border-top: 1px solid rgba(78, 42, 148, 0.2);
 }
 
 .impact-highlight {
-  background: #fff;
-  border-left: 6px solid var(--purple-700);
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
-  box-shadow: var(--shadow-card);
-  padding: 18px 22px;
+  display: flex;
+  align-items: baseline;
+  gap: clamp(16px, 3vw, 32px);
+  padding: 22px 4px;
+  border-bottom: 1px solid rgba(78, 42, 148, 0.2);
+}
+
+.impact-highlight__index {
+  flex: 0 0 auto;
+  font-family: var(--font-body);
+  font-weight: 700;
+  color: var(--purple-600);
+  font-size: calc(0.85rem + var(--body-font-boost));
+  letter-spacing: 0.03em;
+}
+
+.impact-highlight__content {
+  flex: 1 1 auto;
 }
 
 .impact-highlight__number {
@@ -3525,7 +3571,7 @@ a.press-news-item__title:hover {
 }
 
 .impact-highlight--lead {
-  padding: 24px 26px;
+  padding: 28px 4px;
 }
 
 .impact-highlight--lead .impact-highlight__number {
@@ -3552,10 +3598,28 @@ a.press-news-item__title:hover {
 
 .impact-quote-card {
   margin: 0;
-  background: var(--cream-100);
-  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  min-height: 220px;
+  border-radius: 18px 84px 18px 18px;
   box-shadow: var(--shadow-card);
   padding: clamp(24px, 3vw, 32px);
+}
+
+.impact-quote-card--cream {
+  background: var(--cream-100);
+}
+
+.impact-quote-card--purple {
+  background: #ece4f9;
+}
+
+.impact-quote-card--gold {
+  background: #fdf1cd;
+}
+
+.impact-quote-card--green {
+  background: #e3f3e4;
 }
 
 .impact-quote-card__mark {
@@ -3569,12 +3633,25 @@ a.press-news-item__title:hover {
 }
 
 .impact-quote-card__text {
+  flex: 1 0 auto;
   margin: 0;
   font-family: var(--font-body);
   font-style: italic;
   color: var(--ink-900);
   font-size: calc((1rem + var(--body-font-boost)) * var(--font-scale));
   line-height: 1.55;
+}
+
+.impact-quote-card__attribution {
+  align-self: flex-end;
+  margin-top: auto;
+  padding-top: 18px;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 700;
+  color: var(--purple-700);
+  opacity: 0.7;
+  font-size: calc(0.8rem + var(--body-font-boost));
 }
 
 @media (max-width: 700px) {
