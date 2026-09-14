@@ -313,6 +313,21 @@ button {
   height: 20px;
 }
 
+.site-footer__email {
+  margin: 16px 0 0;
+  font-weight: 700;
+  font-size: calc(1.05rem + var(--body-font-boost));
+  letter-spacing: 0.01em;
+}
+
+.site-footer__email a {
+  text-decoration: none;
+}
+
+.site-footer__email a:hover {
+  text-decoration: underline;
+}
+
 .site-footer__disclaimer h3 {
   margin: 0 0 10px;
   font-weight: 700;
@@ -3298,5 +3313,399 @@ a.press-news-item__title:hover {
   .detail-panel {
     width: 88vw;
     min-width: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Impact report (/impact.html)                                            */
+/* ---------------------------------------------------------------------- */
+
+.impact-page {
+  overflow-x: hidden;
+}
+
+.impact-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72vh;
+  padding: calc(var(--header-height) + 60px) 6vw 60px;
+  text-align: center;
+  background: url("/images/site/BG.jpg") center/cover no-repeat, var(--purple-800);
+}
+
+.impact-lang-toggle {
+  position: absolute;
+  top: calc(var(--header-height) + 16px);
+  right: 5vw;
+  z-index: 5;
+  display: flex;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 4px;
+}
+
+.impact-lang-btn {
+  border: 0;
+  background: transparent;
+  color: var(--cream-100);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: calc(0.78rem + var(--body-font-boost));
+  letter-spacing: 0.04em;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.impact-lang-btn.is-active {
+  background: #fff;
+  color: var(--purple-900);
+}
+
+.impact-hero__inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.impact-hero__title {
+  margin: 0 0 20px;
+  font-family: var(--font-display);
+  font-weight: normal;
+  color: #fff;
+  font-size: clamp(calc(30px * var(--font-scale)), calc(7vw * var(--font-scale)), calc(76px * var(--font-scale)));
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+}
+
+.impact-hero__subtitle {
+  margin: 0 auto;
+  max-width: 560px;
+  font-family: var(--font-body);
+  color: var(--cream-100);
+  font-size: calc((1rem + var(--body-font-boost)) * var(--font-scale));
+  line-height: 1.5;
+}
+
+/* Section 2 — key numbers */
+.impact-stats {
+  background: url("/images/site/white-background.png") center/cover no-repeat;
+  padding: clamp(48px, 8vw, 96px) 6vw;
+}
+
+.impact-stats__layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(28px, 4vw, 48px);
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.impact-stat-grid {
+  flex: 1 1 640px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+}
+
+.impact-stat-card {
+  background: #fff;
+  border: 1px solid rgba(78, 42, 148, 0.12);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 22px 14px 20px;
+  text-align: center;
+}
+
+.impact-stat-card__number {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: normal;
+  color: var(--purple-700);
+  font-size: clamp(calc(26px * var(--font-scale)), calc(4vw * var(--font-scale)), calc(50px * var(--font-scale)));
+  line-height: 1.1;
+  overflow-wrap: break-word;
+}
+
+.impact-stat-card__label {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--font-body);
+  color: var(--ink-700);
+  font-size: calc((0.82rem + var(--body-font-boost)) * var(--font-scale));
+  line-height: 1.35;
+}
+
+.impact-partner {
+  flex: 0 0 240px;
+  max-width: 240px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.impact-partner__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+.impact-partner__caption {
+  margin: 10px 0 0;
+  font-family: var(--font-body);
+  color: var(--ink-700);
+  font-size: calc(0.78rem + var(--body-font-boost));
+  font-style: italic;
+}
+
+@media (max-width: 980px) {
+  .impact-stat-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .impact-stat-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Section 3 — "What the Numbers Say" */
+.impact-highlights {
+  background: var(--cream-100);
+  padding: clamp(48px, 8vw, 96px) 6vw;
+}
+
+.impact-highlights__title,
+.impact-quotes__title,
+.impact-learned__title {
+  margin: 0 auto clamp(28px, 4vw, 44px);
+  max-width: 900px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: normal;
+  color: var(--purple-700);
+  font-size: clamp(calc(1.5rem * var(--font-scale)), calc(3vw * var(--font-scale)), calc(2.1rem * var(--font-scale)));
+  letter-spacing: 0.02em;
+}
+
+.impact-highlight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.impact-highlight {
+  background: #fff;
+  border-left: 6px solid var(--purple-700);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  box-shadow: var(--shadow-card);
+  padding: 18px 22px;
+}
+
+.impact-highlight__number {
+  font-family: var(--font-display);
+  font-weight: normal;
+  color: var(--purple-700);
+  font-size: calc((1.4rem + var(--body-font-boost)) * var(--font-scale));
+}
+
+.impact-highlight__text {
+  font-family: var(--font-body);
+  color: var(--ink-900);
+  font-size: calc((0.95rem + var(--body-font-boost)) * var(--font-scale));
+}
+
+.impact-highlight--lead {
+  padding: 24px 26px;
+}
+
+.impact-highlight--lead .impact-highlight__number {
+  font-size: calc((2.1rem + var(--body-font-boost)) * var(--font-scale));
+}
+
+.impact-highlight--lead .impact-highlight__text {
+  font-size: calc((1.1rem + var(--body-font-boost)) * var(--font-scale));
+}
+
+/* Section 4 — "What ARMY Said" */
+.impact-quotes {
+  background: url("/images/site/white-background.png") center/cover no-repeat;
+  padding: clamp(48px, 8vw, 96px) 6vw;
+}
+
+.impact-quote-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 3vw, 32px);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.impact-quote-card {
+  margin: 0;
+  background: var(--cream-100);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: clamp(24px, 3vw, 32px);
+}
+
+.impact-quote-card__mark {
+  display: block;
+  margin: 0 0 6px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: calc(2.6rem * var(--font-scale));
+  line-height: 1;
+  color: var(--purple-600);
+  opacity: 0.55;
+}
+
+.impact-quote-card__text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--ink-900);
+  font-size: calc((1rem + var(--body-font-boost)) * var(--font-scale));
+  line-height: 1.55;
+}
+
+@media (max-width: 700px) {
+  .impact-quote-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Section 5 — "What We Learned" */
+.impact-learned {
+  background: var(--cream-100);
+  padding: clamp(48px, 8vw, 96px) 6vw;
+}
+
+.impact-learned__body {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.impact-learned__para {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink-900);
+  font-size: calc((1rem + var(--body-font-boost)) * var(--font-scale));
+  line-height: 1.6;
+  text-align: center;
+}
+
+.impact-learned__para--lead {
+  font-family: var(--font-display);
+  font-weight: normal;
+  color: var(--purple-700);
+  font-size: calc((1.4rem + var(--body-font-boost)) * var(--font-scale));
+  line-height: 1.4;
+}
+
+/* Section 6 — closing, Willis Tower skyline background */
+.impact-closing {
+  position: relative;
+  background: url("/images/impact-web/purple-lights-2026.jpg") center/cover no-repeat;
+  padding: clamp(64px, 10vw, 120px) 6vw;
+}
+
+.impact-closing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.impact-closing__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.impact-closing__title {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-weight: normal;
+  color: #fff;
+  text-align: center;
+  font-size: clamp(calc(1.6rem * var(--font-scale)), calc(3.4vw * var(--font-scale)), calc(2.4rem * var(--font-scale)));
+  letter-spacing: 0.02em;
+}
+
+.impact-closing__para {
+  margin: 0;
+  font-family: var(--font-body);
+  color: #fff;
+  font-size: calc((1rem + var(--body-font-boost)) * var(--font-scale));
+  line-height: 1.6;
+  text-align: center;
+}
+
+.impact-closing__para--final {
+  font-weight: 700;
+  font-size: calc((1.35rem + var(--body-font-boost)) * var(--font-scale));
+  line-height: 1.45;
+}
+
+/* Section 7 — thank-you + closing line */
+.impact-thanks {
+  background: url("/images/site/BG.jpg") center/cover no-repeat, var(--purple-900);
+  padding: clamp(56px, 9vw, 100px) 6vw;
+  text-align: center;
+}
+
+.impact-thanks__title {
+  margin: 0 0 clamp(28px, 4vw, 44px);
+  font-family: var(--font-display);
+  font-weight: normal;
+  color: #fff;
+  font-size: clamp(calc(1.5rem * var(--font-scale)), calc(3vw * var(--font-scale)), calc(2.1rem * var(--font-scale)));
+  letter-spacing: 0.02em;
+}
+
+.impact-thanks__embed {
+  max-width: 540px;
+  margin: 0 auto clamp(36px, 5vw, 56px);
+}
+
+.impact-thanks__embed .instagram-media {
+  max-width: 100% !important;
+}
+
+.impact-thanks__final {
+  margin: 0 auto;
+  max-width: 720px;
+  font-family: var(--font-display);
+  font-weight: normal;
+  color: #fff;
+  font-size: clamp(calc(1.5rem * var(--font-scale)), calc(3.6vw * var(--font-scale)), calc(2.6rem * var(--font-scale)));
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 640px) {
+  .impact-hero {
+    min-height: 68vh;
+  }
+
+  .impact-lang-toggle {
+    top: calc(var(--header-height) + 10px);
+    right: 4vw;
   }
 }

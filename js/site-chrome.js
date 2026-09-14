@@ -53,12 +53,13 @@ function renderFooter() {
         <nav>${navLinksHTML(null, "site-footer__link")}</nav>
       </div>
       <div class="site-footer__col site-footer__contact">
-        <p class="site-footer__cta">Got a spot to feature or something to add? Reach out!</p>
+        <p class="site-footer__cta">Questions, corrections, or partnership inquiries — reach out anytime.</p>
         <div class="site-footer__socials">
           <a href="https://www.instagram.com/purplechicagoproject/" target="_blank" rel="noopener" aria-label="Instagram">${ICONS.instagram}</a>
           <a href="https://www.facebook.com/profile.php?id=61590208066088" target="_blank" rel="noopener" aria-label="Facebook">${ICONS.facebook}</a>
           <a href="mailto:purplechicagoproject@gmail.com" aria-label="Email">${ICONS.email}</a>
         </div>
+        <p class="site-footer__email"><a href="mailto:purplechicagoproject@gmail.com">purplechicagoproject@gmail.com</a></p>
       </div>
       <div class="site-footer__col site-footer__disclaimer">
         <h3>Disclaimer</h3>
