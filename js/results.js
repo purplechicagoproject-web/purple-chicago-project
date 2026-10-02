@@ -481,11 +481,87 @@ function wireTabs() {
   syncPaused();
 }
 
+// ------------------------------------------------------------ scrolly ---
+// D: a sticky chart panel next to (desktop) or above (mobile, 40% of the
+// screen) the seven survey cards. Panel charts are aria-hidden clones; the
+// originals stay in each card (visually hidden) so screen readers keep
+// every chart and its data table in reading order.
+const MOBILE_QUERY = window.matchMedia("(max-width: 899px)");
+
+function wireScrolly() {
+  const scrolly = document.querySelector("[data-scrolly]");
+  if (!scrolly || !motionOk()) return;
+  const steps = [...scrolly.querySelectorAll(".rs-step")];
+  if (!steps.length) return;
+
+  const panel = document.createElement("div");
+  panel.className = "rs-scrolly__panel";
+  const frame = document.createElement("div");
+  frame.className = "rs-scrolly__frame rs-paper";
+  frame.setAttribute("aria-hidden", "true");
+  const stack = document.createElement("div");
+  stack.className = "rs-scrolly__stack";
+
+  const slides = steps.map((step) => {
+    const slide = document.createElement("div");
+    slide.className = "rs-slide";
+    const chart = step.querySelector(".rs-step__chart .rs-chart");
+    if (chart) {
+      const clone = chart.cloneNode(true);
+      clone.classList.remove("rs-paper");
+      clone.querySelectorAll("table").forEach((table) => table.remove());
+      slide.appendChild(clone);
+    }
+    stack.appendChild(slide);
+    return slide;
+  });
+
+  frame.appendChild(stack);
+  panel.appendChild(frame);
+  const note = scrolly.closest(".rs-survey")?.querySelector("[data-survey-note]");
+  if (note) panel.appendChild(note);
+  scrolly.appendChild(panel);
+  scrolly.classList.add("is-enhanced");
+
+  let active = -1;
+  let ticking = false;
+
+  function update() {
+    ticking = false;
+    const vh = window.innerHeight;
+    const line = MOBILE_QUERY.matches ? (frame.getBoundingClientRect().bottom + vh) / 2 : vh / 2;
+    let best = 0;
+    let bestDistance = Infinity;
+    steps.forEach((step, i) => {
+      const r = step.getBoundingClientRect();
+      const distance = Math.abs((r.top + r.bottom) / 2 - line);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        best = i;
+      }
+    });
+    if (best === active) return;
+    active = best;
+    slides.forEach((slide, i) => slide.classList.toggle("is-active", i === active));
+    markChartFilled(slides[active].querySelector(".rs-chart"));
+  }
+
+  const requestUpdate = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  };
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate);
+  update();
+}
+
 syncMotionClass();
 reducedMotion.addEventListener?.("change", syncMotionClass);
 wireTabs();
 wireLangButtons();
 wirePill();
 wireBarFills();
+wireScrolly();
 wireVideo();
 loadCopy().then(wireCountUp);
