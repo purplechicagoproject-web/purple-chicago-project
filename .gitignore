@@ -20,6 +20,11 @@
 # Archived, no-longer-used site images (kept locally as backup)
 /archive/
 
+# /results working notes and QA screenshots — local only, never deployed.
+/PROGRESS.md
+/REVIEW.md
+/qa/
+
 # Local Claude Code tooling config (dev server launch config, local permissions)
 /.claude/
 

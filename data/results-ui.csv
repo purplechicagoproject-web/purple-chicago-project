@@ -1,0 +1,17 @@
+id,en,ko
+period,"Jul 31 to Aug 30, 2026",2026년 7월 31일부터 8월 30일
+info_button,More info,자세히
+autoplay_pause,Pause autoplay,자동 넘김 멈추기
+autoplay_play,Resume autoplay,자동 넘김 다시 시작
+open_page,Open page,페이지 열기
+video_play,Play the Mayor's welcome video,시장님 환영 영상 재생
+video_label,Video on YouTube,유튜브 영상
+partners_only,Partners only,파트너 전용
+pos_label,POS data,POS 데이터
+map_credit,Map data © OpenStreetMap contributors,지도 데이터 © OpenStreetMap contributors
+table_item,Item,항목
+table_value,Value,값
+still_fallback,Open the page to see it,페이지에서 확인하세요
+alt_video,Screen recording of the {page} page,{page} 페이지 화면 녹화
+alt_still,Screenshot of the {page} page,{page} 페이지 화면
+alt_map,"Map of Chicago with circles marking hotels named by survey respondents, clustered downtown",설문 응답자가 언급한 호텔을 원으로 표시한 시카고 지도. 다운타운에 몰려 있습니다.

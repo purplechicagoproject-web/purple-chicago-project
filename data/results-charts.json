@@ -1,0 +1,81 @@
+{
+  "platform_views": {
+    "title": {"en": "Views by platform, Jul 31 to Aug 30, 2026", "ko": "플랫폼별 조회수, 2026년 7월 31일부터 8월 30일"},
+    "items": [
+      {"en": "Instagram", "ko": "인스타그램", "v": 425397},
+      {"en": "Facebook", "ko": "페이스북", "v": 85025},
+      {"en": "Threads", "ko": "스레드", "v": 35698}
+    ]
+  },
+  "origin": {
+    "title": {"en": "Where respondents came from (n=452)", "ko": "응답자의 출신지 (n=452)"},
+    "items": [
+      {"en": "Neighboring states", "ko": "이웃 주", "v": 208},
+      {"en": "Other U.S. states", "ko": "다른 주", "v": 117},
+      {"en": "Outside the U.S.", "ko": "해외", "v": 12},
+      {"en": "Chicago area", "ko": "시카고 지역", "v": 115}
+    ]
+  },
+  "welcome": {
+    "title": {"en": "Did you feel welcomed? (n=452)", "ko": "환영받았다고 느꼈나요? (n=452)"},
+    "items": [
+      {"en": "Very welcomed", "ko": "매우 환영받음", "v": 325},
+      {"en": "Somewhat welcomed", "ko": "어느 정도 환영받음", "v": 75},
+      {"en": "Neutral", "ko": "보통", "v": 48},
+      {"en": "Not very or not at all", "ko": "별로 또는 전혀", "v": 4}
+    ]
+  },
+  "spend": {
+    "title": {"en": "Spending per person by out-of-town respondents, excluding tickets (n=337)", "ko": "시카고 밖에서 온 응답자의 1인당 지출, 티켓 제외 (n=337)"},
+    "items": [
+      {"en": "Under $200", "ko": "$200 미만", "v": 8},
+      {"en": "$200 to $500", "ko": "$200~500", "v": 60},
+      {"en": "$500 to $1,000", "ko": "$500~1,000", "v": 102},
+      {"en": "$1,000 to $2,000", "ko": "$1,000~2,000", "v": 120},
+      {"en": "$2,000 to $3,000", "ko": "$2,000~3,000", "v": 35},
+      {"en": "Over $3,000", "ko": "$3,000 초과", "v": 12}
+    ]
+  },
+  "return": {
+    "title": {"en": "Plan to return, out-of-town respondents (n=325 answered)", "ko": "재방문 의향, 시카고 밖 응답자 (응답 325명)"},
+    "items": [
+      {"en": "Already planning a trip", "ko": "이미 계획 중", "v": 190},
+      {"en": "Would return for the right reason", "ko": "계기가 있으면 다시 옴", "v": 127},
+      {"en": "Maybe someday", "ko": "언젠가", "v": 4},
+      {"en": "Answered that they live in Chicago", "ko": "시카고에 산다고 응답", "v": 4}
+    ]
+  },
+  "funnel": {
+    "title": {"en": "The partner map (n=452)", "ko": "파트너 지도 (n=452)"},
+    "items": [
+      {"en": "Respondents", "ko": "응답자", "v": 452},
+      {"en": "Knew the map existed", "ko": "지도가 있는 줄 앎", "v": 224},
+      {"en": "Opened it", "ko": "열어봄", "v": 170},
+      {"en": "Visited a business", "ko": "가게를 방문", "v": 102}
+    ]
+  },
+  "daynight": {
+    "title": {"en": "One downtown restaurant: units sold vs. prior four-week average", "ko": "한 다운타운 레스토랑: 직전 4주 평균 대비 판매량"},
+    "unit": "pct_change",
+    "items": [
+      {"en": "Breakfast trays", "ko": "아침 트레이", "v": 50},
+      {"en": "Lunch trays", "ko": "점심 트레이", "v": 117}
+    ]
+  },
+  "partners": {
+    "title": {"en": "Revenue change at partner businesses (9 of 12 reported)", "ko": "파트너 가게의 매출 변화 (12곳 중 9곳 응답)"},
+    "note": {"en": "Compared with a prior period. Owner-reported unless noted; one result is a decline with no figure.", "ko": "직전 기간과 비교한 값입니다. 별도 표시가 없으면 사장님 보고 기준이며, 한 곳은 수치 없이 감소입니다."},
+    "unit": "pct_change",
+    "items": [
+      {"en": "Korean steakhouse, downtown", "ko": "다운타운 한식 스테이크하우스", "v": 176, "zone": "loop", "pos": true},
+      {"en": "Casual Korean, downtown", "ko": "다운타운 캐주얼 한식", "v": 30, "zone": "loop"},
+      {"en": "Korean BBQ, Wicker Park", "ko": "위커파크 한식 BBQ", "v": 10, "zone": "other"},
+      {"en": "Korean BBQ set menu, River North", "ko": "리버노스 한식 BBQ 세트", "v": 1.5, "zone": "other", "pos": true},
+      {"en": "Burger restaurant, South Loop", "ko": "사우스루프 버거", "v": 0, "zone": "other"},
+      {"en": "Korean BBQ, Logan Square and Old Town", "ko": "로건스퀘어와 올드타운 한식 BBQ", "v": 0, "zone": "other"},
+      {"en": "Breakfast and lunch chain", "ko": "아침과 점심 체인", "v": 0, "zone": "other"},
+      {"en": "Restaurant, Lincoln Square", "ko": "링컨스퀘어 식당", "v": 0, "zone": "other"},
+      {"en": "Korean BBQ with bar program, Wicker Park", "ko": "위커파크 바 프로그램이 있는 한식 BBQ", "v": null, "label": {"en": "decline", "ko": "감소"}, "zone": "other"}
+    ]
+  }
+}
