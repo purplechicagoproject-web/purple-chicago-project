@@ -344,7 +344,8 @@ def assembly():
     return (
         '<div class="rs-assembly" data-rs-assembly aria-hidden="true">'
         '<div class="rs-assembly__stage">'
-        '<div class="rs-assembly__frame rs-paper">'
+        '<div class="rs-assembly__frame">'
+        '<div class="rs-assembly__paper rs-paper"></div>'
         f'<div class="rs-assembly__menu">{cards}</div>'
         '<div class="rs-assembly__screen">'
         f'<img src="{WEB}/official-welcome.jpg" width="960" height="472" alt="" loading="lazy">'

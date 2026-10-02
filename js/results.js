@@ -556,8 +556,123 @@ function wireScrolly() {
   update();
 }
 
+// ----------------------------------------------------------- assembly ---
+// B2 opening scene (desktop + motion only): the 11 page names start
+// scattered over the stage and, driven purely by scroll position (so it
+// rewinds), fly into a single menu row; then the paper frame and the first
+// page's screen fade in. transform/opacity only. The real list below is
+// the finished state and is always there.
+const DESKTOP_QUERY = window.matchMedia("(min-width: 900px)");
+const SCATTER = [
+  [0.08, 0.16, -10], [0.3, 0.07, 6], [0.56, 0.14, -5], [0.82, 0.09, 9],
+  [0.93, 0.38, -7], [0.1, 0.5, 8], [0.4, 0.42, -12], [0.7, 0.47, 5],
+  [0.2, 0.82, -6], [0.52, 0.86, 10], [0.86, 0.78, -9],
+];
+
+const clamp01 = (v) => Math.min(1, Math.max(0, v));
+const easeInOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+
+function wireAssembly() {
+  const wrap = document.querySelector("[data-rs-assembly]");
+  if (!wrap) return;
+  const stage = wrap.querySelector(".rs-assembly__stage");
+  const paper = wrap.querySelector(".rs-assembly__paper");
+  const screen = wrap.querySelector(".rs-assembly__screen");
+  const cards = [...wrap.querySelectorAll(".rs-assembly__card")];
+  let offsets = [];
+  let on = false;
+  let ticking = false;
+
+  function measure() {
+    cards.forEach((card) => (card.style.transform = "none"));
+    const s = stage.getBoundingClientRect();
+    offsets = cards.map((card, i) => {
+      const r = card.getBoundingClientRect();
+      const [fx, fy, rot] = SCATTER[i % SCATTER.length];
+      return {
+        dx: s.left + fx * s.width - (r.left + r.width / 2),
+        dy: s.top + fy * s.height - (r.top + r.height / 2),
+        rot,
+      };
+    });
+  }
+
+  function render() {
+    ticking = false;
+    if (!on) return;
+    const total = wrap.offsetHeight - stage.offsetHeight;
+    const p = clamp01(-wrap.getBoundingClientRect().top / total);
+    cards.forEach((card, i) => {
+      const start = 0.06 + i * 0.025;
+      const k = 1 - easeInOut(clamp01((p - start) / 0.32));
+      const o = offsets[i];
+      const drift = Math.sin(p * 14 + i * 1.7) * 10 * k;
+      card.style.transform = `translate(${o.dx * k}px, ${o.dy * k + drift}px) rotate(${o.rot * k}deg) scale(${1 + 0.6 * k})`;
+    });
+    const frameIn = clamp01((p - 0.5) / 0.15);
+    paper.style.opacity = frameIn;
+    paper.style.transform = `scale(${0.96 + 0.04 * frameIn})`;
+    screen.style.opacity = clamp01((p - 0.66) / 0.22);
+  }
+
+  const requestRender = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(render);
+  };
+
+  function setOn(next) {
+    if (next === on) return;
+    on = next;
+    wrap.classList.toggle("is-on", on);
+    if (on) {
+      measure();
+      render();
+    } else {
+      cards.forEach((card) => (card.style.transform = ""));
+    }
+  }
+
+  const sync = () => setOn(motionOk() && DESKTOP_QUERY.matches);
+  window.addEventListener("scroll", requestRender, { passive: true });
+  window.addEventListener("resize", () => {
+    if (!on) return;
+    measure();
+    requestRender();
+  });
+  document.addEventListener("rs:copy", () => {
+    if (!on) return;
+    measure(); // card widths change with the language
+    requestRender();
+  });
+  document.fonts?.ready.then(() => on && (measure(), render()));
+  DESKTOP_QUERY.addEventListener?.("change", sync);
+  sync();
+}
+
+// Mobile (or any width without the scene): the page list arrives item by
+// item the first time it scrolls into view.
+function wireListStagger() {
+  const box = document.querySelector("[data-rs-tabs]");
+  if (!box || !motionOk() || DESKTOP_QUERY.matches || !("IntersectionObserver" in window)) return;
+  if (box.getBoundingClientRect().top < window.innerHeight) return;
+  box.querySelectorAll(".rs-tabs__item").forEach((item, i) => item.style.setProperty("--i", i));
+  box.classList.add("is-staggered");
+  const io = new IntersectionObserver(
+    ([entry]) => {
+      if (!entry.isIntersecting) return;
+      box.classList.add("is-in");
+      io.disconnect();
+    },
+    { threshold: 0.15 }
+  );
+  io.observe(box.querySelector(".rs-tabs__nav"));
+}
+
 syncMotionClass();
 reducedMotion.addEventListener?.("change", syncMotionClass);
+wireAssembly();
+wireListStagger();
 wireTabs();
 wireLangButtons();
 wirePill();
