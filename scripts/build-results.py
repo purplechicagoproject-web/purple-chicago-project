@@ -38,22 +38,18 @@ NUMERIC = re.compile(r"_(value\d*|views)$")
 
 # B2 list, in the order and grouping set in the brief. Paths match the
 # site menu (js/nav-data.js).
-GROUPS = [
-    ("group_fans", "fans", [
-        ("page_official_welcome", "/official-welcome.html", "still", "official-welcome"),
-        ("page_partners_map", "/map/", "still", "welcome-partners-map"),
-        ("page_stadium_info", "/stadium-info.html", "video", "stadium-info"),
-        ("page_essentials_tips", "/essentials-tips.html", "video", "essentials-tips"),
-        ("page_transportation_guide", "/transportation-guide.html", "video", "transportation-guide"),
-        ("page_pilgrimage", "/pilgrimage.html", "video", "pilgrimage"),
-        ("page_chicago_trip_guide", "/chicago-trip-guide.html", "video", "chicago-trip-guide"),
-        ("page_fan_event_hub", "/fan-event-hub.html", "video", "fan-event-hub"),
-    ]),
-    ("group_press", "press", [
-        ("page_partner_toolkit", "/partner-toolkit.html", "partners", "logo"),
-        ("page_press", "/press.html", "video", "press"),
-        ("page_about_contact", "/about-contact.html", "still", "about-contact"),
-    ]),
+# B2 list: one group of nine pages (Partner Toolkit and About & Contact were
+# dropped from the list). Paths match the site menu (js/nav-data.js).
+PAGES = [
+    ("page_official_welcome", "/official-welcome.html", "still", "official-welcome"),
+    ("page_partners_map", "/map/", "still", "welcome-partners-map"),
+    ("page_stadium_info", "/stadium-info.html", "video", "stadium-info"),
+    ("page_essentials_tips", "/essentials-tips.html", "video", "essentials-tips"),
+    ("page_transportation_guide", "/transportation-guide.html", "video", "transportation-guide"),
+    ("page_pilgrimage", "/pilgrimage.html", "video", "pilgrimage"),
+    ("page_chicago_trip_guide", "/chicago-trip-guide.html", "video", "chicago-trip-guide"),
+    ("page_fan_event_hub", "/fan-event-hub.html", "video", "fan-event-hub"),
+    ("page_press", "/press.html", "video", "press"),
 ]
 VIEWS = {
     "page_fan_event_hub": "page_fan_event_hub_views",
@@ -189,16 +185,19 @@ def chart_bars(key, chart):
         )
         table_rows.append((item, cell))
     note = pair(chart["note"], "p", "rs-chart__note") if "note" in chart else ""
+    if key == "partners":
+        note += t("partners_hidden", "p", "rs-chart__note")
     return (
-        f'<figure class="rs-chart rs-chart--bars rs-paper" data-chart="{key}">'
+        f'<figure class="rs-chart rs-chart--bars" data-chart="{key}">'
         f'{pair(chart["title"], "figcaption", "rs-chart__title")}'
         f'<div class="rs-bars" aria-hidden="true">{"".join(rows)}</div>'
         f"{note}{sr_table(chart, table_rows)}</figure>"
     )
 
 
-DONUT_COLORS = ["var(--purple-900)", "var(--purple-600)", "var(--gold-500)", "rgba(78, 42, 148, 0.28)"]
-STACK_COLORS = ["var(--purple-900)", "var(--purple-600)", "rgba(78, 42, 148, 0.32)", "var(--gold-500)"]
+# Purple-only steps around #593175 (darkest -> lightest); labels carry meaning.
+DONUT_COLORS = ["#2e1840", "#593175", "#9a7fb0", "#d6c9e0"]
+STACK_COLORS = ["#2e1840", "#593175", "#9a7fb0", "#d6c9e0"]
 
 
 def legend(items, colors, total):
@@ -229,7 +228,7 @@ def chart_donut(key, chart):
     center = f'<text x="60" y="64" text-anchor="middle" class="rs-donut__center">{esc(n.group(0)) if n else ""}</text>'
     table_rows = [(i, fmt_num(i["v"])) for i in items]
     return (
-        f'<figure class="rs-chart rs-chart--donut rs-paper" data-chart="{key}">'
+        f'<figure class="rs-chart rs-chart--donut" data-chart="{key}">'
         f'{pair(chart["title"], "figcaption", "rs-chart__title")}'
         '<div class="rs-donut" aria-hidden="true">'
         f'<svg class="rs-donut__svg" viewBox="0 0 120 120" width="180" height="180" focusable="false">'
@@ -248,7 +247,7 @@ def chart_stack(key, chart):
     )
     table_rows = [(i, fmt_num(i["v"])) for i in items]
     return (
-        f'<figure class="rs-chart rs-chart--stack rs-paper" data-chart="{key}">'
+        f'<figure class="rs-chart rs-chart--stack" data-chart="{key}">'
         f'{pair(chart["title"], "figcaption", "rs-chart__title")}'
         '<div class="rs-stack" aria-hidden="true">'
         f'<div class="rs-stack__track"><span class="rs-stack__fill">{segs}</span></div>'
@@ -259,7 +258,7 @@ def chart_stack(key, chart):
 
 def chart_map():
     return (
-        '<figure class="rs-chart rs-chart--map rs-paper" data-chart="hotels">'
+        '<figure class="rs-chart rs-chart--map" data-chart="hotels">'
         f'<img class="rs-map__img" src="{WEB}/where-army-stayed.jpg" width="1260" height="798" loading="lazy" '
         f'alt="{esc(en("alt_map"))}" data-t-alt="alt_map">'
         f'{t("map_credit", "figcaption", "rs-chart__credit")}</figure>'
@@ -291,44 +290,34 @@ def alt_text(media, page_id):
 
 
 def tabs():
-    groups = []
-    for group_id, slug, pages in GROUPS:
-        items = []
-        for page_id, href, media, name in pages:
-            img, video, w, h = media_for(media, name)
-            views = ""
-            if page_id in VIEWS:
-                views = (
-                    f'<span class="rs-tab__views">{t(VIEWS[page_id])} {t("page_views_label")}</span>'
-                )
-            items.append(
-                f'<li class="rs-tabs__item"><a class="rs-tab" href="{href}" data-page="{page_id}" '
-                f'data-media="{media}" data-img="{img}" data-video="{video}" data-w="{w}" data-h="{h}">'
-                f'{t(page_id, cls="rs-tab__name")}{views}'
-                '<span class="rs-tab__progress" aria-hidden="true"></span></a></li>'
-            )
-        groups.append(
-            f'<div class="rs-tabs__group"><h3 class="rs-tabs__heading" id="rs-group-{slug}" data-t="{group_id}">'
-            f'{esc(en(group_id))}</h3><ul class="rs-tabs__items" aria-labelledby="rs-group-{slug}">'
-            f'{"".join(items)}</ul></div>'
+    items = []
+    for page_id, href, media, name in PAGES:
+        img, video, w, h = media_for(media, name)
+        views = ""
+        if page_id in VIEWS:
+            views = f'<span class="rs-tab__views">{t(VIEWS[page_id])} {t("page_views_label")}</span>'
+        items.append(
+            f'<li class="rs-tabs__item"><a class="rs-tab" href="{href}" data-page="{page_id}" '
+            f'data-media="{media}" data-img="{img}" data-video="{video}" data-w="{w}" data-h="{h}">'
+            f'{t(page_id, cls="rs-tab__name")}{views}'
+            '<span class="rs-tab__progress" aria-hidden="true"></span></a></li>'
         )
-    first_id, first_href, first_media, first_name = GROUPS[0][2][0]
+    first_id, first_href, first_media, first_name = PAGES[0]
     img, _, w, h = media_for(first_media, first_name)
     return (
         '<div class="rs-tabs" data-rs-tabs>'
         '<div class="rs-tabs__nav">'
         '<button type="button" class="rs-tabs__toggle" data-tabs-toggle hidden>'
         f'{t("autoplay_pause")}</button>'
-        f'{"".join(groups)}'
+        f'<ul class="rs-tabs__items" aria-labelledby="rs-site-title">{"".join(items)}</ul>'
         f'<p class="rs-tabs__period">{t("page_views_label")}, {t("period")}</p>'
         "</div>"
         '<div class="rs-tabs__panel" id="rs-tabs-panel">'
-        '<div class="rs-screen rs-paper">'
+        '<div class="rs-screen">'
         f'<div class="rs-screen__media" data-media="{first_media}">'
         f'<img class="rs-screen__img" src="{img}" width="{w}" height="{h}" '
         f'alt="{esc(alt_text(first_media, first_id))}" data-t-alt="alt_still" data-alt-page="{first_id}">'
         '<video class="rs-screen__video" width="960" height="472" muted loop playsinline preload="none" hidden></video>'
-        f'{t("partners_only", cls="rs-screen__badge")}'
         "</div>"
         '<p class="rs-screen__caption">'
         f'<span class="rs-screen__name" data-t="{first_id}">{esc(en(first_id))}</span>'
@@ -340,14 +329,13 @@ def tabs():
 def assembly():
     cards = "".join(
         f'<span class="rs-assembly__card" data-t="{page_id}">{esc(en(page_id))}</span>'
-        for _, _, pages in GROUPS
-        for page_id, *_ in pages
+        for page_id, *_ in PAGES
     )
     return (
         '<div class="rs-assembly" data-rs-assembly aria-hidden="true">'
         '<div class="rs-assembly__stage">'
         '<div class="rs-assembly__frame">'
-        '<div class="rs-assembly__paper rs-paper"></div>'
+        '<div class="rs-assembly__paper"></div>'
         f'<div class="rs-assembly__menu">{cards}</div>'
         '<div class="rs-assembly__screen">'
         f'<img src="{WEB}/official-welcome.jpg" width="960" height="472" alt="" loading="lazy">'
@@ -364,6 +352,8 @@ def render(match):
             return tabs()
         if kind == "assembly":
             return assembly()
+        if kind == "winnote":
+            return t("survey_note_short", "p", "rs-win__note").replace("<p ", '<p aria-hidden="true" ', 1)
         return esc(fmt_num(en(kind)) if NUMERIC.search(kind) else en(kind))
     if kind == "hash":
         return hashlib.sha1((ROOT / arg).read_bytes()).hexdigest()[:10]

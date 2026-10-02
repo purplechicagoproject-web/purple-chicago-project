@@ -15,3 +15,6 @@ still_fallback,Open the page to see it,페이지에서 확인하세요
 alt_video,Screen recording of the {page} page,{page} 페이지 화면 녹화
 alt_still,Screenshot of the {page} page,{page} 페이지 화면
 alt_map,"Map of Chicago with circles marking hotels named by survey respondents, clustered downtown",설문 응답자가 언급한 호텔을 원으로 표시한 시카고 지도. 다운타운에 몰려 있습니다.
+sound_on,Sound on,소리 켜기
+sound_off,Mute,소리 끄기
+partners_hidden,4 other businesses reported no measurable change.,다른 4곳은 뚜렷한 변화가 없었다고 답했습니다.
