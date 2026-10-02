@@ -41,8 +41,6 @@ NUMERIC = re.compile(r"_(value\d*|views)$")
 # B2 list: one group of nine pages (Partner Toolkit and About & Contact were
 # dropped from the list). Paths match the site menu (js/nav-data.js).
 PAGES = [
-    ("page_official_welcome", "/official-welcome.html", "still", "official-welcome"),
-    ("page_partners_map", "/map/", "still", "welcome-partners-map"),
     ("page_stadium_info", "/stadium-info.html", "video", "stadium-info"),
     ("page_essentials_tips", "/essentials-tips.html", "video", "essentials-tips"),
     ("page_transportation_guide", "/transportation-guide.html", "video", "transportation-guide"),
@@ -50,6 +48,8 @@ PAGES = [
     ("page_chicago_trip_guide", "/chicago-trip-guide.html", "video", "chicago-trip-guide"),
     ("page_fan_event_hub", "/fan-event-hub.html", "video", "fan-event-hub"),
     ("page_press", "/press.html", "video", "press"),
+    ("page_partners_map", "/map/", "still", "welcome-partners-map"),
+    ("page_official_welcome", "/official-welcome.html", "still", "official-welcome"),
 ]
 VIEWS = {
     "page_fan_event_hub": "page_fan_event_hub_views",
@@ -304,6 +304,7 @@ def tabs():
         )
     first_id, first_href, first_media, first_name = PAGES[0]
     img, _, w, h = media_for(first_media, first_name)
+    first_alt_id = "alt_video" if first_media == "video" else "alt_still"
     return (
         '<div class="rs-tabs" data-rs-tabs>'
         '<div class="rs-tabs__nav">'
@@ -316,7 +317,7 @@ def tabs():
         '<div class="rs-screen">'
         f'<div class="rs-screen__media" data-media="{first_media}">'
         f'<img class="rs-screen__img" src="{img}" width="{w}" height="{h}" '
-        f'alt="{esc(alt_text(first_media, first_id))}" data-t-alt="alt_still" data-alt-page="{first_id}">'
+        f'alt="{esc(alt_text(first_media, first_id))}" data-t-alt="{first_alt_id}" data-alt-page="{first_id}">'
         '<video class="rs-screen__video" width="960" height="472" muted loop playsinline preload="none" hidden></video>'
         "</div>"
         '<p class="rs-screen__caption">'
@@ -338,7 +339,7 @@ def assembly():
         '<div class="rs-assembly__paper"></div>'
         f'<div class="rs-assembly__menu">{cards}</div>'
         '<div class="rs-assembly__screen">'
-        f'<img src="{WEB}/official-welcome.jpg" width="960" height="472" alt="" loading="lazy">'
+        f'<img src="{WEB}/{PAGES[0][3]}.jpg" width="960" height="472" alt="" loading="lazy">'
         "</div></div></div></div>"
     )
 
