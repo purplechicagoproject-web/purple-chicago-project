@@ -3941,12 +3941,25 @@ body[data-page="results"] :is(a, button, summary, [tabindex]):focus-visible {
   line-height: 1.5;
 }
 
+/* A thin underline is always there; hover/focus draws a gold bar over it
+   from left to right. */
 .rs-link {
+  padding-bottom: 3px;
   color: var(--purple-700);
   font-weight: 700;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
+  text-decoration: none;
+  background-image: linear-gradient(var(--gold-500), var(--gold-500)), linear-gradient(currentColor, currentColor);
+  background-position: 0 100%, 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 3px, 100% 1px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-size 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.rs-link:hover,
+.rs-link:focus-visible {
+  background-size: 100% 3px, 100% 1px;
 }
 
 /* Same asymmetric "blob corner" pastel card as /impact. */
@@ -4046,6 +4059,42 @@ body[data-page="results"] :is(a, button, summary, [tabindex]):focus-visible {
 
 .rs-lang .impact-lang-btn[aria-pressed="true"] {
   color: var(--purple-900);
+}
+
+/* Until JS has placed the pill, the pressed button gets its own white
+   background so the label stays readable. */
+.rs-lang:not(.is-ready) .impact-lang-btn[aria-pressed="true"] {
+  background: #fff;
+}
+
+.rs-lang.is-ready .rs-lang__pill {
+  transition: left 0.4s cubic-bezier(0.65, 0, 0.35, 1), width 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.rs-lang.is-ready .impact-lang-btn {
+  transition: color 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Motion layer: html.rs-motion is only set when reduced motion is off. */
+.rs-motion [data-fill="armed"] :is(.rs-bar__fill, .rs-stack__fill) {
+  transform: scaleX(0);
+}
+
+.rs-motion [data-fill="done"] :is(.rs-bar__fill, .rs-stack__fill) {
+  transform: scaleX(1);
+  transition: transform 0.9s cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+
+.rs-reach__count {
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rs-link,
+  .rs-lang.is-ready .rs-lang__pill,
+  .rs-lang.is-ready .impact-lang-btn {
+    transition: none;
+  }
 }
 
 /* B1. Doors -------------------------------------------------------------- */
@@ -4172,7 +4221,6 @@ body[data-page="results"] :is(a, button, summary, [tabindex]):focus-visible {
   background: rgba(255, 255, 255, 0.7);
   color: var(--ink-900);
   text-decoration: none;
-  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .rs-tab:hover {
@@ -4387,18 +4435,15 @@ body[data-page="results"] :is(a, button, summary, [tabindex]):focus-visible {
 }
 
 .rs-video__label {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 2;
+  display: inline-block;
+  margin: 0 0 8px;
   padding: 4px 10px;
   border-radius: 999px;
-  background: rgba(250, 246, 239, 0.92);
-  color: var(--purple-900);
+  background: var(--purple-900);
+  color: #fff;
   font-family: var(--font-body);
   font-weight: 700;
   font-size: calc(0.78rem * var(--font-scale));
-  pointer-events: none;
 }
 
 .rs-video__frame iframe {

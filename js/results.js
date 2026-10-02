@@ -171,5 +171,121 @@ async function loadCopy() {
   applyCopy();
 }
 
+// ------------------------------------------------------------ motion ---
+// Everything below starts from the finished static page and only adds
+// motion when the visitor hasn't asked for reduced motion.
+
+export function motionOk() {
+  return !reducedMotion.matches;
+}
+
+function syncMotionClass() {
+  root.classList.toggle("rs-motion", motionOk());
+}
+
+// EN|KO pill: slides to the pressed button using its offsetLeft/Width.
+function placePill() {
+  const toggle = document.querySelector(".rs-lang");
+  const pill = toggle?.querySelector(".rs-lang__pill");
+  const pressed = toggle?.querySelector('[aria-pressed="true"]');
+  if (!pill || !pressed) return;
+  pill.style.left = `${pressed.offsetLeft}px`;
+  pill.style.width = `${pressed.offsetWidth}px`;
+  if (!toggle.classList.contains("is-ready")) {
+    // Enable the transition only after the first placement, so the pill
+    // doesn't slide in from 0 on page load.
+    requestAnimationFrame(() => toggle.classList.add("is-ready"));
+  }
+}
+
+function wirePill() {
+  placePill();
+  document.addEventListener("rs:copy", placePill);
+  document.fonts?.ready.then(placePill);
+  window.addEventListener("resize", placePill);
+}
+
+// Bars fill once their chart comes into view (or, for the survey panel,
+// when its card becomes active — see markChartFilled).
+export function markChartFilled(chart) {
+  if (chart?.dataset.fill === "armed") chart.dataset.fill = "done";
+}
+
+function wireBarFills() {
+  if (!motionOk() || !("IntersectionObserver" in window)) return;
+  const charts = document.querySelectorAll(".rs-chart--bars, .rs-chart--stack");
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        // Charts living in the sticky survey panel fill on card activation.
+        if (entry.target.closest(".rs-scrolly__panel")) return;
+        markChartFilled(entry.target);
+        io.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.35 }
+  );
+  charts.forEach((chart) => {
+    chart.dataset.fill = "armed";
+    io.observe(chart);
+  });
+}
+
+// Mayor video: poster + play button only; YouTube is contacted on click.
+function wireVideo() {
+  document.querySelectorAll(".rs-video__poster[data-video-id]").forEach((poster) => {
+    poster.addEventListener("click", (event) => {
+      event.preventDefault();
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(poster.dataset.videoId)}?autoplay=1&rel=0&modestbranding=1`;
+      iframe.title = t("video_play") || "Video";
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      iframe.allowFullscreen = true;
+      iframe.referrerPolicy = "strict-origin-when-cross-origin";
+      poster.replaceWith(iframe);
+      iframe.focus();
+    });
+  });
+}
+
+// The one count-up on the page (scene4_value): 1.4s, ease-out cubic. The
+// visible number is aria-hidden; screen readers get the final value from
+// the .rs-sr twin, which never animates.
+function wireCountUp() {
+  const el = document.querySelector("[data-countup]");
+  if (!el || !motionOk() || !("IntersectionObserver" in window)) return;
+  const rect = el.getBoundingClientRect();
+  if (rect.top < window.innerHeight) return; // already on screen: leave it final
+
+  const builtIn = Number(el.textContent.replace(/,/g, "")) || 0;
+  el.style.minWidth = `${rect.width}px`;
+  el.textContent = "0";
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      const target = Number(String(t("scene4_value") ?? "").replace(/,/g, "")) || builtIn;
+      const start = performance.now();
+      const step = (now) => {
+        const p = Math.min(1, (now - start) / 1400);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = formatNum(Math.round(target * eased));
+        if (p < 1) requestAnimationFrame(step);
+        else el.style.minWidth = "";
+      };
+      requestAnimationFrame(step);
+    },
+    { threshold: 0.5 }
+  );
+  io.observe(el);
+}
+
+syncMotionClass();
+reducedMotion.addEventListener?.("change", syncMotionClass);
 wireLangButtons();
-loadCopy();
+wirePill();
+wireBarFills();
+wireVideo();
+loadCopy().then(wireCountUp);
