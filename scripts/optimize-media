@@ -1,0 +1,237 @@
+#!/usr/bin/env bash
+# Builds web media for /results from images/results/ (originals, untouched,
+# gitignored) into images/results-web/, driven by scripts/optimize-media.conf.
+#
+#   scripts/optimize-media            # everything
+#   scripts/optimize-media videos     # or: images | stills | report
+#
+# Needs ffmpeg/ffprobe (Homebrew) and, for stills, Google Chrome.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONF="$ROOT/scripts/optimize-media.conf"
+SRC="$ROOT/images/results"
+DEST="$ROOT/images/results-web"
+STILLS_RAW="$SRC/stills"
+
+# Homebrew's bin isn't on PATH in every shell (e.g. non-login shells).
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+
+CLIP_SECONDS=8
+VIDEO_WIDTH=960
+VIDEO_FPS=30
+MAX_VIDEO_BYTES=1500000
+CRF_START=24
+CRF_STEP=2
+CRF_MAX=40
+
+# Same frame as the screen recordings (2356x1158 = 1178x579 CSS px @2x).
+STILL_W=1178
+STILL_H=579
+STILL_SCALE=2
+SEED_PORT=8799
+
+trim() { local s="$1"; s="${s#"${s%%[![:space:]]*}"}"; echo "${s%"${s##*[![:space:]]}"}"; }
+
+slugify() {
+  echo "$1" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//'
+}
+
+need() { command -v "$1" >/dev/null 2>&1 || { echo "Missing: $1" >&2; exit 1; }; }
+
+size_of() { stat -f%z "$1"; }
+
+urlencode() { python3 -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$1"; }
+
+conf_lines() {
+  local wanted="$1"
+  grep -vE '^\s*(#|$)' "$CONF" | while IFS='|' read -r type a b c d; do
+    [[ "$(trim "$type")" == "$wanted" ]] || continue
+    printf '%s|%s|%s|%s\n' "$(trim "$a")" "$(trim "$b")" "$(trim "${c:-}")" "$(trim "${d:-}")"
+  done
+}
+
+encode_video() {
+  local src="$1" out="$2" start="$3" crf="$4"
+  ffmpeg -nostdin -hide_banner -loglevel error -y \
+    -ss "$start" -i "$src" -t "$CLIP_SECONDS" -an \
+    -vf "fps=$VIDEO_FPS,scale=$VIDEO_WIDTH:-2:flags=lanczos,format=yuv420p" \
+    -c:v libx264 -preset slow -crf "$crf" -profile:v high \
+    -movflags +faststart -tag:v avc1 "$out"
+}
+
+do_videos() {
+  need ffmpeg
+  conf_lines video | while IFS='|' read -r file name start _; do
+    local src="$SRC/$file"
+    [[ -f "$src" ]] || { echo "SKIP video (missing source): $file" >&2; continue; }
+    name="$(slugify "${name:-${file%.*}}")"
+    start="${start:-0}"
+    local out="$DEST/$name.mp4" crf=$CRF_START
+    encode_video "$src" "$out" "$start" "$crf"
+    while (( $(size_of "$out") > MAX_VIDEO_BYTES )) && (( crf < CRF_MAX )); do
+      crf=$((crf + CRF_STEP))
+      encode_video "$src" "$out" "$start" "$crf"
+    done
+    if (( $(size_of "$out") > MAX_VIDEO_BYTES )); then
+      echo "WARN $name.mp4 still over limit at crf $crf" >&2
+    fi
+    # Poster = the clip's own first frame, so nothing jumps when it starts.
+    ffmpeg -nostdin -hide_banner -loglevel error -y -ss "$start" -i "$src" -frames:v 1 \
+      -vf "scale=$VIDEO_WIDTH:-2:flags=lanczos" -q:v 3 "$DEST/$name.jpg"
+    echo "video  $name.mp4  (crf $crf, start ${start}s)"
+  done
+}
+
+resize_image() {
+  local src="$1" out="$2" max="$3" fmt="$4"
+  local w h
+  IFS=x read -r w h < <(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0:s=x "$src" </dev/null)
+  # Never upscale: only shrink when the long side is over the limit.
+  local scale="iw:ih"
+  if (( w >= h && w > max )); then scale="$max:-2"; elif (( h > w && h > max )); then scale="-2:$max"; fi
+  if [[ "$fmt" == "jpg" ]]; then
+    ffmpeg -nostdin -hide_banner -loglevel error -y -i "$src" \
+      -vf "scale=$scale:flags=lanczos,format=yuvj444p" -q:v 3 "$out"
+  else
+    ffmpeg -nostdin -hide_banner -loglevel error -y -i "$src" \
+      -vf "scale=$scale:flags=lanczos" -compression_level 9 "$out"
+  fi
+}
+
+do_images() {
+  need ffmpeg; need ffprobe
+  conf_lines image | while IFS='|' read -r file name max fmt; do
+    local src="$SRC/$file"
+    [[ -f "$src" ]] || { echo "SKIP image (missing source): $file" >&2; continue; }
+    name="$(slugify "${name:-${file%.*}}")"
+    fmt="${fmt:-png}"
+    max="${max:-1600}"
+    (( max > 1600 )) && max=1600
+    resize_image "$src" "$DEST/$name.$fmt" "$max" "$fmt"
+    echo "image  $name.$fmt"
+  done
+}
+
+# Tiny local server just for capturing: serves the site as-is, plus /__seed,
+# which pre-dismisses the map page's first-visit welcome popup (sets its own
+# "snooze" key) and then redirects, and an optional ?__hide= that injects a
+# display:none rule into that one HTML response — no site file is changed.
+start_seed_server() {
+  python3 - "$ROOT" "$SEED_PORT" <<'PY' &
+import http.server, json, os, sys, urllib.parse
+root, port = sys.argv[1], int(sys.argv[2])
+SEED = ("<!doctype html><script>try{localStorage.setItem('pchip_welcome_map_snooze_until',"
+        "String(Date.now()+864e5));}catch(e){}location.replace(%s);</script>")
+class Handler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *a, **k):
+        super().__init__(*a, directory=root, **k)
+    def log_message(self, *a):
+        pass
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-store")
+        super().end_headers()
+    def do_GET(self):
+        u = urllib.parse.urlparse(self.path)
+        if u.path == "/__seed":
+            nxt = urllib.parse.parse_qs(u.query).get("next", ["/"])[0]
+            if not nxt.startswith("/") or nxt.startswith("//"):
+                nxt = "/"
+            body = (SEED % json.dumps(nxt)).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+        hide = urllib.parse.parse_qs(u.query).get("__hide", [None])[0]
+        if hide:
+            fp = os.path.normpath(os.path.join(root, u.path.lstrip("/")))
+            if os.path.isdir(fp):
+                fp = os.path.join(fp, "index.html")
+            if fp.startswith(root) and fp.endswith(".html") and os.path.isfile(fp):
+                with open(fp, encoding="utf-8") as f:
+                    html = f.read()
+                rule = "<style>%s{display:none!important}</style>" % hide.replace("<", "")
+                body = html.replace("</head>", rule + "</head>", 1).encode()
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+                return
+        super().do_GET()
+http.server.ThreadingHTTPServer(("127.0.0.1", port), Handler).serve_forever()
+PY
+  SEED_PID=$!
+  for _ in $(seq 1 20); do
+    curl -s -o /dev/null "http://127.0.0.1:$SEED_PORT/" && return 0
+    sleep 0.25
+  done
+  echo "Capture server did not start on port $SEED_PORT" >&2
+  exit 1
+}
+
+do_stills() {
+  need ffmpeg; need ffprobe; need python3; need curl
+  [[ -x "$CHROME" ]] || { echo "Missing: Google Chrome" >&2; exit 1; }
+  mkdir -p "$STILLS_RAW"
+  start_seed_server
+  trap 'kill "$SEED_PID" 2>/dev/null || true' EXIT
+  conf_lines still | while IFS='|' read -r path name hide _; do
+    name="$(slugify "$name")"
+    local next="$path" url
+    [[ -n "$hide" ]] && next="$path?__hide=$(urlencode "$hide")"
+    url="http://127.0.0.1:$SEED_PORT/__seed?next=$(urlencode "$next")"
+    local raw="$STILLS_RAW/$name.png" profile
+    profile="$(mktemp -d)"
+    rm -f "$raw"
+    "$CHROME" --headless=new --disable-gpu --hide-scrollbars --no-first-run \
+      --user-data-dir="$profile" --window-size="$STILL_W,$STILL_H" \
+      --force-device-scale-factor="$STILL_SCALE" --virtual-time-budget=15000 \
+      --screenshot="$raw" "$url" </dev/null >/dev/null 2>&1 &
+    # Pages with embeds (e.g. YouTube) can keep headless Chrome alive after
+    # the screenshot is written, so stop this run's Chrome (matched by its
+    # unique temp profile) once the file settles, or after 45s regardless.
+    local waited=0 last=-1 now
+    while (( waited < 90 )); do
+      sleep 0.5; waited=$((waited + 1))
+      [[ -f "$raw" ]] || continue
+      now="$(size_of "$raw")"
+      if (( now > 0 && now == last )); then break; fi
+      last="$now"
+    done
+    pkill -f -- "--user-data-dir=$profile" 2>/dev/null || true
+    wait 2>/dev/null || true
+    rm -rf "$profile"
+    [[ -f "$raw" ]] || { echo "SKIP still (capture failed): $path" >&2; continue; }
+    ffmpeg -nostdin -hide_banner -loglevel error -y -i "$raw" \
+      -vf "scale=$VIDEO_WIDTH:-2:flags=lanczos,format=yuvj444p" -q:v 3 "$DEST/$name.jpg"
+    echo "still  $name.jpg  ($path)"
+  done
+}
+
+do_report() {
+  need ffprobe
+  printf "\n%-30s %10s %10s %12s\n" "file" "size" "duration" "dimensions"
+  for f in "$DEST"/*; do
+    [[ "$(basename "$f")" == ._* ]] && continue
+    local dur="-" dims
+    dims="$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0:s=x "$f")"
+    if [[ "$f" == *.mp4 ]]; then
+      dur="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$f" | awk '{printf "%.2fs", $1}')"
+    fi
+    printf "%-30s %8d KB %10s %12s\n" "$(basename "$f")" "$(( $(size_of "$f") / 1024 ))" "$dur" "$dims"
+  done
+}
+
+mkdir -p "$DEST"
+case "${1:-all}" in
+  videos) do_videos ;;
+  images) do_images ;;
+  stills) do_stills ;;
+  report) do_report ;;
+  all) do_videos; do_images; do_stills; do_report ;;
+  *) echo "Usage: $0 [all|videos|images|stills|report]" >&2; exit 1 ;;
+esac
