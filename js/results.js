@@ -282,8 +282,208 @@ function wireCountUp() {
   io.observe(el);
 }
 
+// --------------------------------------------------------------- tabs ---
+// B2 page list. Static markup is a list of plain links (works without JS);
+// here it becomes a tablist driving one screen panel. Auto-advance every
+// 8s is driven by the active tab's progress-bar animation (animationend),
+// so pausing the animation pauses the timer too.
+function wireTabs() {
+  const box = document.querySelector("[data-rs-tabs]");
+  if (!box) return;
+  const tabs = [...box.querySelectorAll(".rs-tab")];
+  const panel = box.querySelector("#rs-tabs-panel");
+  const media = panel.querySelector(".rs-screen__media");
+  const img = panel.querySelector(".rs-screen__img");
+  const video = panel.querySelector(".rs-screen__video");
+  const nameEl = panel.querySelector(".rs-screen__name");
+  const link = panel.querySelector(".rs-screen__link");
+  const toggle = box.querySelector("[data-tabs-toggle]");
+  const toggleLabel = toggle.querySelector("[data-t]");
+
+  let index = 0;
+  let userStopped = !motionOk();
+  let hovering = false;
+  let focusInside = false;
+  let visible = false;
+
+  box.querySelectorAll(".rs-tabs__items").forEach((list) => {
+    list.setAttribute("role", "tablist");
+    list.querySelectorAll("li").forEach((li) => li.setAttribute("role", "presentation"));
+  });
+  panel.setAttribute("role", "tabpanel");
+  tabs.forEach((tab, i) => {
+    tab.id = `rs-tab-${i}`;
+    tab.setAttribute("role", "tab");
+    tab.setAttribute("aria-controls", panel.id);
+  });
+
+  video.muted = true;
+  if (motionOk()) {
+    video.autoplay = true;
+  } else {
+    video.controls = true;
+  }
+
+  const autoplayOn = () => !userStopped;
+
+  function updateToggle() {
+    toggle.hidden = false;
+    toggleLabel.dataset.t = autoplayOn() ? "autoplay_pause" : "autoplay_play";
+    toggleLabel.textContent = t(toggleLabel.dataset.t) || toggleLabel.textContent;
+  }
+
+  function syncPaused() {
+    box.classList.toggle("is-paused", hovering || focusInside || !visible);
+  }
+
+  function restartProgress() {
+    tabs.forEach((tab) => tab.classList.remove("is-running"));
+    if (!autoplayOn()) return;
+    const tab = tabs[index];
+    void tab.offsetWidth; // restart the CSS animation
+    tab.classList.add("is-running");
+  }
+
+  function videoLabel(pageId) {
+    return (t("alt_video") || "").replace("{page}", t(pageId) || "");
+  }
+
+  function loadVideoIfVisible() {
+    const tab = tabs[index];
+    if (tab.dataset.media !== "video" || document.visibilityState === "hidden") return;
+    if (visible && video.getAttribute("src") !== tab.dataset.video) {
+      video.src = tab.dataset.video;
+      if (motionOk()) video.play().catch(() => {});
+    } else if (visible && motionOk() && video.paused) {
+      video.play().catch(() => {});
+    }
+  }
+
+  function showMedia(tab) {
+    const pageId = tab.dataset.page;
+    media.dataset.media = tab.dataset.media;
+    nameEl.dataset.t = pageId;
+    nameEl.textContent = t(pageId) || tab.querySelector(".rs-tab__name").textContent;
+    link.href = tab.getAttribute("href");
+
+    if (tab.dataset.media === "video") {
+      img.hidden = true;
+      video.hidden = false;
+      video.poster = tab.dataset.img;
+      video.setAttribute("aria-label", videoLabel(pageId));
+      video.dataset.page = pageId;
+      if (video.getAttribute("src") !== tab.dataset.video) {
+        video.removeAttribute("src");
+        video.load();
+      }
+      loadVideoIfVisible();
+    } else {
+      video.pause();
+      video.removeAttribute("src");
+      video.load();
+      video.hidden = true;
+      img.hidden = false;
+      img.src = tab.dataset.img;
+      img.width = Number(tab.dataset.w);
+      img.height = Number(tab.dataset.h);
+      img.dataset.tAlt = "alt_still";
+      img.dataset.altPage = pageId;
+      img.alt = (t("alt_still") || "").replace("{page}", t(pageId) || "");
+    }
+  }
+
+  function select(i, { focus = false } = {}) {
+    index = (i + tabs.length) % tabs.length;
+    tabs.forEach((tab, j) => {
+      const on = j === index;
+      tab.setAttribute("aria-selected", String(on));
+      tab.tabIndex = on ? 0 : -1;
+    });
+    panel.setAttribute("aria-labelledby", tabs[index].id);
+    showMedia(tabs[index]);
+    if (focus) tabs[index].focus();
+    restartProgress();
+  }
+
+  function stopByUser() {
+    userStopped = true;
+    updateToggle();
+    restartProgress();
+  }
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener("click", (event) => {
+      event.preventDefault();
+      select(i);
+      stopByUser();
+    });
+    tab.addEventListener("keydown", (event) => {
+      const moves = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
+      let next = null;
+      if (event.key in moves) next = index + moves[event.key];
+      else if (event.key === "Home") next = 0;
+      else if (event.key === "End") next = tabs.length - 1;
+      else if (event.key === "Enter" || event.key === " ") next = i;
+      if (next === null) return;
+      event.preventDefault();
+      select(next, { focus: true });
+      stopByUser();
+    });
+    tab.querySelector(".rs-tab__progress").addEventListener("animationend", () => {
+      if (autoplayOn() && i === index) select(index + 1);
+    });
+  });
+
+  toggle.addEventListener("click", () => {
+    userStopped = !userStopped;
+    updateToggle();
+    restartProgress();
+  });
+
+  box.addEventListener("mouseenter", () => { hovering = true; syncPaused(); });
+  box.addEventListener("mouseleave", () => { hovering = false; syncPaused(); });
+  box.addEventListener("focusin", () => { focusInside = true; syncPaused(); });
+  box.addEventListener("focusout", (event) => {
+    if (!box.contains(event.relatedTarget)) {
+      focusInside = false;
+      syncPaused();
+    }
+  });
+
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        syncPaused();
+        if (visible) loadVideoIfVisible();
+        else video.pause();
+      },
+      { threshold: 0.25 }
+    ).observe(panel);
+  } else {
+    visible = true;
+  }
+
+  // A play() made while the browser tab was in the background can be
+  // refused; try again once the video can play or the tab is visible.
+  video.addEventListener("canplay", loadVideoIfVisible);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") loadVideoIfVisible();
+  });
+
+  document.addEventListener("rs:copy", () => {
+    updateToggle();
+    if (!video.hidden && video.dataset.page) video.setAttribute("aria-label", videoLabel(video.dataset.page));
+  });
+
+  updateToggle();
+  select(0);
+  syncPaused();
+}
+
 syncMotionClass();
 reducedMotion.addEventListener?.("change", syncMotionClass);
+wireTabs();
 wireLangButtons();
 wirePill();
 wireBarFills();

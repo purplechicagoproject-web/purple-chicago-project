@@ -315,7 +315,7 @@ def tabs():
     return (
         '<div class="rs-tabs" data-rs-tabs>'
         '<div class="rs-tabs__nav">'
-        '<button type="button" class="rs-tabs__toggle" data-tabs-toggle hidden aria-pressed="false">'
+        '<button type="button" class="rs-tabs__toggle" data-tabs-toggle hidden>'
         f'{t("autoplay_pause")}</button>'
         f'{"".join(groups)}'
         f'<p class="rs-tabs__period">{t("page_views_label")}, {t("period")}</p>'

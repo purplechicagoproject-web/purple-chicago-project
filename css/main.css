@@ -4263,6 +4263,19 @@ body[data-page="results"] :is(a, button, summary, [tabindex]):focus-visible {
   transform-origin: left center;
 }
 
+@keyframes rs-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.rs-tab.is-running .rs-tab__progress {
+  animation: rs-progress 8s linear forwards;
+}
+
+.rs-tabs.is-paused .rs-tab.is-running .rs-tab__progress {
+  animation-play-state: paused;
+}
+
 .rs-tabs__period {
   margin: 12px 0 0;
   font-family: var(--font-body);
