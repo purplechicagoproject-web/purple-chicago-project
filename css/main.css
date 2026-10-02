@@ -3803,6 +3803,17 @@ body[data-page="results"] {
 html[lang="ko"] body[data-page="results"] {
   --font-body: "Big Shoulders", "Noto Sans KR", "Apple SD Gothic Neo", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-display: "Antihero", "East Sea Dokdo", "Noto Sans KR", sans-serif;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* Text headings use East Sea Dokdo for Latin words too (so "ARMY" doesn't
+   jump to Antihero mid-line) and are scaled up, since Dokdo reads about a
+   quarter smaller at the same size. Numbers keep Antihero. */
+html[lang="ko"] body[data-page="results"] :is(.rs-hero__title, .rs-h2, .rs-h3, .rs-door__label, .rs-next__closing, .rs-press__title, .rs-screen__name, .rs-strip) {
+  --rs-ko-scale: 1.3;
+  font-family: "East Sea Dokdo", "Antihero", "Noto Sans KR", sans-serif;
+  line-height: 1.2;
 }
 
 /* clip (not hidden) so position: sticky inside keeps working. */
@@ -3852,7 +3863,7 @@ body[data-page="results"] :is(a, button, summary, [tabindex]):focus-visible {
   font-family: var(--font-display);
   font-weight: normal;
   color: var(--purple-900);
-  font-size: clamp(calc(1.7rem * var(--font-scale)), calc(4.2vw * var(--font-scale)), calc(2.8rem * var(--font-scale)));
+  font-size: calc(clamp(calc(1.7rem * var(--font-scale)), calc(4.2vw * var(--font-scale)), calc(2.8rem * var(--font-scale))) * var(--rs-ko-scale, 1));
   line-height: 1.12;
   letter-spacing: 0.02em;
 }
@@ -3866,7 +3877,7 @@ body[data-page="results"] :is(a, button, summary, [tabindex]):focus-visible {
   font-family: var(--font-display);
   font-weight: normal;
   color: var(--purple-900);
-  font-size: calc(1.35rem * var(--font-scale));
+  font-size: calc(calc(1.35rem * var(--font-scale)) * var(--rs-ko-scale, 1));
   line-height: 1.15;
   letter-spacing: 0.02em;
 }
@@ -4028,7 +4039,7 @@ body[data-page="results"] :is(a, button, summary, [tabindex]):focus-visible {
   font-family: var(--font-display);
   font-weight: normal;
   color: #fff;
-  font-size: clamp(calc(38px * var(--font-scale)), calc(9vw * var(--font-scale)), calc(104px * var(--font-scale)));
+  font-size: calc(clamp(calc(38px * var(--font-scale)), calc(9vw * var(--font-scale)), calc(104px * var(--font-scale))) * var(--rs-ko-scale, 1));
   line-height: 1.04;
   letter-spacing: 0.01em;
 }
@@ -4140,7 +4151,7 @@ body[data-page="results"] :is(a, button, summary, [tabindex]):focus-visible {
   margin: 0;
   font-family: var(--font-display);
   color: var(--purple-900);
-  font-size: calc(1.3rem * var(--font-scale));
+  font-size: calc(calc(1.3rem * var(--font-scale)) * var(--rs-ko-scale, 1));
   line-height: 1.15;
 }
 
@@ -4343,7 +4354,7 @@ body[data-page="results"] :is(a, button, summary, [tabindex]):focus-visible {
 .rs-screen__name {
   font-family: var(--font-display);
   color: var(--purple-900);
-  font-size: calc(1.2rem * var(--font-scale));
+  font-size: calc(calc(1.2rem * var(--font-scale)) * var(--rs-ko-scale, 1));
 }
 
 /* Scroll scene is opt-in (js/results.js), never part of the static page.
@@ -4879,7 +4890,7 @@ body[data-page="results"] :is(a, button, summary, [tabindex]):focus-visible {
   transform: rotate(-1.5deg);
   font-family: var(--font-display);
   color: var(--purple-900);
-  font-size: calc(1.3rem * var(--font-scale));
+  font-size: calc(calc(1.3rem * var(--font-scale)) * var(--rs-ko-scale, 1));
   letter-spacing: 0.03em;
 }
 
@@ -5133,7 +5144,7 @@ body[data-page="results"] :is(a, button, summary, [tabindex]):focus-visible {
   text-align: center;
   font-family: var(--font-display);
   color: var(--purple-900);
-  font-size: clamp(calc(1.6rem * var(--font-scale)), calc(5vw * var(--font-scale)), calc(2.8rem * var(--font-scale)));
+  font-size: calc(clamp(calc(1.6rem * var(--font-scale)), calc(5vw * var(--font-scale)), calc(2.8rem * var(--font-scale))) * var(--rs-ko-scale, 1));
   line-height: 1.15;
 }
 
@@ -5175,7 +5186,7 @@ body[data-page="results"] :is(a, button, summary, [tabindex]):focus-visible {
   font-family: var(--font-display);
   font-weight: normal;
   color: #fff;
-  font-size: clamp(calc(1.4rem * var(--font-scale)), calc(3.4vw * var(--font-scale)), calc(2.2rem * var(--font-scale)));
+  font-size: calc(clamp(calc(1.4rem * var(--font-scale)), calc(3.4vw * var(--font-scale)), calc(2.2rem * var(--font-scale))) * var(--rs-ko-scale, 1));
   line-height: 1.15;
 }
 

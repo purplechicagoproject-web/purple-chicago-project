@@ -502,6 +502,15 @@ function wireScrolly() {
   const stack = document.createElement("div");
   stack.className = "rs-scrolly__stack";
 
+  // The visually hidden originals only need their alt text, so their src is
+  // dropped before cloning; the panel clones get it back only when the scene
+  // is about to scroll in (a cloned <img> starts loading immediately, lazy
+  // or not).
+  scrolly.querySelectorAll("img[src]").forEach((img) => {
+    img.dataset.src = img.getAttribute("src");
+    img.removeAttribute("src");
+  });
+
   const slides = steps.map((step) => {
     const slide = document.createElement("div");
     slide.className = "rs-slide";
@@ -515,6 +524,25 @@ function wireScrolly() {
     stack.appendChild(slide);
     return slide;
   });
+
+  const fillPanelImages = () =>
+    stack.querySelectorAll("img[data-src]").forEach((img) => {
+      img.src = img.dataset.src;
+      delete img.dataset.src;
+    });
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        fillPanelImages();
+        io.disconnect();
+      },
+      { rootMargin: "800px 0px" }
+    );
+    io.observe(scrolly);
+  } else {
+    fillPanelImages();
+  }
 
   frame.appendChild(stack);
   panel.appendChild(frame);
