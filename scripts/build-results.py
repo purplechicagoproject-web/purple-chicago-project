@@ -17,10 +17,12 @@ Template placeholders:
   {{chart:key}}     a chart from results-charts.json
   {{tabs}}          the B2 page list + screen panel
   {{assembly}}      the B2 scroll scene cards (decorative)
+  {{hash:path}}     short content hash of a repo file, for ?v= cache busting
 
 Run: python3 scripts/build-results.py
 """
 import csv
+import hashlib
 import html
 import json
 import re
@@ -363,6 +365,8 @@ def render(match):
         if kind == "assembly":
             return assembly()
         return esc(fmt_num(en(kind)) if NUMERIC.search(kind) else en(kind))
+    if kind == "hash":
+        return hashlib.sha1((ROOT / arg).read_bytes()).hexdigest()[:10]
     if kind == "num":
         return esc(fmt_num(en(arg)))
     if kind == "value":
@@ -378,7 +382,7 @@ def render(match):
 
 def main():
     src = TEMPLATE.read_text(encoding="utf-8")
-    out = re.sub(r"\{\{([a-z0-9_:]+)\}\}", render, src)
+    out = re.sub(r"\{\{([a-z0-9_:./-]+)\}\}", render, src)
     OUT.write_text(out, encoding="utf-8")
     print(f"Wrote {OUT.relative_to(ROOT)} ({len(out):,} bytes)")
 
