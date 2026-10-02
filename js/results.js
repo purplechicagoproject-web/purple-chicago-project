@@ -183,103 +183,271 @@ function syncMotionClass() {
   root.classList.toggle("rs-motion", motionOk());
 }
 
-// EN|KO pill: slides to the pressed button using its offsetLeft/Width.
-function placePill() {
+// Reveal: every block fades up when it scrolls in, and again every time it
+// comes back (no unobserve). Survey windows and their fixed charts are
+// excluded — a transform on a window would trap its fixed chart.
+const REVEAL_SELECTOR = [
+  ".rs-hero__line", ".rs-intro", ".rs-intro__text", ".rs-h2", ".rs-h3", ".rs-doors__head", ".rs-door",
+  ".rs-tabs__toggle", ".rs-tabs__item", ".rs-tabs__period", ".rs-screen", ".rs-reach__number",
+  ".rs-reach__text", ".rs-chart", ".rs-video__label", ".rs-video__frame", ".rs-video__caption",
+  ".rs-result", ".rs-win__value", ".rs-win__text", ".rs-quote", ".rs-windows__label", ".rs-survey__note",
+  ".rs-small", ".rs-next__card", ".rs-next__closing", ".rs-press__art", ".rs-press__text",
+  ".rs-contact__text", ".rs-contact__links li",
+].join(",");
+
+function wireReveal() {
+  if (!motionOk() || !("IntersectionObserver" in window)) return;
+  const page = document.querySelector(".rs-page");
+  const targets = [...page.querySelectorAll(REVEAL_SELECTOR)].filter(
+    (el) => !el.closest(".rs-assembly, .rs-win__chart, .rs-lang") && !el.parentElement.closest(REVEAL_SELECTOR)
+  );
+  const perParent = new Map();
+  targets.forEach((el) => {
+    const n = perParent.get(el.parentElement) || 0;
+    perParent.set(el.parentElement, n + 1);
+    el.style.setProperty("--rs-i", Math.min(n, 6));
+    el.classList.add("rs-reveal");
+  });
+  const io = new IntersectionObserver(
+    (entries) => entries.forEach((entry) => entry.target.classList.toggle("is-in", entry.isIntersecting)),
+    { rootMargin: "0px 0px -6% 0px", threshold: 0.01 }
+  );
+  targets.forEach((el) => io.observe(el));
+}
+
+// EN|KO pill: slides with the Web Animations API (0.4s) so the move stays
+// visible even while the language switch restyles the whole page.
+let pillRect = null;
+
+function placePill(animate = false) {
   const toggle = document.querySelector(".rs-lang");
   const pill = toggle?.querySelector(".rs-lang__pill");
   const pressed = toggle?.querySelector('[aria-pressed="true"]');
   if (!pill || !pressed) return;
-  pill.style.left = `${pressed.offsetLeft}px`;
-  pill.style.width = `${pressed.offsetWidth}px`;
-  if (!toggle.classList.contains("is-ready")) {
-    // Enable the transition only after the first placement, so the pill
-    // doesn't slide in from 0 on page load.
-    requestAnimationFrame(() => toggle.classList.add("is-ready"));
+  const next = { left: pressed.offsetLeft, width: pressed.offsetWidth };
+  const prev = pillRect;
+  pillRect = next;
+  pill.style.left = `${next.left}px`;
+  pill.style.width = `${next.width}px`;
+  toggle.classList.add("is-ready");
+  const moved = prev && (prev.left !== next.left || prev.width !== next.width);
+  if (animate && moved && motionOk() && pill.animate) {
+    pill.animate(
+      [
+        { left: `${prev.left}px`, width: `${prev.width}px` },
+        { left: `${next.left}px`, width: `${next.width}px` },
+      ],
+      { duration: 400, easing: "cubic-bezier(0.65, 0, 0.35, 1)" }
+    );
   }
 }
 
 function wirePill() {
   placePill();
-  document.addEventListener("rs:copy", placePill);
-  document.fonts?.ready.then(placePill);
-  window.addEventListener("resize", placePill);
+  document.addEventListener("rs:copy", () => placePill(true));
+  document.fonts?.ready.then(() => placePill());
+  window.addEventListener("resize", () => placePill());
 }
 
-// Bars fill once their chart comes into view (or, for the survey panel,
-// when its card becomes active — see markChartFilled).
-export function markChartFilled(chart) {
-  if (chart?.dataset.fill === "armed") chart.dataset.fill = "done";
-}
-
+// Bars fill when their chart (or, for survey charts, their window) comes
+// into view, and empty again when it leaves, so they refill on return.
 function wireBarFills() {
   if (!motionOk() || !("IntersectionObserver" in window)) return;
-  const charts = document.querySelectorAll(".rs-chart--bars, .rs-chart--stack");
-  const io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        // Charts living in the sticky survey panel fill on card activation.
-        if (entry.target.closest(".rs-scrolly__panel")) return;
-        markChartFilled(entry.target);
-        io.unobserve(entry.target);
-      });
-    },
-    { threshold: 0.35 }
-  );
-  charts.forEach((chart) => {
+  const byTarget = new Map();
+  document.querySelectorAll(".rs-chart--bars, .rs-chart--stack").forEach((chart) => {
     chart.dataset.fill = "armed";
-    io.observe(chart);
+    const target = chart.closest(".rs-win") || chart;
+    if (!byTarget.has(target)) byTarget.set(target, []);
+    byTarget.get(target).push(chart);
   });
+  const io = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((entry) => {
+        byTarget.get(entry.target).forEach((chart) => {
+          chart.dataset.fill = entry.isIntersecting ? "done" : "armed";
+        });
+      }),
+    { threshold: 0.3 }
+  );
+  byTarget.forEach((_, target) => io.observe(target));
 }
 
-// Mayor video: poster + play button only; YouTube is contacted on click.
-function wireVideo() {
-  document.querySelectorAll(".rs-video__poster[data-video-id]").forEach((poster) => {
-    poster.addEventListener("click", (event) => {
-      event.preventDefault();
-      const iframe = document.createElement("iframe");
-      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(poster.dataset.videoId)}?autoplay=1&rel=0&modestbranding=1`;
-      iframe.title = t("video_play") || "Video";
-      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-      iframe.allowFullscreen = true;
-      iframe.referrerPolicy = "strict-origin-when-cross-origin";
-      poster.replaceWith(iframe);
-      iframe.focus();
-    });
-  });
-}
-
-// The one count-up on the page (scene4_value): 1.4s, ease-out cubic. The
-// visible number is aria-hidden; screen readers get the final value from
-// the .rs-sr twin, which never animates.
+// The one count-up (scene4_value): 0 -> value in 1.4s, ease-out cubic,
+// every time it scrolls into view. Screen readers read the .rs-sr twin.
 function wireCountUp() {
   const el = document.querySelector("[data-countup]");
   if (!el || !motionOk() || !("IntersectionObserver" in window)) return;
-  const rect = el.getBoundingClientRect();
-  if (rect.top < window.innerHeight) return; // already on screen: leave it final
-
   const builtIn = Number(el.textContent.replace(/,/g, "")) || 0;
-  el.style.minWidth = `${rect.width}px`;
-  el.textContent = "0";
+  const goal = () => Number(String(t("scene4_value") ?? "").replace(/,/g, "")) || builtIn;
+  let raf = 0;
+  let inView = false;
 
-  const io = new IntersectionObserver(
-    (entries) => {
-      if (!entries.some((e) => e.isIntersecting)) return;
-      io.disconnect();
-      const target = Number(String(t("scene4_value") ?? "").replace(/,/g, "")) || builtIn;
-      const start = performance.now();
-      const step = (now) => {
-        const p = Math.min(1, (now - start) / 1400);
-        const eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = formatNum(Math.round(target * eased));
-        if (p < 1) requestAnimationFrame(step);
-        else el.style.minWidth = "";
+  // Reserve the final number's width so counting never shifts the layout;
+  // measured again once the display font has loaded.
+  const reserveWidth = () => {
+    const shown = el.textContent;
+    el.style.minWidth = "";
+    el.textContent = formatNum(goal());
+    el.style.minWidth = `${el.getBoundingClientRect().width}px`;
+    el.textContent = shown;
+  };
+  reserveWidth();
+  document.fonts?.ready.then(reserveWidth);
+
+  const run = () => {
+    cancelAnimationFrame(raf);
+    const target = goal();
+    const start = performance.now();
+    const step = (now) => {
+      const p = Math.min(1, (now - start) / 1400);
+      el.textContent = formatNum(Math.round(target * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+  };
+
+  new IntersectionObserver(
+    ([entry]) => {
+      inView = entry.isIntersecting;
+      if (inView) run();
+      else {
+        cancelAnimationFrame(raf);
+        el.textContent = "0";
+      }
+    },
+    { threshold: 0.4 }
+  ).observe(el);
+
+  // applyCopy rewrites the number; keep it at 0 while it's off screen.
+  document.addEventListener("rs:copy", () => {
+    if (!inView) el.textContent = "0";
+  });
+}
+
+// Mayor video (B3): YouTube IFrame API on youtube-nocookie. With motion on,
+// the player is built as the section approaches, plays muted while at
+// least half on screen and pauses when it leaves; Sound on / Mute toggles
+// audio. Reduced motion, or a device that blocks autoplay, gets the play
+// button instead.
+let ytPromise = null;
+
+function loadYouTubeApi() {
+  if (window.YT?.Player) return Promise.resolve(window.YT);
+  if (!ytPromise) {
+    ytPromise = new Promise((resolve) => {
+      const previous = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        previous?.();
+        resolve(window.YT);
       };
-      requestAnimationFrame(step);
+      const script = document.createElement("script");
+      script.src = "https://www.youtube.com/iframe_api";
+      script.async = true;
+      document.head.appendChild(script);
+    });
+  }
+  return ytPromise;
+}
+
+function wireVideo() {
+  const fig = document.querySelector("[data-rs-video]");
+  if (!fig) return;
+  const frame = fig.querySelector(".rs-video__frame");
+  const poster = fig.querySelector(".rs-video__poster");
+  const soundBtn = fig.querySelector("[data-video-sound]");
+  const soundLabel = soundBtn.querySelector("[data-t]");
+  let player = null;
+  let ready = false;
+  let inView = false;
+  let muted = true;
+
+  const setSoundLabel = () => {
+    soundLabel.dataset.t = muted ? "sound_on" : "sound_off";
+    soundLabel.textContent = t(soundLabel.dataset.t) || soundLabel.textContent;
+  };
+
+  const tryAutoplay = () => {
+    player.playVideo();
+    setTimeout(() => {
+      const state = player.getPlayerState?.();
+      if (inView && state !== 1 && state !== 3) fig.classList.add("needs-tap");
+    }, 1500);
+  };
+
+  const create = (withSound) => {
+    if (player) return;
+    player = "pending";
+    loadYouTubeApi().then((YT) => {
+      player = new YT.Player("rs-video-player", {
+        host: "https://www.youtube-nocookie.com",
+        videoId: fig.dataset.videoId,
+        playerVars: { autoplay: withSound ? 1 : 0, mute: withSound ? 0 : 1, playsinline: 1, rel: 0, modestbranding: 1 },
+        events: {
+          onReady: () => {
+            ready = true;
+            fig.classList.add("has-player");
+            soundBtn.hidden = false;
+            muted = !withSound;
+            if (muted) player.mute();
+            setSoundLabel();
+            const iframe = frame.querySelector("iframe");
+            if (iframe) iframe.title = t("video_play") || "Video";
+            if (withSound) player.playVideo();
+            else if (inView) tryAutoplay();
+          },
+          onStateChange: (event) => {
+            if (event.data === YT.PlayerState.PLAYING) fig.classList.remove("needs-tap");
+          },
+        },
+      });
+    });
+  };
+
+  poster.addEventListener("click", (event) => {
+    event.preventDefault();
+    if (ready) {
+      fig.classList.remove("needs-tap");
+      player.playVideo();
+    } else {
+      create(true);
+    }
+  });
+
+  soundBtn.addEventListener("click", () => {
+    if (!ready) return;
+    if (muted) {
+      player.unMute();
+      player.setVolume(100);
+      if (player.getPlayerState() !== 1) player.playVideo();
+    } else {
+      player.mute();
+    }
+    muted = !muted;
+    setSoundLabel();
+  });
+
+  document.addEventListener("rs:copy", () => {
+    if (!soundBtn.hidden) setSoundLabel();
+  });
+
+  if (!motionOk() || !("IntersectionObserver" in window)) return;
+
+  new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) create(false);
+    },
+    { rootMargin: "600px 0px" }
+  ).observe(frame);
+
+  new IntersectionObserver(
+    ([entry]) => {
+      inView = entry.isIntersecting;
+      if (!ready) return;
+      if (inView) tryAutoplay();
+      else player.pauseVideo();
     },
     { threshold: 0.5 }
-  );
-  io.observe(el);
+  ).observe(frame);
 }
 
 // --------------------------------------------------------------- tabs ---
@@ -481,111 +649,8 @@ function wireTabs() {
   syncPaused();
 }
 
-// ------------------------------------------------------------ scrolly ---
-// D: a sticky chart panel next to (desktop) or above (mobile, 40% of the
-// screen) the seven survey cards. Panel charts are aria-hidden clones; the
-// originals stay in each card (visually hidden) so screen readers keep
-// every chart and its data table in reading order.
-const MOBILE_QUERY = window.matchMedia("(max-width: 899px)");
-
-function wireScrolly() {
-  const scrolly = document.querySelector("[data-scrolly]");
-  if (!scrolly || !motionOk()) return;
-  const steps = [...scrolly.querySelectorAll(".rs-step")];
-  if (!steps.length) return;
-
-  const panel = document.createElement("div");
-  panel.className = "rs-scrolly__panel";
-  const frame = document.createElement("div");
-  frame.className = "rs-scrolly__frame rs-paper";
-  frame.setAttribute("aria-hidden", "true");
-  const stack = document.createElement("div");
-  stack.className = "rs-scrolly__stack";
-
-  // The visually hidden originals only need their alt text, so their src is
-  // dropped before cloning; the panel clones get it back only when the scene
-  // is about to scroll in (a cloned <img> starts loading immediately, lazy
-  // or not).
-  scrolly.querySelectorAll("img[src]").forEach((img) => {
-    img.dataset.src = img.getAttribute("src");
-    img.removeAttribute("src");
-  });
-
-  const slides = steps.map((step) => {
-    const slide = document.createElement("div");
-    slide.className = "rs-slide";
-    const chart = step.querySelector(".rs-step__chart .rs-chart");
-    if (chart) {
-      const clone = chart.cloneNode(true);
-      clone.classList.remove("rs-paper");
-      clone.querySelectorAll("table").forEach((table) => table.remove());
-      slide.appendChild(clone);
-    }
-    stack.appendChild(slide);
-    return slide;
-  });
-
-  const fillPanelImages = () =>
-    stack.querySelectorAll("img[data-src]").forEach((img) => {
-      img.src = img.dataset.src;
-      delete img.dataset.src;
-    });
-  if ("IntersectionObserver" in window) {
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        fillPanelImages();
-        io.disconnect();
-      },
-      { rootMargin: "800px 0px" }
-    );
-    io.observe(scrolly);
-  } else {
-    fillPanelImages();
-  }
-
-  frame.appendChild(stack);
-  panel.appendChild(frame);
-  const note = scrolly.closest(".rs-survey")?.querySelector("[data-survey-note]");
-  if (note) panel.appendChild(note);
-  scrolly.appendChild(panel);
-  scrolly.classList.add("is-enhanced");
-
-  let active = -1;
-  let ticking = false;
-
-  function update() {
-    ticking = false;
-    const vh = window.innerHeight;
-    const line = MOBILE_QUERY.matches ? (frame.getBoundingClientRect().bottom + vh) / 2 : vh / 2;
-    let best = 0;
-    let bestDistance = Infinity;
-    steps.forEach((step, i) => {
-      const r = step.getBoundingClientRect();
-      const distance = Math.abs((r.top + r.bottom) / 2 - line);
-      if (distance < bestDistance) {
-        bestDistance = distance;
-        best = i;
-      }
-    });
-    if (best === active) return;
-    active = best;
-    slides.forEach((slide, i) => slide.classList.toggle("is-active", i === active));
-    markChartFilled(slides[active].querySelector(".rs-chart"));
-  }
-
-  const requestUpdate = () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(update);
-  };
-  window.addEventListener("scroll", requestUpdate, { passive: true });
-  window.addEventListener("resize", requestUpdate);
-  update();
-}
-
 // ----------------------------------------------------------- assembly ---
-// B2 opening scene (desktop + motion only): the 11 page names start
+// B2 opening scene (desktop + motion only): the 9 page names start
 // scattered over the stage and, driven purely by scroll position (so it
 // rewinds), fly into a single menu row; then the paper frame and the first
 // page's screen fade in. transform/opacity only. The real list below is
@@ -680,31 +745,15 @@ function wireAssembly() {
 
 // Mobile (or any width without the scene): the page list arrives item by
 // item the first time it scrolls into view.
-function wireListStagger() {
-  const box = document.querySelector("[data-rs-tabs]");
-  if (!box || !motionOk() || DESKTOP_QUERY.matches || !("IntersectionObserver" in window)) return;
-  if (box.getBoundingClientRect().top < window.innerHeight) return;
-  box.querySelectorAll(".rs-tabs__item").forEach((item, i) => item.style.setProperty("--i", i));
-  box.classList.add("is-staggered");
-  const io = new IntersectionObserver(
-    ([entry]) => {
-      if (!entry.isIntersecting) return;
-      box.classList.add("is-in");
-      io.disconnect();
-    },
-    { threshold: 0.15 }
-  );
-  io.observe(box.querySelector(".rs-tabs__nav"));
-}
 
 syncMotionClass();
 reducedMotion.addEventListener?.("change", syncMotionClass);
+wireReveal();
 wireAssembly();
-wireListStagger();
 wireTabs();
 wireLangButtons();
 wirePill();
 wireBarFills();
-wireScrolly();
 wireVideo();
-loadCopy().then(wireCountUp);
+wireCountUp();
+loadCopy();
