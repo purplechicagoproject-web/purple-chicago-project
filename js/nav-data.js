@@ -11,5 +11,6 @@ export const NAV_ITEMS = [
   { slug: "fan-event-hub", label: "Fan Event Hub", href: "/fan-event-hub.html" },
   { slug: "partner-toolkit", label: "Partner Toolkit", href: "/partner-toolkit.html" },
   { slug: "press", label: "Press", href: "/press.html" },
+  { slug: "results", label: "Results", href: "/results" },
   { slug: "about-contact", label: "About & Contact", href: "/about-contact.html" },
 ];

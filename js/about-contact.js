@@ -87,7 +87,7 @@ function renderPrinciplesCard(title, rows) {
 }
 
 // Hardcoded rather than sheet-driven (unlike the other cards here): this is
-// a one-time campaign recap tied to specific numbers on /impact.html, not
+// a one-time campaign recap tied to the figures on /results, not
 // content that should change without a matching update to that page.
 function renderTourRecapCard() {
   return `
@@ -97,7 +97,7 @@ function renderTourRecapCard() {
         <p>The August 2026 shows reached 546,120 people on social media, brought 12 local businesses on board as Welcome Partners, and secured two official welcome videos from the Mayor of Chicago.</p>
         <p>A post-concert survey of 442 ARMY found that 77% traveled from outside Chicago, spent roughly $1,230 per person locally, and not one said they wouldn't come back.</p>
       </div>
-      <a class="info-link-btn" href="/impact.html">See the full impact report &rarr;</a>
+      <a class="info-link-btn" href="/results">See the full impact report &rarr;</a>
     </div>
   `;
 }
