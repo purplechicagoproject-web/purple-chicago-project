@@ -1,45 +1,94 @@
-// 헤세드 자료 확인 질문지. questions.json을 불러와 그리고,
-// 답변과 파일은 Apps Script로 보냅니다. 입력 중인 내용은 localStorage에 임시 저장합니다.
+// 헤세드 자료 확인 질문지.
+// 비밀번호 → 이름 입력 → 서버(Apps Script)에서 기존 답변을 불러와 그립니다.
+// 답변은 바뀐 항목만 자동 저장합니다. 서버 내용이 기준이고, localStorage는
+// 입력자 이름과 아직 저장되지 못한 항목을 잠시 보관하는 데만 씁니다.
 import { guardPage } from "/hesed-qanda/auth.js";
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbyCZ7NHmAWhw8pfeL-aFKGgSHRN16NzcsSU1TIrX5Px2aSZBmEGXOlwZdUOolvnUORQ/exec";
 const TOKEN = "hesed-qanda-2026";
-const DRAFT_KEY = "hesed-qanda-draft-v1";
+const EDITOR_KEY = "hesed-qanda-editor";
+const PENDING_KEY = "hesed-qanda-pending-v2";
 const MAX_BYTES = 20 * 1024 * 1024;
+const TEXT_DELAY = 2000;
+const RETRY_DELAY = 15000;
 
 const QUESTION_STATUSES = ["준비 완료", "확인 중", "해당 없음"];
 const HOMEPAGE_STATUSES = ["수정 완료", "수정 예정", "그대로 유지"];
 
-// ---------- 임시 저장 ----------
-// answers: { qid: { status, answer, link } }
-// files:   { qid: [ { name } ] }        (업로드에 성공한 파일만)
-// dirty:   { sectionId: true }          (서버에 아직 저장하지 않은 변경)
-// savedAt: { sectionId: "오후 3:12" }
-let draft = { answers: {}, files: {}, dirty: {}, savedAt: {} };
-
-function loadDraft() {
+// ---------- localStorage (모두 try/catch) ----------
+function storeGet(key) {
   try {
-    const raw = localStorage.getItem(DRAFT_KEY);
-    if (raw) draft = { ...draft, ...JSON.parse(raw) };
+    return localStorage.getItem(key);
   } catch {
-    // 저장소를 쓸 수 없으면 빈 상태로 시작합니다.
+    return null;
+  }
+}
+function storeSet(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    // 저장 공간을 쓸 수 없어도 페이지는 계속 동작합니다.
+  }
+}
+function storeRemove(key) {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    // 무시
   }
 }
 
-function persist() {
-  try {
-    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-  } catch {
-    // 저장 공간이 없거나 막혀 있어도 페이지는 계속 동작합니다.
-  }
-}
+// ---------- 상태 ----------
+let editor = storeGet(EDITOR_KEY) || "";
+const answers = {}; // qid → { status, answer, link }
+const meta = {}; // qid → { editor, updated }
+const files = {}; // qid → [{ name, editor }]
+const sectionOf = {}; // qid → { id, type }
+
+// 저장 대기열: qid → 변경 번호. 저장 요청 중에 또 바뀐 항목은 남겨 두었다가 다시 보냅니다.
+const pending = {};
+let changeSeq = 0;
+let saveTimer = null;
+let saving = false;
+let uploadsInFlight = 0;
 
 function answerOf(qid) {
-  return (draft.answers[qid] ||= { status: "", answer: "", link: "" });
+  return (answers[qid] ||= { status: "", answer: "", link: "" });
 }
 
-let uploadsInFlight = 0;
+function itemPayload(qid) {
+  const a = answerOf(qid);
+  const homepage = sectionOf[qid].type === "homepage";
+  return {
+    qid,
+    section: sectionOf[qid].id,
+    status: a.status,
+    answer: homepage ? "" : a.answer,
+    link: homepage ? "" : a.link,
+  };
+}
+
+function persistPending() {
+  const qids = Object.keys(pending);
+  if (!qids.length) return storeRemove(PENDING_KEY);
+  storeSet(PENDING_KEY, JSON.stringify(qids.map(itemPayload)));
+}
+
+function restorePending() {
+  let items = [];
+  try {
+    items = JSON.parse(storeGet(PENDING_KEY) || "[]");
+  } catch {
+    items = [];
+  }
+  for (const it of items) {
+    if (!it || !sectionOf[it.qid]) continue;
+    Object.assign(answerOf(it.qid), { status: it.status || "", answer: it.answer || "", link: it.link || "" });
+    pending[it.qid] = ++changeSeq;
+  }
+  return items.length > 0;
+}
 
 // ---------- 작은 DOM 도우미 ----------
 function el(tag, attrs = {}, ...children) {
@@ -58,112 +107,193 @@ function el(tag, attrs = {}, ...children) {
   return node;
 }
 
-function timeLabel() {
-  return new Date().toLocaleTimeString("ko-KR", { hour: "numeric", minute: "2-digit" });
+function timeLabel(d = new Date()) {
+  return d.toLocaleTimeString("ko-KR", { hour: "numeric", minute: "2-digit" });
+}
+
+// "10/18 오후 3:12". 날짜로 읽을 수 없는 값은 그대로 보여 줍니다.
+function stampLabel(value) {
+  const d = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(d.getTime())) return String(value || "");
+  return `${d.getMonth() + 1}/${d.getDate()} ${timeLabel(d)}`;
 }
 
 // Content-Type을 넣지 않아 text/plain으로 전송됩니다 (CORS 사전 요청 회피).
 async function post(data) {
-  const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
+  const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ token: TOKEN, ...data }) });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  let json = null;
-  try {
-    json = await res.json();
-  } catch {
-    // 응답이 JSON이 아니어도 HTTP 성공이면 저장된 것으로 봅니다.
-  }
-  if (json && (json.ok === false || json.error || json.status === "error")) {
-    throw new Error(json.error || json.message || "저장 실패");
-  }
+  return res.json();
+}
+
+async function postOk(data) {
+  const json = await post(data);
+  if (!json || json.ok !== true) throw new Error((json && json.error) || "fail");
   return json;
 }
 
-// ---------- 진행률 ----------
-let questionItems = []; // 섹션 1~8 질문 [{ qid, sectionId }]
-const progressEls = {};
-const tocCountEls = {};
+// ---------- 이름 입력 ----------
+function askName(root, onDone, { cancelable = false } = {}) {
+  const input = el("input", {
+    class: "gate__input",
+    type: "text",
+    placeholder: "이름",
+    autocomplete: "name",
+    enterkeyhint: "go",
+    "aria-label": "이름",
+    maxlength: 40,
+  });
+  input.value = editor;
+  const error = el("p", { class: "gate__error", hidden: true }, "이름을 입력해 주세요.");
+  const form = el(
+    "form",
+    { class: "gate__card" },
+    el("h1", { class: "gate__title" }, "이름을 입력해 주세요"),
+    el("p", { class: "gate__hint" }, "저장할 때 누가 입력했는지 함께 기록됩니다."),
+    el("div", { class: "gate__row" }, input, el("button", { class: "gate__submit", type: "submit", "aria-label": "확인" }, "→")),
+    error,
+    cancelable && el("button", { type: "button", class: "gate__cancel", onclick: () => onDone(null) }, "취소")
+  );
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = input.value.trim();
+    if (!name) {
+      error.hidden = false;
+      input.focus();
+      return;
+    }
+    editor = name;
+    storeSet(EDITOR_KEY, name);
+    onDone(name);
+  });
+  root.replaceChildren(el("div", { class: "gate" }, form));
+  input.focus();
+}
+
+// ---------- 상단 고정 영역 ----------
+const ui = {};
+
+function setSaveStatus(kind, text) {
+  ui.save.className = `save-status save-status--${kind}`;
+  ui.save.textContent = text;
+}
 
 function isAnswered(qid) {
-  const a = draft.answers[qid];
-  const hasFiles = (draft.files[qid] || []).length > 0;
-  return Boolean(hasFiles || (a && (a.status || a.answer.trim() || a.link.trim())));
+  const a = answers[qid];
+  return Boolean((files[qid] || []).length || (a && (a.status || a.answer.trim() || a.link.trim())));
 }
+
+let questionQids = [];
+const tocCounts = [];
 
 function updateProgress() {
-  const total = questionItems.length;
-  const done = questionItems.filter((q) => isAnswered(q.qid)).length;
-  progressEls.text.textContent = `${total}개 중 ${done}개 응답`;
-  progressEls.fill.style.width = `${total ? (done / total) * 100 : 0}%`;
-  for (const [sid, info] of Object.entries(tocCountEls)) {
-    const n = info.qids.filter((qid) =>
-      info.homepage ? Boolean(draft.answers[qid]?.status) : isAnswered(qid)
-    ).length;
-    info.el.textContent = `${n}/${info.qids.length}`;
+  const done = questionQids.filter(isAnswered).length;
+  ui.progressText.textContent = `${questionQids.length}개 중 ${done}개 응답`;
+  ui.progressFill.style.width = `${questionQids.length ? (done / questionQids.length) * 100 : 0}%`;
+  for (const t of tocCounts) {
+    const n = t.qids.filter((q) => (t.homepage ? Boolean(answers[q]?.status) : isAnswered(q))).length;
+    t.el.textContent = `${n}/${t.qids.length}`;
   }
 }
 
-// ---------- 섹션 저장 상태 표시 ----------
-const saveMsgEls = {};
+// ---------- 마지막 수정 표시 ----------
+const metaEls = {};
 
-function showSaveState(sectionId) {
-  const msg = saveMsgEls[sectionId];
-  if (!msg) return;
-  if (draft.dirty[sectionId]) {
-    msg.className = "save-msg save-msg--dirty";
-    msg.textContent = "저장하지 않은 변경이 있습니다";
-  } else if (draft.savedAt[sectionId]) {
-    msg.className = "save-msg save-msg--ok";
-    msg.textContent = `저장됨 (${draft.savedAt[sectionId]})`;
-  } else {
-    msg.className = "save-msg";
-    msg.textContent = "";
-  }
+function renderMeta(qid) {
+  const node = metaEls[qid];
+  if (!node) return;
+  const m = meta[qid];
+  node.textContent = m && (m.editor || m.updated) ? `마지막 수정: ${[m.editor, stampLabel(m.updated)].filter(Boolean).join(", ")}` : "";
 }
 
-function markDirty(sectionId) {
-  draft.dirty[sectionId] = true;
-  persist();
-  showSaveState(sectionId);
+// ---------- 자동 저장 ----------
+function changed(qid, delay) {
+  pending[qid] = ++changeSeq;
+  persistPending();
   updateProgress();
+  scheduleSave(delay);
 }
 
-// ---------- 질문 항목 (섹션 1~8) ----------
-function statusChoices(name, statuses, current, onPick, box = false) {
+function scheduleSave(delay) {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(flush, delay);
+}
+
+async function flush() {
+  clearTimeout(saveTimer);
+  if (saving) return; // 진행 중인 저장이 끝나면 남은 항목을 이어서 보냅니다.
+  const snapshot = { ...pending };
+  const qids = Object.keys(snapshot);
+  if (!qids.length) return;
+
+  saving = true;
+  setSaveStatus("busy", "저장 중...");
+  try {
+    await postOk({ action: "answers", editor, items: qids.map(itemPayload) });
+    const now = new Date();
+    for (const qid of qids) {
+      if (pending[qid] === snapshot[qid]) delete pending[qid];
+      meta[qid] = { editor, updated: now };
+      renderMeta(qid);
+    }
+    persistPending();
+    setSaveStatus("ok", `자동 저장됨 ${timeLabel(now)}`);
+    saving = false;
+    if (Object.keys(pending).length) scheduleSave(0);
+  } catch {
+    saving = false;
+    persistPending();
+    setSaveStatus("error", "저장 실패, 연결 확인 후 다시 시도합니다");
+    scheduleSave(RETRY_DELAY);
+  }
+}
+
+window.addEventListener("online", () => {
+  if (Object.keys(pending).length) scheduleSave(0);
+});
+
+window.addEventListener("beforeunload", (e) => {
+  if (uploadsInFlight > 0 || Object.keys(pending).length > 0) {
+    e.preventDefault();
+    e.returnValue = "";
+  }
+});
+
+// ---------- 입력 요소 ----------
+function statusChoices(qid, statuses, box = false) {
+  const a = answerOf(qid);
   const group = el("div", { class: "choices", role: box ? "group" : "radiogroup" });
   for (const s of statuses) {
-    const input = el("input", {
-      type: box ? "checkbox" : "radio",
-      name,
-      value: s,
-      checked: current === s,
-    });
+    const input = el("input", { type: box ? "checkbox" : "radio", name: `st-${qid}`, value: s, checked: a.status === s });
     input.addEventListener("change", () => {
       if (box) {
-        // 체크박스 모양이지만 하나만 선택되도록 합니다. 다시 누르면 선택 해제.
+        // 체크박스 모양이지만 하나만 선택됩니다. 다시 누르면 선택 해제.
         group.querySelectorAll("input").forEach((o) => {
           if (o !== input) o.checked = false;
         });
-        onPick(input.checked ? s : "");
+        a.status = input.checked ? s : "";
       } else {
-        onPick(s);
+        a.status = s;
       }
+      changed(qid, 0);
     });
     group.append(el("label", { class: box ? "choice choice--box" : "choice" }, input, el("span", {}, s)));
   }
   return group;
 }
 
-function textField(kind, label, value, placeholder, onInput) {
-  const id = `f-${Math.random().toString(36).slice(2)}`;
-  const printVal = el("div", { class: "print-only print-val", "data-kind": kind }, value);
+function textField(qid, kind, label, placeholder) {
+  const a = answerOf(qid);
+  const id = `f-${kind}-${qid}`;
+  const printVal = el("div", { class: "print-only print-val", "data-kind": kind }, a[kind]);
   const input =
     kind === "answer"
       ? el("textarea", { id, rows: 3, placeholder })
       : el("input", { id, type: "url", class: "link", inputmode: "url", placeholder, autocomplete: "off" });
-  input.value = value;
+  input.value = a[kind];
   input.addEventListener("input", () => {
+    a[kind] = input.value;
     printVal.textContent = input.value;
-    onInput(input.value);
+    changed(qid, TEXT_DELAY);
   });
   return el("div", {}, el("label", { class: "field-label", for: id }, label), input, printVal);
 }
@@ -177,14 +307,13 @@ function renderUpload(qid) {
     return row;
   };
 
-  const setDone = (row, name) => {
+  const setDone = (row, f) => {
     row.className = "file file--done";
-    row.querySelector(".file__name").textContent = `✓ ${name}`;
+    row.querySelector(".file__name").textContent = `✓ ${f.name}${f.editor ? ` (${f.editor})` : ""}`;
     row.querySelector(".file__state").textContent = "";
   };
 
-  // 이전에 올린 파일 목록 복원
-  for (const f of draft.files[qid] || []) setDone(addRow(f.name), f.name);
+  for (const f of files[qid] || []) setDone(addRow(f.name), f);
 
   const upload = async (file, row) => {
     row.className = "file";
@@ -200,17 +329,17 @@ function renderUpload(qid) {
         r.readAsDataURL(file);
       });
       const base64 = String(dataUrl).slice(String(dataUrl).indexOf(",") + 1);
-      await post({
-        token: TOKEN,
+      await postOk({
         action: "upload",
+        editor,
         qid,
         filename: file.name,
         mimeType: file.type || "application/octet-stream",
         base64,
       });
-      setDone(row, file.name);
-      (draft.files[qid] ||= []).push({ name: file.name });
-      persist();
+      const f = { name: file.name, editor };
+      (files[qid] ||= []).push(f);
+      setDone(row, f);
       updateProgress();
     } catch {
       row.className = "file file--error";
@@ -244,47 +373,36 @@ function renderUpload(qid) {
   );
 }
 
-function renderQuestion(section, item) {
-  const a = answerOf(item.id);
-  const dirty = () => markDirty(section.id);
+function metaLine(qid) {
+  metaEls[qid] = el("p", { class: "q__meta" });
+  renderMeta(qid);
+  return metaEls[qid];
+}
 
+// ---------- 질문 항목 (섹션 1~8) ----------
+function renderQuestion(item) {
+  const qid = item.id;
   const body = el(
     "div",
     { class: "q__body" },
-    statusChoices(`st-${item.id}`, QUESTION_STATUSES, a.status, (v) => {
-      a.status = v;
-      dirty();
-    }),
-    textField("answer", "답변", a.answer, "답변을 적어 주세요", (v) => {
-      a.answer = v;
-      dirty();
-    })
+    statusChoices(qid, QUESTION_STATUSES),
+    textField(qid, "answer", "답변", "답변을 적어 주세요")
   );
 
   if (item.upload === "link") {
-    body.append(
-      textField("link", "영상 공유 링크", a.link, "구글드라이브, WeTransfer 등 공유 링크", (v) => {
-        a.link = v;
-        dirty();
-      })
-    );
+    body.append(textField(qid, "link", "영상 공유 링크", "구글드라이브, WeTransfer 등 공유 링크"));
   } else {
-    body.append(
-      renderUpload(item.id),
-      textField("link", "공유 링크 (20MB가 넘는 파일)", a.link, "구글드라이브, WeTransfer 등 공유 링크", (v) => {
-        a.link = v;
-        dirty();
-      })
-    );
+    body.append(renderUpload(qid), textField(qid, "link", "공유 링크 (20MB가 넘는 파일)", "구글드라이브, WeTransfer 등 공유 링크"));
   }
+  body.append(metaLine(qid));
 
   return el(
     "div",
-    { class: "q", id: `q-${item.id}` },
+    { class: "q", id: `q-${qid}` },
     el(
       "div",
       { class: "q__head" },
-      el("span", { class: "q__num" }, item.id),
+      el("span", { class: "q__num" }, qid),
       el("div", {}, el("p", { class: "q__text" }, item.question), item.reason && el("p", { class: "q__reason" }, item.reason))
     ),
     body
@@ -293,38 +411,24 @@ function renderQuestion(section, item) {
 
 // ---------- 홈페이지 업데이트 (섹션 9) ----------
 function renderHomepageSection(section) {
-  const frag = [];
-  if (section.intro) frag.push(el("p", { class: "hp-intro" }, section.intro));
+  const out = [];
+  if (section.intro) out.push(el("p", { class: "hp-intro" }, section.intro));
 
   for (const g of section.groups) {
     const hasFix = g.items.some((it) => it.fix);
     const head = el("tr", {}, el("th", {}, ""), el("th", {}, "페이지"), el("th", {}, "현재 문구"), hasFix && el("th", {}, "수정 내용"), el("th", {}, "진행"));
-    const rows = g.items.map((it) => {
-      const a = answerOf(it.id);
-      return el(
+    const rows = g.items.map((it) =>
+      el(
         "tr",
         {},
         el("td", { class: "hp-id" }, it.id),
         el("td", { "data-label": "페이지" }, it.page),
         el("td", { "data-label": "현재 문구" }, it.current),
         hasFix && el("td", { "data-label": "수정 내용" }, it.fix || ""),
-        el(
-          "td",
-          { class: "hp-choices" },
-          statusChoices(
-            `hp-${it.id}`,
-            HOMEPAGE_STATUSES,
-            a.status,
-            (v) => {
-              a.status = v;
-              markDirty(section.id);
-            },
-            true
-          )
-        )
-      );
-    });
-    frag.push(
+        el("td", { class: "hp-choices" }, statusChoices(it.id, HOMEPAGE_STATUSES, true), metaLine(it.id))
+      )
+    );
+    out.push(
       el(
         "div",
         { class: "hp-group" },
@@ -335,8 +439,8 @@ function renderHomepageSection(section) {
     );
   }
 
-  if (section.footnote) frag.push(el("p", { class: "hp-footnote" }, section.footnote));
-  return frag;
+  if (section.footnote) out.push(el("p", { class: "hp-footnote" }, section.footnote));
+  return out;
 }
 
 function sectionQids(section) {
@@ -345,50 +449,29 @@ function sectionQids(section) {
     : section.items.map((it) => it.id);
 }
 
-function sectionPayload(section) {
-  return sectionQids(section).map((qid) => {
-    const a = answerOf(qid);
-    return section.type === "homepage"
-      ? { qid, section: section.id, status: a.status, answer: "", link: "" }
-      : { qid, section: section.id, status: a.status, answer: a.answer, link: a.link };
-  });
-}
-
-async function saveSections(sections, button, msg) {
-  button.disabled = true;
-  const prevLabel = button.textContent;
-  button.textContent = "저장 중…";
-  msg.className = "save-msg";
-  msg.textContent = "";
-  try {
-    await post({ token: TOKEN, action: "answers", items: sections.flatMap(sectionPayload) });
-    const t = timeLabel();
-    for (const s of sections) {
-      delete draft.dirty[s.id];
-      draft.savedAt[s.id] = t;
-      showSaveState(s.id);
-    }
-    persist();
-    msg.className = "save-msg save-msg--ok";
-    msg.textContent = `저장됨 (${t})`;
-  } catch {
-    msg.className = "save-msg save-msg--error";
-    msg.textContent = "저장하지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.";
-  } finally {
-    button.disabled = false;
-    button.textContent = prevLabel;
-  }
-}
-
 // ---------- 페이지 ----------
 function renderPage(root, data) {
   const sections = data.sections;
-  questionItems = sections
-    .filter((s) => s.type === "question")
-    .flatMap((s) => s.items.map((it) => ({ qid: it.id, sectionId: s.id })));
+  questionQids = sections.filter((s) => s.type === "question").flatMap(sectionQids);
 
-  progressEls.text = el("span", {});
-  progressEls.fill = el("div", { class: "bar__fill" });
+  ui.progressText = el("span", {});
+  ui.progressFill = el("div", { class: "bar__fill" });
+  ui.save = el("span", { class: "save-status", "aria-live": "polite" });
+  ui.editor = el("span", { class: "editor__name" }, editor);
+
+  const changeName = el("button", { type: "button", class: "editor__change" }, "변경");
+  changeName.addEventListener("click", () => {
+    const overlay = el("div", { class: "overlay" });
+    document.body.append(overlay);
+    askName(
+      overlay,
+      (name) => {
+        if (name) ui.editor.textContent = name;
+        overlay.remove();
+      },
+      { cancelable: true }
+    );
+  });
 
   const topbar = el(
     "header",
@@ -396,8 +479,9 @@ function renderPage(root, data) {
     el(
       "div",
       { class: "topbar__inner" },
-      el("div", { class: "topbar__progress" }, progressEls.text, el("div", { class: "bar" }, progressEls.fill)),
-      el("button", { type: "button", class: "btn-print", onclick: () => window.print() }, "인쇄")
+      el("div", { class: "topbar__progress" }, ui.progressText, el("div", { class: "bar" }, ui.progressFill)),
+      el("button", { type: "button", class: "btn-print", onclick: () => window.print() }, "인쇄"),
+      el("div", { class: "topbar__row" }, el("span", { class: "editor" }, "입력자: ", ui.editor, " (", changeName, ")"), ui.save)
     )
   );
 
@@ -406,32 +490,19 @@ function renderPage(root, data) {
     { class: "toc" },
     sections.map((s) => {
       const count = el("span", { class: "toc__count" });
-      tocCountEls[s.id] = { el: count, qids: sectionQids(s), homepage: s.type === "homepage" };
-      return el(
-        "li",
-        {},
-        el("a", { href: `#s-${s.id}`, style: `--c:${s.color}` }, el("span", { class: "toc__title" }, s.title), count)
-      );
+      tocCounts.push({ el: count, qids: sectionQids(s), homepage: s.type === "homepage" });
+      return el("li", {}, el("a", { href: `#s-${s.id}`, style: `--c:${s.color}` }, el("span", { class: "toc__title" }, s.title), count));
     })
   );
 
-  const sectionEls = sections.map((s) => {
-    const msg = el("span", { class: "save-msg", "aria-live": "polite" });
-    saveMsgEls[s.id] = msg;
-    const btn = el("button", { type: "button", class: "btn-save" }, "이 섹션 저장");
-    btn.addEventListener("click", () => saveSections([s], btn, msg));
-    return el(
+  const sectionEls = sections.map((s) =>
+    el(
       "section",
       { class: "section", id: `s-${s.id}`, style: `--c:${s.color}` },
       el("h2", { class: "section__title" }, s.title),
-      s.type === "homepage" ? renderHomepageSection(s) : s.items.map((it) => renderQuestion(s, it)),
-      el("div", { class: "savebar" }, btn, msg)
-    );
-  });
-
-  const finalMsg = el("p", { class: "save-msg", "aria-live": "polite" });
-  const finalBtn = el("button", { type: "button", class: "btn-save" }, "전체 저장");
-  finalBtn.addEventListener("click", () => saveSections(sections, finalBtn, finalMsg));
+      s.type === "homepage" ? renderHomepageSection(s) : s.items.map(renderQuestion)
+    )
+  );
 
   root.replaceChildren(
     topbar,
@@ -442,35 +513,96 @@ function renderPage(root, data) {
         "div",
         { class: "intro" },
         el("h1", {}, data.title),
-        el("p", {}, "답변은 섹션별로 저장되며, 나중에 다시 들어와 이어서 작성하실 수 있습니다. 구글 로그인은 필요 없습니다.")
+        el("p", {}, "답변은 입력하는 대로 자동 저장되며, 나중에 다시 들어와 이어서 작성하실 수 있습니다. 구글 로그인은 필요 없습니다.")
       ),
       toc,
-      sectionEls,
-      el("div", { class: "final" }, finalBtn, finalMsg)
+      sectionEls
     )
   );
 
-  for (const s of sections) showSaveState(s.id);
   updateProgress();
 }
 
-async function start(root) {
-  loadDraft();
-  try {
-    const res = await fetch("/hesed-qanda/questions.json", { cache: "no-cache" });
-    if (!res.ok) throw new Error(res.status);
-    renderPage(root, await res.json());
-  } catch {
-    root.replaceChildren(el("p", { class: "load-error" }, "질문을 불러오지 못했습니다. 새로고침해 주세요."));
+// 서버에서 받은 내용으로 상태를 채웁니다.
+function applyServerData(json) {
+  for (const [qid, v] of Object.entries(json.answers || {})) {
+    if (!sectionOf[qid] || !v) continue;
+    Object.assign(answerOf(qid), { status: v.status || "", answer: v.answer || "", link: v.link || "" });
+    if (v.editor || v.updated) meta[qid] = { editor: v.editor || "", updated: v.updated || "" };
+  }
+  for (const [qid, list] of Object.entries(json.files || {})) {
+    if (Array.isArray(list)) files[qid] = list.map((f) => ({ name: f.name, editor: f.editor || "" }));
   }
 }
 
-window.addEventListener("beforeunload", (e) => {
-  if (uploadsInFlight > 0 || Object.keys(draft.dirty).length > 0) {
-    e.preventDefault();
-    e.returnValue = "";
+async function loadAndRender(root) {
+  root.replaceChildren(el("p", { class: "loading" }, "불러오는 중..."));
+  try {
+    const [qRes, server] = await Promise.all([
+      fetch("/hesed-qanda/questions.json", { cache: "no-cache" }),
+      postOk({ action: "load" }),
+    ]);
+    if (!qRes.ok) throw new Error(qRes.status);
+    const data = await qRes.json();
+
+    for (const s of data.sections) {
+      for (const qid of sectionQids(s)) sectionOf[qid] = { id: s.id, type: s.type };
+    }
+    applyServerData(server);
+    // 지난번에 저장되지 못한 항목은 서버 값 위에 덮어쓰고 다시 보냅니다.
+    const hadPending = restorePending();
+
+    renderPage(root, data);
+    showTestReset(); // TEST RESET: 보내기 전에 삭제
+    if (hadPending) {
+      setSaveStatus("busy", "저장되지 않은 내용을 다시 보냅니다...");
+      scheduleSave(0);
+    }
+  } catch {
+    root.replaceChildren(
+      el(
+        "div",
+        { class: "loading" },
+        el("p", { class: "load-error" }, "내용을 불러오지 못했습니다. 인터넷 연결을 확인해 주세요."),
+        el("button", { type: "button", class: "btn-retry", onclick: () => loadAndRender(root) }, "다시 시도")
+      )
+    );
   }
-});
+}
+
+/* TEST RESET: 보내기 전에 삭제 (시작) */
+function showTestReset() {
+  const box = document.getElementById("test-reset");
+  if (!box || box.dataset.ready) return;
+  box.dataset.ready = "1";
+  box.hidden = false;
+  const btn = box.querySelector("button");
+  const msg = box.querySelector(".test-reset__msg");
+  btn.addEventListener("click", async () => {
+    const adminKey = window.prompt("리셋 코드를 입력해 주세요");
+    if (!adminKey) return;
+    btn.disabled = true;
+    msg.textContent = "";
+    try {
+      const json = await post({ action: "reset", adminKey });
+      if (json && json.ok === true) {
+        for (const k of Object.keys(pending)) delete pending[k];
+        storeRemove(PENDING_KEY);
+        storeRemove(EDITOR_KEY);
+        location.reload();
+        return;
+      }
+      msg.textContent = json && json.error === "wrong_key" ? "코드가 맞지 않습니다" : "리셋하지 못했습니다";
+    } catch {
+      msg.textContent = "리셋하지 못했습니다";
+    }
+    btn.disabled = false;
+  });
+}
+/* TEST RESET: 보내기 전에 삭제 (끝) */
 
 const root = document.getElementById("app");
-guardPage(root, () => start(root));
+guardPage(root, () => {
+  if (editor) loadAndRender(root);
+  else askName(root, () => loadAndRender(root));
+});
