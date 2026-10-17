@@ -1,0 +1,567 @@
+{
+ "title": "헤세드 미국 런칭 자료 확인 질문지",
+ "sections": [
+  {
+   "id": "1",
+   "title": "1. 회사 관계와 수상",
+   "color": "#8a5a1c",
+   "type": "question",
+   "items": [
+    {
+     "id": "1-1",
+     "question": "SROLANH Mango Co., Ltd.와 헤세드가 같은 회사임을 보여주는 서류(사업자 등록, 지분, 계열사 증명 등)를 주실 수 있을까요?",
+     "reason": "Great Taste에 SROLANH 이름으로 등록되어 있어, 헤세드 제품으로 수상 사실을 알리려면 증빙이 필요합니다.",
+     "upload": "file"
+    },
+    {
+     "id": "1-2",
+     "question": "2025년 Great Taste 인증서 원본 파일을 주실 수 있을까요?",
+     "reason": "인증서에 “HESED (SROLANH Mango Co., Ltd.)”가 함께 적혀 있어 1-1의 보조 증빙이 됩니다.",
+     "upload": "file"
+    },
+    {
+     "id": "1-3",
+     "question": "2026년 3스타 인증서, Great Taste 로고 파일, 로고 사용 규정을 주실 수 있을까요?",
+     "reason": "로고는 공식 파일과 규정대로만 사용해야 합니다.",
+     "upload": "file"
+    },
+    {
+     "id": "1-4",
+     "question": "2025년 Khmer Gold Dried Mango와 2026년 KEO Romeat Dried Mango Bite 100%는 같은 제품인가요?",
+     "reason": "“2년 연속 3스타” 문구를 쓰기 위한 확인입니다.",
+     "upload": "file"
+    },
+    {
+     "id": "1-5",
+     "question": "미국에서 판매할 건망고가 수상 제품과 같은 레시피, 규격인가요?",
+     "reason": "수상 문구를 미국 판매 제품에 쓰기 위한 확인입니다.",
+     "upload": "file"
+    }
+   ]
+  },
+  {
+   "id": "2",
+   "title": "2. WFTO",
+   "color": "#3f6e8c",
+   "type": "question",
+   "items": [
+    {
+     "id": "2-1",
+     "question": "갱신 절차에서 남은 요건은 무엇이고, 언제 완료될 예정인가요?",
+     "reason": "공식 페이지 상태가 “Renewal in Progress”로 되어 있습니다.",
+     "upload": "file"
+    },
+    {
+     "id": "2-2",
+     "question": "SROLANH에서 생산하는 건망고도 WFTO 보증 범위에 포함되나요?",
+     "reason": "회원 등록은 헤세드 이름으로 되어 있습니다.",
+     "upload": "file"
+    },
+    {
+     "id": "2-3",
+     "question": "미국용 마케팅 자료에 WFTO 마크를 사용해도 된다는 서면 확인과 마크 파일을 주실 수 있을까요?",
+     "reason": "마크는 정확한 명칭과 규정대로 사용해야 합니다.",
+     "upload": "file"
+    }
+   ]
+  },
+  {
+   "id": "3",
+   "title": "3. 인증과 표시 근거 (건망고)",
+   "color": "#5e7a3a",
+   "type": "question",
+   "items": [
+    {
+     "id": "3-1",
+     "question": "미국에서 판매할 건망고는 유기농 제품인가요, 일반 제품인가요?",
+     "reason": "두 종류가 있다고 들었습니다.",
+     "upload": "file"
+    },
+    {
+     "id": "3-2",
+     "question": "유기농 제품이라면 USDA 유기농(NOP) 인증이 있나요?",
+     "reason": "미국에서는 USDA 인증 없이 유기농 표현을 쓰기 어렵습니다.",
+     "upload": "file"
+    },
+    {
+     "id": "3-3",
+     "question": "HACCP, GMP 인증서 사본과 유효기간, 해당 시설을 알려 주실 수 있을까요?",
+     "reason": "위생 관련 문구의 근거 자료입니다.",
+     "upload": "file"
+    },
+    {
+     "id": "3-4",
+     "question": "미생물, 아황산염 검사 성적서가 있나요?",
+     "reason": "“첨가물 없음” 문구의 근거 자료입니다.",
+     "upload": "file"
+    },
+    {
+     "id": "3-5",
+     "question": "설탕을 넣지 않았다는 공정 확인서나 원재료 증명을 주실 수 있을까요?",
+     "reason": "“No added sugar” 표기의 근거 자료입니다.",
+     "upload": "file"
+    },
+    {
+     "id": "3-6",
+     "question": "최신 영양성분 시험성적서(제공량 기준 포함)가 있나요?",
+     "reason": "규격서의 제공량(60g)과 포장 단위(50g)가 다르고, 비타민C 수치의 근거 확인이 필요합니다.",
+     "upload": "file"
+    },
+    {
+     "id": "3-7",
+     "question": "유통기한은 몇 개월인가요?",
+     "reason": "자료마다 8개월, 12개월, 24개월로 다르게 적혀 있습니다.",
+     "upload": "file"
+    },
+    {
+     "id": "3-8",
+     "question": "미국 판매용 포장 규격(120g 등)은 무엇인가요?",
+     "reason": "홈페이지 상품 구성에 필요합니다.",
+     "upload": "file"
+    },
+    {
+     "id": "3-9",
+     "question": "Keo Romeat 품종 설명을 브랜드 소개에 사용해도 될까요? 품종 이름의 뜻이나 유래가 있다면 알려 주세요.",
+     "reason": "산지 이야기의 핵심 소재로 쓰려고 합니다.",
+     "upload": "file"
+    },
+    {
+     "id": "3-10",
+     "question": "현재 수출하고 있는 나라는 어디인가요?",
+     "reason": "자료마다 5개국, 6개국으로 다르게 적혀 있습니다.",
+     "upload": "file"
+    }
+   ]
+  },
+  {
+   "id": "4",
+   "title": "4. 짚 숙성과 위생",
+   "color": "#9a4a3a",
+   "type": "question",
+   "items": [
+    {
+     "id": "4-1",
+     "question": "짚 숙성과 세척 과정을 설명해 주실 수 있을까요? (짚 종류와 재사용 여부, 곰팡이와 먼지 관리, 숙성 장소와 기간, 세척 방법과 소독 여부)",
+     "reason": "소비자가 위생에 대해 물을 수 있어 정확한 설명이 필요합니다.",
+     "upload": "file"
+    }
+   ]
+  },
+  {
+   "id": "5",
+   "title": "5. 사회적 가치의 근거",
+   "color": "#6b5b95",
+   "type": "question",
+   "items": [
+    {
+     "id": "5-1",
+     "question": "현재 고용 인원과 그중 부모 직원의 수를 알려 주실 수 있을까요?",
+     "reason": "“부모님께 일자리” 문구의 근거 자료입니다.",
+     "upload": "file"
+    },
+    {
+     "id": "5-2",
+     "question": "아이들 교육 지원 프로그램의 내용, 기간, 규모는 어떻게 되나요?",
+     "reason": "“아이들에게 배움” 문구의 근거 자료입니다.",
+     "upload": "file"
+    },
+    {
+     "id": "5-3",
+     "question": "농가에 지급하는 매입 가격 구조를 보여줄 자료가 있나요?",
+     "reason": "공정무역 이야기를 숫자로 전달할 수 있습니다.",
+     "upload": "file"
+    }
+   ]
+  },
+  {
+   "id": "6",
+   "title": "6. 영상과 사진",
+   "color": "#2f7a73",
+   "type": "question",
+   "items": [
+    {
+     "id": "6-1",
+     "question": "유튜브에 올리신 영상의 원본 파일을 주실 수 있을까요? 그리고 이 영상을 재편집해 광고와 홈페이지에 사용해도 될까요?",
+     "reason": "재편집에는 원본 화질이 필요합니다. 영상은 용량이 커서 온라인 질문지에 공유 링크로 넣어 주시면 됩니다.",
+     "upload": "link"
+    },
+    {
+     "id": "6-2",
+     "question": "영상에 나온 분들의 출연 동의서를 받으셨나요?",
+     "reason": "미국 광고에 얼굴이 나오려면 동의가 필요합니다.",
+     "upload": "file"
+    },
+    {
+     "id": "6-3",
+     "question": "동의서가 없는 장면의 사용을 허락하신다면, 그로 인한 문제의 책임을 제조사가 진다는 확인서에 서명해 주실 수 있을까요?",
+     "reason": "동의서가 없는 장면을 안전하게 쓰기 위한 절차입니다.",
+     "upload": "file"
+    },
+    {
+     "id": "6-4",
+     "question": "제품 사진, 농장과 풍경 사진, 제조 과정 사진이 있나요?",
+     "reason": "홈페이지와 SNS 콘텐츠에 필요합니다.",
+     "upload": "file"
+    },
+    {
+     "id": "6-5",
+     "question": "협력 단체(꽃피는 아침마을, KOICA 등)의 이름, 로고, 함께 찍은 사진과 영상을 마케팅에 사용해도 될까요? 해당 단체의 허락이 따로 필요한가요?",
+     "reason": "다른 단체의 이름과 로고는 그 단체의 허락이 필요할 수 있습니다.",
+     "upload": "file"
+    },
+    {
+     "id": "6-6",
+     "question": "영상과 사진은 누가 촬영했나요?",
+     "reason": "외부 업체가 촬영했다면 그쪽의 사용 허락도 필요합니다.",
+     "upload": "file"
+    }
+   ]
+  },
+  {
+   "id": "7",
+   "title": "7. 납품 이력",
+   "color": "#a07a1a",
+   "type": "question",
+   "items": [
+    {
+     "id": "7-1",
+     "question": "하얏트, 항공사, 한국 선물세트, 이탈리아 납품과 관련된 계약서, 납품 사진, 확인 메일 같은 자료가 있나요?",
+     "reason": "납품 이력은 가장 강한 신뢰 근거가 됩니다.",
+     "upload": "file"
+    },
+    {
+     "id": "7-2",
+     "question": "이 납품처들의 이름을 마케팅에 사용해도 될까요?",
+     "reason": "납품처 이름 사용에는 해당 회사의 허락이 필요할 수 있습니다.",
+     "upload": "file"
+    }
+   ]
+  },
+  {
+   "id": "8",
+   "title": "8. 팜슈거",
+   "color": "#8a3f62",
+   "type": "question",
+   "items": [
+    {
+     "id": "8-1",
+     "question": "판매할 팜슈거의 제품명이 USDA 인증 품목명(Palmyra palm sugar, Sovannak palm sugar)과 같은가요?",
+     "reason": "이름이 다르면 유기농 표기가 어려울 수 있습니다.",
+     "upload": "file"
+    },
+    {
+     "id": "8-2",
+     "question": "저GI 인증(Glycemic Index Foundation)은 현재도 유효한가요? 2020년 이후 원료나 공정이 바뀌었나요?",
+     "reason": "저GI 문구의 유효성 확인입니다.",
+     "upload": "file"
+    },
+    {
+     "id": "8-3",
+     "question": "캄퐁스퍼 PGI를 사용할 수 있는 협회 인증이 있나요?",
+     "reason": "PGI는 캄퐁스퍼 원료에만 해당합니다.",
+     "upload": "file"
+    },
+    {
+     "id": "8-4",
+     "question": "최신 시험성적서(영양성분, 중금속, 5-HMF, 당 조성, 사탕수수 설탕 혼합 여부)를 주실 수 있을까요?",
+     "reason": "“100% 팜슈거” 문구와 제품 정보의 근거 자료입니다.",
+     "upload": "file"
+    },
+    {
+     "id": "8-5",
+     "question": "홈페이지의 칼슘 572mg, 생산능력(70톤, 200톤, 300톤), 비타민B2 수치의 출처는 무엇인가요?",
+     "reason": "자료끼리 숫자가 다릅니다. 받은 자료 중 2017년 TÜV 시험에서는 칼슘이 100g당 약 2.8mg으로 나와, 홈페이지 수치와 큰 차이가 있습니다.",
+     "upload": "file"
+    }
+   ]
+  },
+  {
+   "id": "9",
+   "title": "9. 홈페이지 업데이트 요청",
+   "color": "#4a5568",
+   "type": "homepage",
+   "intro": "미국에서 제품을 접한 바이어와 소비자는 제조사 홈페이지를 함께 찾아보게 됩니다. 이때 홈페이지에 만료된 인증서나 오타가 남아 있으면 제품 신뢰도까지 낮아질 수 있어, 아래 항목을 함께 정비해 주시면 감사하겠습니다. 특히 인증서 교체와 건강 효능 문구 정리는 미국 마케팅 문구와도 직접 연결되는 부분이라 먼저 부탁드립니다.",
+   "footnote": "참고로, 이번 기회에 홈페이지 전체를 새로 단장하시는 것도 추천드립니다.",
+   "groups": [
+    {
+     "id": "9-A",
+     "title": "9-A. 인증서와 날짜",
+     "items": [
+      {
+       "id": "9A-1",
+       "page": "메인 페이지",
+       "current": "WFTO 인증서 이미지 (Valid until 31/03/2025, 만료본)",
+       "fix": "2027년 3월 31일까지 유효한 최신 인증서로 교체"
+      },
+      {
+       "id": "9A-2",
+       "page": "메인 페이지 WFTO 소개",
+       "current": "“In 2020 years” WFTO 인증을 받았다는 문구",
+       "fix": "WFTO 기록(2023년 12월 13일 보증 회원)과 맞게 수정"
+      },
+      {
+       "id": "9A-3",
+       "page": "저GI 인증",
+       "current": "2020년 11월 인증서 기준",
+       "fix": "현재 유효 여부 확인 후 최신본 게시"
+      }
+     ]
+    },
+    {
+     "id": "9-B",
+     "title": "9-B. 오타와 번역 실수",
+     "items": [
+      {
+       "id": "9B-1",
+       "page": "메인",
+       "current": "is an natural sugar",
+       "fix": "is a natural sugar"
+      },
+      {
+       "id": "9B-2",
+       "page": "메인",
+       "current": "We're Membership of WFTO",
+       "fix": "We're a Member of WFTO"
+      },
+      {
+       "id": "9B-3",
+       "page": "Sovannak Palm Sugar",
+       "current": "공정 이미지의 한국어 문구 (프랑스 환경 NGO에서 개발한 스토브에서 1차 가공)",
+       "fix": "영어로 번역"
+      },
+      {
+       "id": "9B-4",
+       "page": "Sovannak Palm Sugar",
+       "current": "borassus flabelliter",
+       "fix": "Borassus flabellifer"
+      },
+      {
+       "id": "9B-5",
+       "page": "Sovannak Palm Sugar",
+       "current": "Delicious.Nutritious.Sustainable.",
+       "fix": "마침표 뒤 띄어쓰기"
+      },
+      {
+       "id": "9B-6",
+       "page": "IBS Project",
+       "current": "한국어 문구",
+       "fix": "영어로 번역"
+      },
+      {
+       "id": "9B-7",
+       "page": "Palmyra Blossom Sugar",
+       "current": "Gluten & Grain- free",
+       "fix": "Grain-free"
+      },
+      {
+       "id": "9B-8",
+       "page": "Dried Fruits",
+       "current": "Hessed",
+       "fix": "Hesed"
+      },
+      {
+       "id": "9B-9",
+       "page": "Dried Fruits",
+       "current": "Candal Province",
+       "fix": "Kandal Province"
+      },
+      {
+       "id": "9B-10",
+       "page": "Dried Fruits",
+       "current": "productssold",
+       "fix": "products sold"
+      },
+      {
+       "id": "9B-11",
+       "page": "Dried Fruits",
+       "current": "페이지 주소 hesed-dreid-mango",
+       "fix": "dried"
+      },
+      {
+       "id": "9B-12",
+       "page": "Cashew Nuts",
+       "current": "Incomparable sue",
+       "fix": "고소함의 오역 (sue는 소송한다는 뜻)"
+      },
+      {
+       "id": "9B-13",
+       "page": "Cashew Nuts",
+       "current": "fried in small portions",
+       "fix": "roasted (볶은 제품)"
+      },
+      {
+       "id": "9B-14",
+       "page": "Cashew Nuts",
+       "current": "Cleanliness at different eye levels",
+       "fix": "한국어 직역, 문장 수정"
+      },
+      {
+       "id": "9B-15",
+       "page": "Cashew Nuts",
+       "current": "I set the process to the Korean level.",
+       "fix": "한국어 직역, 문장 수정"
+      },
+      {
+       "id": "9B-16",
+       "page": "Cashew Nuts",
+       "current": "The taste is also king!",
+       "fix": "한국어 직역, 문장 수정"
+      },
+      {
+       "id": "9B-17",
+       "page": "Pepper",
+       "current": "Ocean (오각형 그래프)",
+       "fix": "Appearance"
+      },
+      {
+       "id": "9B-18",
+       "page": "Pepper",
+       "current": "Balanc",
+       "fix": "Balance"
+      },
+      {
+       "id": "9B-19",
+       "page": "Pepper",
+       "current": "Incense",
+       "fix": "Aroma (Incense는 제사용 향)"
+      },
+      {
+       "id": "9B-20",
+       "page": "Pepper",
+       "current": "blue pepper",
+       "fix": "green pepper"
+      },
+      {
+       "id": "9B-21",
+       "page": "Pepper",
+       "current": "pickles or pickles",
+       "fix": "단어 중복"
+      },
+      {
+       "id": "9B-22",
+       "page": "Pepper",
+       "current": "a few tablets",
+       "fix": "peppercorns (tablets는 알약)"
+      },
+      {
+       "id": "9B-23",
+       "page": "Pepper",
+       "current": "When to enjoy by car",
+       "fix": "as tea (차를 자동차로 번역)"
+      },
+      {
+       "id": "9B-24",
+       "page": "Pepper",
+       "current": "the fishy smell will be caught",
+       "fix": "비린내를 “잡다” 직역, 문장 수정"
+      },
+      {
+       "id": "9B-25",
+       "page": "Pepper",
+       "current": "shock caution, fire caution",
+       "fix": "경고문 직역, 문장 수정"
+      },
+      {
+       "id": "9B-26",
+       "page": "Pepper",
+       "current": "페이지 주소 papper",
+       "fix": "pepper"
+      }
+     ]
+    },
+    {
+     "id": "9-C",
+     "title": "9-C. 삭제 또는 근거 확인이 필요한 문구",
+     "note": "문법이 아니라 내용의 문제입니다. 미국에서는 건강 효능이나 질병 관련 표현을 근거 없이 쓰기 어려워, 삭제하시거나 근거 자료를 함께 보내 주세요. 이 중 폴리페놀, 코엔자임Q10, 비타민B12, 엽산, 셀레늄 수치는 2018년 충남대 검사성적서(참고용, 홍보 사용 불가 조건)가 근거로 보여, 현재 형태로는 사용이 어렵습니다. 반면 시드니 대학교 시험 결과인 GI 48, GL 2는 그대로 사용하셔도 됩니다.",
+     "items": [
+      {
+       "id": "9C-1",
+       "page": "메인",
+       "current": "Safe and healthy premium sugar substitute"
+      },
+      {
+       "id": "9C-2",
+       "page": "Palmyra Blossom Sugar",
+       "current": "영양성분표 전체 (칼슘 572mg, 마그네슘 29mg은 받은 자료에 없음, 나트륨 138mg은 TÜV 결과와 다름, 엽산과 셀레늄은 충남대 참고용 성적서 수치)"
+      },
+      {
+       "id": "9C-3",
+       "page": "Palmyra Blossom Sugar",
+       "current": "polyphenol (per 100g) 424.5mg / High in Polyphenol"
+      },
+      {
+       "id": "9C-4",
+       "page": "Palmyra Blossom Sugar",
+       "current": "Contain Vitamin B12 & B6"
+      },
+      {
+       "id": "9C-5",
+       "page": "Palmyra Blossom Sugar",
+       "current": "low GI below 48 (시드니 보고서 값은 48 ± 5)"
+      },
+      {
+       "id": "9C-6",
+       "page": "Palmyra Blossom Sugar",
+       "current": "excellent choice for individuals managing diabetes"
+      },
+      {
+       "id": "9C-7",
+       "page": "Palmyra Blossom Sugar",
+       "current": "White Sugar 비교 그래프 (시드니 시험의 비교 대상은 백설탕이 아니라 포도당)"
+      },
+      {
+       "id": "9C-8",
+       "page": "Palmyra Blossom Sugar",
+       "current": "Rich in Minerals / Low FODMAP"
+      },
+      {
+       "id": "9C-9",
+       "page": "Palmyra Blossom Sugar",
+       "current": "PGI 설명 (PGI는 캄퐁스퍼 생산분에만 해당, 캄퐁츠낭 생산분과 구분 필요)"
+      },
+      {
+       "id": "9C-10",
+       "page": "Palmyra Blossom Sugar",
+       "current": "70 tons+/years, 200 tons+/years (자료마다 생산량이 다름)"
+      },
+      {
+       "id": "9C-11",
+       "page": "Sovannak Palm Sugar",
+       "current": "Vitamin B1, B2 & C (TÜV 시험에서 비타민C 불검출, B2는 시험 없음)"
+      },
+      {
+       "id": "9C-12",
+       "page": "Sovannak Palm Sugar",
+       "current": "Sweet but helpful for diet / Help to reduce sugar in your body"
+      },
+      {
+       "id": "9C-13",
+       "page": "Sovannak Palm Sugar",
+       "current": "Get your fresh with healthy dessert"
+      },
+      {
+       "id": "9C-14",
+       "page": "Sovannak Palm Sugar",
+       "current": "More energy & nutritions / Contains mineral & polyphenols"
+      },
+      {
+       "id": "9C-15",
+       "page": "Sovannak Palm Sugar",
+       "current": "polyphenol, coenzyme Q10, and many kinds of vitamins"
+      },
+      {
+       "id": "9C-16",
+       "page": "Dried Fruits",
+       "current": "First Sugar-Free Dried Mango / healthy snack / snack for diet"
+      },
+      {
+       "id": "9C-17",
+       "page": "Cashew Nuts",
+       "current": "SUPER FOOD which can help adult disease prevention"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,3 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /survey-hotels.html
+# 헤세드 질문지: 삭제할 때 이 줄도 함께 삭제
+Disallow: /hesed-qanda
