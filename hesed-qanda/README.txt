@@ -19,16 +19,21 @@
 - auth.js         비밀번호 잠금 (js/partner-toolkit-auth.js를 복사해 고친 것)
 - style.css       이 페이지 전용 디자인
 - questions.json  질문 데이터 (문구를 바꾸려면 이 파일만 고치면 됩니다)
+- hesed-checklist.pdf  인쇄용 체크리스트 (페이지 위쪽 "체크리스트 열기" 버튼이 새 탭으로 엶)
 - README.txt      이 안내문
 
+체크리스트 PDF 교체
+- 위치: hesed-qanda/hesed-checklist.pdf
+- 바꾸려면 새 PDF를 같은 이름(hesed-checklist.pdf)으로 덮어쓰고 커밋, push하면 됩니다.
+  코드는 고칠 필요가 없습니다.
+
+인쇄
+- 화면의 인쇄 버튼은 없앴습니다. 브라우저 인쇄(Cmd + P)를 쓰면 style.css의
+  @media print 설정대로 버튼·입력칸 테두리·안내 띠 없이 질문과 답변만 나옵니다.
+
 보내기 전에 테스트 리셋 버튼 삭제
-- 페이지 맨 아래 "테스트 리셋" 버튼은 시험용입니다. 질문지를 보내기 전에 지워 주세요.
-- 아래 세 파일에서 "TEST RESET: 보내기 전에 삭제 (시작)"부터 "(끝)"까지의 줄을 지우면 됩니다.
-  · index.html  (<!-- TEST RESET ... --> 사이의 버튼 HTML)
-  · style.css   (/* TEST RESET ... */ 사이의 스타일)
-  · app.js      (/* TEST RESET ... */ 사이의 showTestReset 함수와,
-                 "showTestReset(); // TEST RESET: 보내기 전에 삭제" 한 줄)
-- 리셋 코드는 페이지 코드에 들어 있지 않습니다 (서버에서만 확인).
+- [완료] index.html, style.css, app.js의 "TEST RESET" 표시 부분을 모두 지웠습니다.
+  리셋 요청(action: "reset")을 보내는 코드도 페이지에 남아 있지 않습니다.
 
 삭제 방법 (답변을 다 받은 뒤)
 1. hesed-qanda 폴더를 통째로 삭제합니다.

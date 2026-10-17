@@ -480,7 +480,6 @@ function renderPage(root, data) {
       "div",
       { class: "topbar__inner" },
       el("div", { class: "topbar__progress" }, ui.progressText, el("div", { class: "bar" }, ui.progressFill)),
-      el("button", { type: "button", class: "btn-print", onclick: () => window.print() }, "인쇄"),
       el("div", { class: "topbar__row" }, el("span", { class: "editor" }, "입력자: ", ui.editor, " (", changeName, ")"), ui.save)
     )
   );
@@ -509,6 +508,16 @@ function renderPage(root, data) {
     el(
       "div",
       { class: "wrap" },
+      el(
+        "aside",
+        { class: "checklist" },
+        el("p", { class: "checklist__text" }, "인쇄용 체크리스트가 필요하시면 여기에서 받으실 수 있습니다."),
+        el(
+          "a",
+          { class: "checklist__btn", href: "/hesed-qanda/hesed-checklist.pdf", target: "_blank", rel: "noopener" },
+          "체크리스트 열기"
+        )
+      ),
       el(
         "div",
         { class: "intro" },
@@ -553,7 +562,6 @@ async function loadAndRender(root) {
     const hadPending = restorePending();
 
     renderPage(root, data);
-    showTestReset(); // TEST RESET: 보내기 전에 삭제
     if (hadPending) {
       setSaveStatus("busy", "저장되지 않은 내용을 다시 보냅니다...");
       scheduleSave(0);
@@ -570,36 +578,6 @@ async function loadAndRender(root) {
   }
 }
 
-/* TEST RESET: 보내기 전에 삭제 (시작) */
-function showTestReset() {
-  const box = document.getElementById("test-reset");
-  if (!box || box.dataset.ready) return;
-  box.dataset.ready = "1";
-  box.hidden = false;
-  const btn = box.querySelector("button");
-  const msg = box.querySelector(".test-reset__msg");
-  btn.addEventListener("click", async () => {
-    const adminKey = window.prompt("리셋 코드를 입력해 주세요");
-    if (!adminKey) return;
-    btn.disabled = true;
-    msg.textContent = "";
-    try {
-      const json = await post({ action: "reset", adminKey });
-      if (json && json.ok === true) {
-        for (const k of Object.keys(pending)) delete pending[k];
-        storeRemove(PENDING_KEY);
-        storeRemove(EDITOR_KEY);
-        location.reload();
-        return;
-      }
-      msg.textContent = json && json.error === "wrong_key" ? "코드가 맞지 않습니다" : "리셋하지 못했습니다";
-    } catch {
-      msg.textContent = "리셋하지 못했습니다";
-    }
-    btn.disabled = false;
-  });
-}
-/* TEST RESET: 보내기 전에 삭제 (끝) */
 
 const root = document.getElementById("app");
 guardPage(root, () => {
