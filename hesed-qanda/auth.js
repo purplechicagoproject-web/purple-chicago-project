@@ -3,7 +3,7 @@
 // (기존 파일은 수정하지 않음). 같은 브라우저 세션 동안은 다시 묻지 않습니다.
 
 const SESSION_KEY = "hesed-qanda-unlocked";
-const PASSWORD = "hesedqna2026";
+const PASSWORD = "2026qna";
 
 function isUnlocked() {
   try {
