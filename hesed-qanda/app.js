@@ -2,7 +2,7 @@
 // 비밀번호 → 이름 입력 → 서버(Apps Script)에서 기존 답변을 불러와 그립니다.
 // 답변은 바뀐 항목만 자동 저장합니다. 서버 내용이 기준이고, localStorage는
 // 입력자 이름과 아직 저장되지 못한 항목을 잠시 보관하는 데만 씁니다.
-import { guardPage } from "/hesed-qanda/auth.js";
+import { guardPage } from "/hesed-qanda/auth.js?v=4";
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbyCZ7NHmAWhw8pfeL-aFKGgSHRN16NzcsSU1TIrX5Px2aSZBmEGXOlwZdUOolvnUORQ/exec";
