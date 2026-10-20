@@ -2,7 +2,7 @@
 // 비밀번호 → 이름 입력 → 서버(Apps Script)에서 기존 답변을 불러와 그립니다.
 // 답변은 바뀐 항목만 자동 저장합니다. 서버 내용이 기준이고, localStorage는
 // 입력자 이름과 아직 저장되지 못한 항목을 잠시 보관하는 데만 씁니다.
-import { guardPage } from "/hesed-qanda/auth.js?v=4";
+import { guardPage } from "/hesed-qanda/auth.js?v=5";
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbyCZ7NHmAWhw8pfeL-aFKGgSHRN16NzcsSU1TIrX5Px2aSZBmEGXOlwZdUOolvnUORQ/exec";
@@ -119,14 +119,27 @@ function stampLabel(value) {
 }
 
 // Content-Type을 넣지 않아 text/plain으로 전송됩니다 (CORS 사전 요청 회피).
-async function post(data) {
-  const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ token: TOKEN, ...data }) });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
+// 응답이 오지 않고 멈추면 timeout 뒤에 실패로 처리해, 다음 저장이 막히지 않게 합니다.
+// keepalive는 페이지가 백그라운드로 가거나 닫혀도 요청이 끝까지 가도록 합니다 (본문 64KB 이하만).
+async function post(data, { timeout = 30000, keepalive = false } = {}) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeout);
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify({ token: TOKEN, ...data }),
+      signal: ctrl.signal,
+      keepalive,
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
-async function postOk(data) {
-  const json = await post(data);
+async function postOk(data, opts) {
+  const json = await post(data, opts);
   if (!json || json.ok !== true) throw new Error((json && json.error) || "fail");
   return json;
 }
@@ -227,8 +240,11 @@ async function flush() {
 
   saving = true;
   setSaveStatus("busy", "저장 중...");
+  const body = { action: "answers", editor, items: qids.map(itemPayload) };
+  // 백그라운드로 갈 때는 keepalive로 보냅니다. 64KB를 넘으면 브라우저가 거부하므로 그때는 일반 요청.
+  const keepalive = document.visibilityState === "hidden" && JSON.stringify(body).length < 60000;
   try {
-    await postOk({ action: "answers", editor, items: qids.map(itemPayload) });
+    await postOk(body, { keepalive });
     const now = new Date();
     for (const qid of qids) {
       if (pending[qid] === snapshot[qid]) delete pending[qid];
@@ -250,6 +266,15 @@ async function flush() {
 window.addEventListener("online", () => {
   if (Object.keys(pending).length) scheduleSave(0);
 });
+
+// 휴대폰에서 카메라·사진 앱으로 넘어가거나 탭을 닫으면, 2초를 기다리지 않고 바로 저장합니다.
+function flushNow() {
+  if (Object.keys(pending).length) flush();
+}
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") flushNow();
+});
+window.addEventListener("pagehide", flushNow);
 
 window.addEventListener("beforeunload", (e) => {
   if (uploadsInFlight > 0 || Object.keys(pending).length > 0) {
@@ -336,7 +361,7 @@ function renderUpload(qid) {
         filename: file.name,
         mimeType: file.type || "application/octet-stream",
         base64,
-      });
+      }, { timeout: 300000 });
       const f = { name: file.name, editor };
       (files[qid] ||= []).push(f);
       setDone(row, f);
