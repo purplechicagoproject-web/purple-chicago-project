@@ -2,7 +2,7 @@
 // 비밀번호 → 이름 입력 → 서버(Apps Script)에서 기존 답변을 불러와 그립니다.
 // 답변은 바뀐 항목만 자동 저장합니다. 서버 내용이 기준이고, localStorage는
 // 입력자 이름과 아직 저장되지 못한 항목을 잠시 보관하는 데만 씁니다.
-import { guardPage } from "/hesed-qanda/auth.js?v=5";
+import { guardPage } from "/hesed-qanda/auth.js?v=6";
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbyCZ7NHmAWhw8pfeL-aFKGgSHRN16NzcsSU1TIrX5Px2aSZBmEGXOlwZdUOolvnUORQ/exec";
@@ -558,14 +558,40 @@ function renderPage(root, data) {
 }
 
 // 서버에서 받은 내용으로 상태를 채웁니다.
-function applyServerData(json) {
-  for (const [qid, v] of Object.entries(json.answers || {})) {
-    if (!sectionOf[qid] || !v) continue;
-    Object.assign(answerOf(qid), { status: v.status || "", answer: v.answer || "", link: v.link || "" });
-    if (v.editor || v.updated) meta[qid] = { editor: v.editor || "", updated: v.updated || "" };
+// 구글 시트가 "1-1" 같은 질문 번호를 날짜(1월 1일)로 바꿔 저장해서, 불러올 때
+// "Thu Jan 01 2026 00:00:00 GMT-0600 ..." 또는 "2026-01-01T06:00:00.000Z"로 돌아옵니다.
+// 이런 값을 다시 "월-일" 질문 번호로 되돌립니다.
+const MONTHS = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 };
+
+function normalizeQid(key) {
+  const k = String(key).trim();
+  if (sectionOf[k]) return k;
+  let m = /^\w{3} (\w{3}) (\d{1,2}) \d{4}/.exec(k);
+  if (m && MONTHS[m[1]]) return `${MONTHS[m[1]]}-${Number(m[2])}`;
+  m = /^\d{4}-\d{2}-\d{2}T/.exec(k);
+  if (m) {
+    // 시트 시간대의 자정이 UTC로 바뀐 값이므로, 12시간을 더하면 원래 날짜가 됩니다.
+    const d = new Date(new Date(k).getTime() + 12 * 3600 * 1000);
+    if (!Number.isNaN(d.getTime())) return `${d.getUTCMonth() + 1}-${d.getUTCDate()}`;
   }
-  for (const [qid, list] of Object.entries(json.files || {})) {
-    if (Array.isArray(list)) files[qid] = list.map((f) => ({ name: f.name, editor: f.editor || "" }));
+  return k;
+}
+
+function applyServerData(json) {
+  const latest = {}; // 같은 질문이 여러 줄이면 가장 최근 것을 씁니다.
+  for (const [key, v] of Object.entries(json.answers || {})) {
+    const qid = normalizeQid(key);
+    if (!sectionOf[qid] || !v) continue;
+    const t = new Date(v.updated).getTime() || 0;
+    if (qid in latest && latest[qid] > t) continue;
+    latest[qid] = t;
+    Object.assign(answerOf(qid), { status: v.status || "", answer: v.answer || "", link: v.link || "" });
+    meta[qid] = v.editor || v.updated ? { editor: v.editor || "", updated: v.updated || "" } : undefined;
+  }
+  for (const [key, list] of Object.entries(json.files || {})) {
+    const qid = normalizeQid(key);
+    if (!sectionOf[qid] || !Array.isArray(list)) continue;
+    (files[qid] ||= []).push(...list.map((f) => ({ name: f.name, editor: f.editor || "" })));
   }
 }
 
